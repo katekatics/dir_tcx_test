@@ -1,0 +1,7 @@
+.vscode/
+static/
+*.csv
+*.log
+*.xlsx
+*.pyc
+db.sqlite3

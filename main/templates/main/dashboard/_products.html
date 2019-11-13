@@ -1,0 +1,260 @@
+<div class="card mb-3">
+    <div class="card-header bg-success text-white" id="headingProducts" tabindex="0" data-toggle="collapse"
+        data-target="#products" aria-expanded="true" aria-controls="products">
+        <h6 class=" mb-0">
+            <i class="fas fa-apple-alt pt-1"></i> Товары
+        </h6>
+    </div>
+
+    <div id="products" class="collapse show" aria-labelledby="headingProducts">
+        <div class="card-body-block bg-light">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="products_overdue_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right"
+                            data-original-title="Кол-во позиций просроченных товаров<br>(При нажатии на блок можно получить<br>информацио о товарах и скачать отчет<br>за сегодняшний день)<br>Блок обновляется раз в день (в 8 утра)">
+                            <h6 class="card-title">Просроченая продукция</h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="products_overdue_body">
+                            <h4 class="card-text text-center" id="products_overdue_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="products_overdue_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="products_overdue_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="products_overdue_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Просроченная продукция</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="products_overdue_modal_body"
+                                style="overflow-y: scroll;height: 80%;">
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'products_overdue_report' full_sap=full_sap %}" target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="products_alcohol_errors_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right"
+                            data-original-title="При нажатии на блок можно получить информацио<br>об ошибках и скачать отчет за сегодняшний день<br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title">Ошибки продажи алкоголя</h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="products_alcohol_errors_body">
+                            <h4 class="card-text text-center" id="products_alcohol_errors_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="products_alcohol_errors_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="products_alcohol_errors_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id=" products_alcohol_errors_modal" tabindex="-1" role="dialog"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Ошибки продажи алкоголя</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="table-responsive" id="products_alcohol_errors_modal_body">
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'products_alcohol_errors_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="products_low_saled_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Кол-во позиций товаров, продажи которых<br>за сегодня упали более чем на 50% по<br>сравнению со средними продажами за 21<br>день
+                            (При нажатии на блок можно получить<br> информацио о товарах и скачать отчет)<br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title">Товары с низкими продажами </h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="products_low_saled_body">
+                            <h4 class="card-text text-center" id="products_low_saled_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="products_low_saled_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="products_low_saled_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="products_low_saled_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Товары с низкими продажами</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="products_low_saled_modal_body"
+                                style="overflow-y: scroll;height: 80%;"></div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'products_low_saled_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="products_stoped_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Кол-во позиций товаров, без движения более 72 часов<br> 
+                            (При нажатии на блок можно получить информацио о товарах и скачать отчет)<br>Блок обновляется раз в день (в 8 утра)">
+                            <h6 class="card-title">Товары без движения</h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="products_stoped_body">
+                            <h4 class="card-text text-center" id="products_stoped_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="products_stoped_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="products_stoped_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="products_stoped_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Товары без движения</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="products_stoped_modal_body"></div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'products_stoped_report' full_sap=full_sap %}" target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="products_minus_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Кол-во позиций товаров, с отрицательным остатком<br> 
+                            (При нажатии на блок можно получить информацио о товарах и скачать отчет)<br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title">Товары с отрицательными остатками</h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="products_minus_body">
+                            <h4 class="card-text text-center" id="products_minus_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="products_minus_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="products_minus_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="products_minus_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Товары с отрицательными остатками</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="products_minus_modal_body"></div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'products_minus_report' full_sap=full_sap %}" target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

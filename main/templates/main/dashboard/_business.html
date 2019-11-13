@@ -1,0 +1,423 @@
+<div class="card mb-3">
+    <!-- Заголовок карточки -->
+    <div class="card-header bg-success text-white" id="headingBusiness" tabindex="0" data-toggle="collapse"
+        data-target="#business" aria-expanded="true" aria-controls="business">
+        <h6 class=" mb-0">
+            <i class="fas fa-business-time pt-1"></i> Основные бизнес показатели "{{full_sap}}"
+        </h6>
+    </div>
+    <!-- Тело карточки -->
+    <div id="business" class="collapse show" aria-labelledby="headingBusiness">
+        <div class="card-body-block bg-light">
+            <div class="row">
+
+                <!-- Продажи -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="business_revenue_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Выручка за сегодня | выручка неделей ранее<br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title text-center">Продажи на текущий день | Продажи прошлой недели</h6>
+                        </div>
+                        <div class="card-body" id="business_revenue_tooltip" tabindex="0" data-html="true"
+                            data-toggle="tooltip" data-placement="right">
+                            <h4 class="card-text text-center" id="business_revenue_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_revenue_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_revenue_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- РТО -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="business_rto_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Суммарный РТО за месяц на текущую дату<br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title text-center">РТО накопленное на текущую дату</h6>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-text text-center" id="business_rto_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_rto_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_rto_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Средний чек -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1 business_collection" id="business_average_check_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right"
+                            data-original-title="Средний чек за неделю со<br>сравнением относительно прошлой недели<br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title text-center">Средний чек за неделю | Средний чек прошлой недели</h6>
+                        </div>
+
+                        <div class="card-body" tabindex="0" data-toggle="modal"
+                            id="business_average_check">
+                            <h4 class="card-text text-center" id="business_average_check_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_average_check_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_average_check_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="business_average_check_modal" tabindex="-1" role="dialog"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Средний чек</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="business_average_check_modal_body">
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'business_average_check_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Отмененные чеки -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="business_canceled_checks_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Аннулированные чеки за текущий день<br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title text-center">Отмененные чеки</h6>
+                        </div>
+
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="business_canceled_checks_body">
+                            <h4 class="card-text text-center" id="business_canceled_checks_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_canceled_checks_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_canceled_checks_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="business_canceled_checks_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Отмененные чеки</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="business_canceled_checks_modal_body">
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'business_canceled_checks_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Списания -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="business_write_offs_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right"
+                            data-original-title="Общая сумма фактически закрытых<br>списаний за текущий месяц по<br>магазину (Процент от суммарного РТО)<br><br>Общая сумма фактически закрытых<br>списаний за текущую неделю по<br>магазину (Процент от суммарного РТО)<br><br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title text-center">Списания без учета компенсаций</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class="card-text text-center" id="business_write_offs_body_text_m">-</h5>
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="card-text text-center" id="business_write_offs_body_text_w">-</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_write_offs_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_write_offs_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Скорость сканирования кассиров -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="business_sellers_perfom_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right"
+                            data-original-title="Кол-во кассиров<br>(При нажатии на блок можно получить дополнительную информацию)<br>Блок обновляется раз в день (в 8 утра)">
+                            <h6 class="card-title text-center">Скорость сканирования кассиров</h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal"
+                            id="business_sellers_perfom_body">
+                            <h4 class="card-text text-center" id="business_sellers_perfom_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_sellers_perfom_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_sellers_perfom_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="business_sellers_perfom_modal" tabindex="-1" role="dialog"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Скорость сканирования кассиров</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="business_sellers_perfom_modal_body">
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'business_sellers_perfom_month_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет за месяц</a>
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'business_sellers_perfom_week_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- # Незакрытие документы приемки -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="business_open_documents_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Кол-во открытых документов<br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title text-center">Незакрытые документы приемки</h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal"
+                            id="business_open_documents_body">
+                            <h4 class="card-text text-center" id="business_open_documents_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_open_documents_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_open_documents_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="business_open_documents_modal" tabindex="-1" role="dialog"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Незакрытые документы приемки</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="business_open_documents_modal_body">
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'business_open_documents_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Незакрытие документы приемки АП -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="business_open_alcohol_documents_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Незакрытые документы приемки АП<br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title text-center">Незакрытые документы приемки АП</h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal"
+                            id="business_open_alcohol_documents_body">
+                            <h4 class="card-text text-center" id="business_open_alcohol_documents_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_open_alcohol_documents_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_open_alcohol_documents_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="business_open_alcohol_documents_modal" tabindex="-1" role="dialog"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Незакрытые документы приемки АП</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="business_open_alcohol_documents_modal_body">
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'business_open_alcohol_documents_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!-- Markdown -->
+                <div class="col-12">
+                    <div class="card bg-dark text-white my-1" id="business_markdown_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Markdown<br>Блок обновляется каждые 15 минут">
+                            <div class="row">
+                                <div class="col-3">
+                                    <h6 class="card-title text-center">Бюджет уценки для продаж на тек-й месяц</h6>
+                                </div>
+                                <div class="col-3">
+                                    <h6 class="card-title text-center">Бюджет уценки для наклеек на тек-й месяц</h6>
+                                </div>
+                                <div class="col-3">
+                                    <h6 class="card-title text-center">Остаток бюджета уценки для продаж</h6>
+                                </div>
+                                <div class="col-3">
+                                    <h6 class="card-title text-center">Остаток бюджета уценки для наклеек</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="markdown_body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <h4 class="card-text text-center" id="business_markdown_body_text_0"></h4>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-text text-center" id="business_markdown_body_text_1"></h4>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-text text-center" id="business_markdown_body_text_2"></h4>
+                                </div>
+                                <div class="col-2">
+                                    <h4 class="card-text text-center" id="business_markdown_body_text_3"></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_markdown_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_markdown_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                                {% comment %} <div class="col-1 mb-0">
+                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

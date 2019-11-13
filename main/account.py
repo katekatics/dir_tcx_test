@@ -1,0 +1,6 @@
+store_db_login = 'MONITORING'
+store_db_pass = '1AAA2BB3D'
+help_db_login = 'HELPDESK'
+help_db_pass = 'Zz123456'
+zabbix_login = 'store_card_api'
+zabbix_pass = '12345'
