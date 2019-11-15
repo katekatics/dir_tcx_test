@@ -11,12 +11,36 @@ from datetime import datetime
 import os
 from django.http import HttpResponse, HttpResponseRedirect
 import xlsxwriter
-
+from django.core.files.storage import FileSystemStorage
+import shutil
 
 # LOGGER
 import logging
 from logging.handlers import RotatingFileHandler
 
+@login_required
+def upload_index(request):
+    return render(request, 'main/upload.html')
+
+@login_required
+def upload(request):
+    if request.method == 'POST':
+        uploaded_file = request.FILES['document']
+        fs = FileSystemStorage(os.getcwd() + '/media/')
+        form = (uploaded_file.name).split('.')[1]
+        name = 'hr_test'
+        file_name = name + '.' + form
+        if fs.exists(file_name) == False:
+            if (form == 'xls') or (form == 'xlsx'):
+                fs.save(file_name, uploaded_file)
+                return redirect(request.path_info.split('upload')[0])
+            else:
+                return redirect(request.path_info.split('upload')[0])
+        else:
+            for j in os.walk(os.getcwd() + '/media/'):
+                os.remove(j[0] + j[2][0])
+            fs.save(file_name, uploaded_file)
+            return redirect(request.path_info.split('upload')[0])
 
 log_level = logging.INFO
 LOG_PATH = os.getcwd() + "/logs/activity.csv"

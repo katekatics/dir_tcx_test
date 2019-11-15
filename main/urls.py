@@ -60,6 +60,10 @@ urlpatterns = [
 
     path('store/<str:full_sap>/services_cashless/', views.services_cashless, name='services_cashless'),
 
+    path('upload/', views.upload_index, name='upload_index'),
+
+    path('upload/file/', views.upload, name='upload'),
+
     path('logout/', views.do_logout, name='logout'),
 
     path('store/<str:full_sap>/', views.dashboard, name='dashboard'),

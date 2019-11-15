@@ -1,0 +1,16 @@
+{% load static %}
+<head>
+<link rel="stylesheet" href="{%  static 'main/css/base.css' %}">
+</head>
+<title>HR загрузчик</title>
+
+<form action="file/" method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+    <div class="container" style="margin-left: 30px; margin-top: 30px;">
+        <h1>HR загрузчик</h1>
+        <div class="form-group">
+            <input type="file" class="form-control-file" name="document" accept=".xls,.xlsx">
+            <input class="btn btn-primary my-2" type="submit" value="Загрузить"></input>
+        </div>
+    </div>
+</form>

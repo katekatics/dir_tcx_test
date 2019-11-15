@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{%  static 'main/css/base.css' %}">
     <link rel="stylesheet" href="{%  static 'main/css/sticky-footer.css' %}">
     <link rel="stylesheet" href="{%  static 'main/css/datatables.min.css' %}">
-    <link rel="stylesheet" href="{%  static 'main/css/spiner.css' %}">
+    {% comment %} <link rel="stylesheet" href="{%  static 'main/css/spiner.css' %}"> {% endcomment %}
     <script src="{% static 'main/js/jquery.min.js' %}"></script>
     <script src="{% static 'main/js/popper.min.js' %}"></script>
     <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
@@ -119,6 +119,12 @@
                                 <a class="dropdown-item" href="{% url 'download_activity_log' %}">
                                     <i class="fas fa-users-cog fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Активность пользователей
+                                </a>
+                                {% endif %}
+                                {% if user.get_username == 'e.astrakhantseva' %}
+                                <a class="dropdown-item" href="{% url 'upload_index' %}">
+                                    <i class="fa fa-arrow-up fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Загрузчик
                                 </a>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
