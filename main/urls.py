@@ -64,6 +64,8 @@ urlpatterns = [
 
     path('upload/file/', views.upload, name='upload'),
 
+    path('upload/download/', views.hr_indicators, name='hr_indicators'),
+
     path('logout/', views.do_logout, name='logout'),
 
     path('store/<str:full_sap>/', views.dashboard, name='dashboard'),

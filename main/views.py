@@ -75,6 +75,19 @@ def do_logging(function):
             return function(request)
     return wrapper
 
+# HR-показатели (отчет)
+@login_required
+def hr_indicators(request):
+    filename = 'hr_test.xlsx'
+    if os.listdir(path='media/'):
+        if filename in os.listdir(path='media/')[0]:
+            with open('media/hr_test.xlsx', 'rb') as fp:
+                data = fp.read()
+        response = HttpResponse(content_type="application/")
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+        response.write(data)
+        return response
+
 
 
 # ОСНОВНЫЕ БИЗНЕС ПОКАЗАТЕЛИ
