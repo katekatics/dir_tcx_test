@@ -110,6 +110,13 @@ def business_sellers_perfom(store):
                     result['thead'], result['month'], store)
     return result
 
+# HR показатели
+def hr_indicators(store):
+    result = find_data('hr_indicators', store)
+    if 'thead' in result:
+        write_report('hr_indicators_report',
+                    result['thead'], result['tbody'], store)
+    return result
 
 # Markdown
 def business_markdown(store):

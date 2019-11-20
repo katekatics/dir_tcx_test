@@ -117,6 +117,9 @@ USE_TZ = True
 
 CSRF_COOKIE_NAME = 'tcx_token'
 SESSION_COOKIE_NAME = 'tcx_session'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 900
+# SESSION_SAVE_EVERY_REQUEST = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/

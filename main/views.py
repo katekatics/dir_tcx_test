@@ -77,7 +77,7 @@ def do_logging(function):
 
 # HR-показатели (отчет)
 @login_required
-def hr_indicators(request):
+def hr_indicators_original(request):
     filename = 'hr_test.xlsx'
     if os.listdir(path='media/'):
         if filename in os.listdir(path='media/')[0]:
@@ -218,6 +218,24 @@ def business_sellers_perfom(request, full_sap):
     result = store_class.business_sellers_perfom(full_sap)
     return JsonResponse(result)
 
+
+# # HR показатели (отчет)
+@login_required
+@do_logging
+def hr_indicators_report(request, full_sap):
+    with open('reports/{0}/hr_indicators_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_hr_indicators_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
+# # HR показатели
+@login_required
+def hr_indicators(request, full_sap):
+    result = store_class.hr_indicators(full_sap)
+    return JsonResponse(result)
 
 # Markdown
 @login_required
@@ -503,3 +521,6 @@ def do_logout(request):
 @do_logging
 def click_detect(request, full_sap, action):
     return HttpResponse()
+
+# def process_request(request):
+    # last_activity = request.session['user']
