@@ -501,13 +501,13 @@ def sign_in(request):
                                     login(request, user)
                                     return redirect(index)
                         else:
-                            messages.error(request, 'У вас нет доступа к данному сайту')
+                            messages.error(request, 'У вас нет доступа к данному сайту. Чтобы запросить доступ к сайту, обратитесь на DASHBOARD-DIR-PRODUCT@X5.RU')
                             return redirect(sign_in)
                     else:
-                        messages.error(request, 'Введен не верный пароль')
+                        messages.error(request, 'Неверный логин/пароль')
                         return redirect(sign_in)
             else:
-                messages.error(request, 'Иди нафиг')
+                messages.error(request, 'Неверный логин/пароль')
                 return redirect(sign_in)
         else:
             form =LoginForm()
