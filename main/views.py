@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from . import store_class
 from .models import Message, Incident
 from django.contrib.auth.decorators import login_required
-from .ad import checkUserInAD
+from .ad import checkUserInAD, checkUserGroup
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .forms import LoginForm
@@ -13,6 +13,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 import xlsxwriter
 from django.core.files.storage import FileSystemStorage
 import shutil
+from django.contrib import messages
 
 # LOGGER
 import logging
@@ -480,27 +481,33 @@ def sign_in(request):
                     if '@' in username:
                         username = username.split('@')[0]
                     if checkUserInAD(username+'@x5.ru', password):
-                        user = authenticate(request, username=username, password=password)
-                        if user is not None:
-                            login(request, user)
-                            if 'next' in request.GET:
-                                return HttpResponseRedirect(request.GET['next'])
-                            return redirect(index)
-                        else:
-                            if User.objects.filter(username=username).exists():
-                                user = User.objects.get(username__exact=username)
-                                user.set_password(password)
-                                user.save()
+                        if checkUserGroup(username+'@x5.ru', password):
+                            user = authenticate(request, username=username, password=password)
+                            if user is not None:
                                 login(request, user)
+                                if 'next' in request.GET:
+                                    return HttpResponseRedirect(request.GET['next'])
                                 return redirect(index)
                             else:
-                                user = User.objects.create_user(username, username+'@x5.ru', password)
-                                user.save()
-                                login(request, user)
-                                return redirect(index)
+                                if User.objects.filter(username=username).exists():
+                                    user = User.objects.get(username__exact=username)
+                                    user.set_password(password)
+                                    user.save()
+                                    login(request, user)
+                                    return redirect(index)
+                                else:
+                                    user = User.objects.create_user(username, username+'@x5.ru', password)
+                                    user.save()
+                                    login(request, user)
+                                    return redirect(index)
+                        else:
+                            messages.error(request, 'У вас нет доступа к данному сайту')
+                            return redirect(sign_in)
                     else:
+                        messages.error(request, 'Введен не верный пароль')
                         return redirect(sign_in)
             else:
+                messages.error(request, 'Иди нафиг')
                 return redirect(sign_in)
         else:
             form =LoginForm()
