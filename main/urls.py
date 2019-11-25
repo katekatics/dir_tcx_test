@@ -72,6 +72,8 @@ urlpatterns = [
     path('logout/', views.do_logout, name='logout'),
 
     path('store/<str:full_sap>/', views.dashboard, name='dashboard'),
+    
+    path('store/<str:full_sap>/go_back/', views.go_back, name='go_back'),
 
     path('', views.index, name='index'),
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from . import store_class
-from .models import Message, Incident
+from .models import Message, Incident, Directors
 from django.contrib.auth.decorators import login_required
 from .ad import checkUserInAD, checkUserGroup
 from django.contrib.auth import authenticate, login, logout
@@ -14,16 +14,17 @@ import xlsxwriter
 from django.core.files.storage import FileSystemStorage
 import shutil
 from django.contrib import messages
+# from cefevent import CEFEvent
 
 # LOGGER
 import logging
 from logging.handlers import RotatingFileHandler
 
-@login_required
+@login_required(redirect_field_name='')
 def upload_index(request):
     return render(request, 'main/upload.html')
 
-@login_required
+@login_required(redirect_field_name='')
 def upload(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['document']
@@ -58,6 +59,43 @@ rotateHandler = RotatingFileHandler(logfile, maxBytes=1024 * 1024 * 50, backupCo
 rotateHandler.setFormatter(logFormatter)
 logger.addHandler(rotateHandler)
 
+# c = CEFEvent()
+
+# def cef_logging(function):
+#     def wrapper(request, full_sap=None, click=None):
+#         time = str(datetime.now().time()).split('.')[0]
+#         date = str(datetime.now().date())
+#         dns = request.META['CLIENTNAME']
+#         if full_sap:
+#             if click:
+#                 c.set_field('start', date + ' ' + time)
+#                 c.set_field('deviceDns Domain', dns)
+#                 c.set_field('name', 'click')
+#                 c.set_field('msg', 'store: ' + full_sap)
+#                 c.set_field('click', click)
+#                 c.build_cef()
+#                 print(c)
+#                 return function(request, full_sap, click)
+#             else:
+#                 c.set_field('start', date + ' ' + time)
+#                 c.set_field('deviceDns Domain', dns)
+#                 c.set_field('name', function.__name__)
+#                 c.set_field('msg', 'store: ' + full_sap)
+#                 c.build_cef()
+#                 print(c)
+#                 return function(request, full_sap)
+
+#         else:
+#             c.set_field('start', date + ' ' + time)
+#             c.set_field('deviceDns Domain', dns)
+#             c.set_field('name', function.__name__)
+#             c.build_cef()
+#             print(c)
+#             return function(request)
+#     return wrapper
+
+
+
 
 def do_logging(function):
     def wrapper(request,full_sap=None, click=None):
@@ -77,7 +115,7 @@ def do_logging(function):
     return wrapper
 
 # HR-показатели (отчет)
-@login_required
+@login_required(redirect_field_name='')
 def hr_indicators_original(request):
     filename = 'hr_test.xlsx'
     if os.listdir(path='media/'):
@@ -93,14 +131,15 @@ def hr_indicators_original(request):
 
 # ОСНОВНЫЕ БИЗНЕС ПОКАЗАТЕЛИ
 # Продажи
-@login_required
+@login_required(redirect_field_name='')
 def business_revenue(request, full_sap):
     result = store_class.business_revenue(full_sap)
     return JsonResponse(result)
 
 
 # Приемка алкоголя(отчет)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def business_open_alcohol_documents_report(request, full_sap):
     with open('reports/{0}/alcohol_documents_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -112,14 +151,15 @@ def business_open_alcohol_documents_report(request, full_sap):
     return response
 
 # Приемка алкоголя
-@login_required
+@login_required(redirect_field_name='')
 def business_open_alcohol_documents(request, full_sap):
     result = store_class.business_open_alcohol_documents(full_sap)
     return JsonResponse(result)
 
 
 # # Незакрытие документы приемки(отчет)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def business_open_documents_report(request, full_sap):
     with open('reports/{0}/open_documents_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -131,21 +171,22 @@ def business_open_documents_report(request, full_sap):
     return response
 
 # # Незакрытие документы приемки
-@login_required
+@login_required(redirect_field_name='')
 def business_open_documents(request, full_sap):
     result = store_class.business_open_documents(full_sap)
     return JsonResponse(result)
 
 
 # РТО
-@login_required
+@login_required(redirect_field_name='')
 def business_rto(request, full_sap):
     result = store_class.business_rto(full_sap)
     return JsonResponse(result)
 
 
 # Средний чек(отчет)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def business_average_check_report(request, full_sap):
     with open('reports/{0}/average_check_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -157,14 +198,15 @@ def business_average_check_report(request, full_sap):
     return response
 
 # Средний чек
-@login_required
+@login_required(redirect_field_name='')
 def business_average_check(request, full_sap):
     result = store_class.business_average_check(full_sap)
     return JsonResponse(result)
 
 
 # Отмененные чеки(отчет)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def business_canceled_checks_report(request, full_sap):
     with open('reports/{0}/cancel_check_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -176,21 +218,22 @@ def business_canceled_checks_report(request, full_sap):
     return response
 
 # Отмененные чеки
-@login_required
+@login_required(redirect_field_name='')
 def business_canceled_checks(request, full_sap):
     result = store_class.business_canceled_checks(full_sap)
     return JsonResponse(result)
 
 
 # Списания
-@login_required
+@login_required(redirect_field_name='')
 def business_write_offs(request, full_sap):
     result = store_class.business_write_offs(full_sap)
     return JsonResponse(result)
 
 
 # Скорость сканирования кассиров(отчет)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def business_sellers_perfom_week_report(request, full_sap):
     with open('reports/{0}/sellers_perfom_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -202,7 +245,8 @@ def business_sellers_perfom_week_report(request, full_sap):
     return response
 
 # Скорость сканирования кассиров(отчет за месяц)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def business_sellers_perfom_month_report(request, full_sap):
     with open('reports/{0}/month_sellers_perfom_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -214,14 +258,15 @@ def business_sellers_perfom_month_report(request, full_sap):
     return response
 
 # Скорость сканирования кассиров
-@login_required
+@login_required(redirect_field_name='')
 def business_sellers_perfom(request, full_sap):
     result = store_class.business_sellers_perfom(full_sap)
     return JsonResponse(result)
 
 
 # # HR показатели (отчет)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def hr_indicators_report(request, full_sap):
     with open('reports/{0}/hr_indicators_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -233,13 +278,13 @@ def hr_indicators_report(request, full_sap):
     return response
 
 # # HR показатели
-@login_required
+@login_required(redirect_field_name='')
 def hr_indicators(request, full_sap):
     result = store_class.hr_indicators(full_sap)
     return JsonResponse(result)
 
 # Markdown
-@login_required
+@login_required(redirect_field_name='')
 def business_markdown(request, full_sap):
     result = store_class.business_markdown(full_sap)
     return JsonResponse(result)
@@ -247,7 +292,8 @@ def business_markdown(request, full_sap):
 
 # ТОВАРЫ
 # Просроченая продукция(отчет)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def products_overdue_report(request, full_sap):
     with open('reports/{0}/overdue_products_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -259,14 +305,15 @@ def products_overdue_report(request, full_sap):
     return response
 
 # Просроченая продукция
-@login_required
+@login_required(redirect_field_name='')
 def products_overdue(request, full_sap):
     result = store_class.products_overdue(full_sap)
     return JsonResponse(result)
 
 
 # Ошибки продажи алкоголя(отчет)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def products_alcohol_errors_report(request, full_sap):
     with open('reports/{0}/alcohol_errors_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -278,14 +325,15 @@ def products_alcohol_errors_report(request, full_sap):
     return response
 
 # Ошибки продажи алкоголя
-@login_required
+@login_required(redirect_field_name='')
 def products_alcohol_errors(request, full_sap):
     result = store_class.products_alcohol_errors(full_sap)
     return JsonResponse(result)
 
 
 # Товары с низкими продажами(отчет)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def products_low_saled_report(request, full_sap):
     with open('reports/{0}/low_saled_products_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -297,14 +345,15 @@ def products_low_saled_report(request, full_sap):
     return response
 
 # Товары с низкими продажами
-@login_required
+@login_required(redirect_field_name='')
 def products_low_saled(request, full_sap):
     result = store_class.products_low_saled(full_sap)
     return JsonResponse(result)
 
 
 # Товары без движения(отчет)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def products_stoped_report(request, full_sap):
     with open('reports/{0}/stoped_products_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -316,14 +365,15 @@ def products_stoped_report(request, full_sap):
     return response
 
 # Товары без движения
-@login_required
+@login_required(redirect_field_name='')
 def products_stoped(request, full_sap):
     result = store_class.products_stoped(full_sap)
     return JsonResponse(result)
 
 
 # Товары с отрицательными остатками(отчет)
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def products_minus_report(request, full_sap):
     with open('reports/{0}/minus_products_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -335,7 +385,7 @@ def products_minus_report(request, full_sap):
     return response
 
 # Товары с отрицательными остатками
-@login_required
+@login_required(redirect_field_name='')
 def products_minus(request, full_sap):
     result = store_class.products_minus(full_sap)
     return JsonResponse(result)
@@ -345,28 +395,28 @@ def products_minus(request, full_sap):
 
 # ДОСТУПНОСТЬ ОСНОВНЫХ СЕРВИСОВ
 # Cвязь
-@login_required
+@login_required(redirect_field_name='')
 def services_net(request, full_sap):
     result = store_class.services_net(full_sap)
     return JsonResponse(result)
 
 
 # Алкоголь
-@login_required
+@login_required(redirect_field_name='')
 def services_alcohol(request, full_sap):
     result = store_class.services_alcohol(full_sap)
     return JsonResponse(result)
 
 
 # Лояльность
-@login_required
+@login_required(redirect_field_name='')
 def services_loyalty(request, full_sap):
     result = store_class.services_loyalty(full_sap)
     return JsonResponse(result)
 
 
 # Безналичный расчет
-@login_required
+@login_required(redirect_field_name='')
 def services_cashless(request, full_sap):
     result = store_class.services_cashless(full_sap)
     return JsonResponse(result)
@@ -375,20 +425,21 @@ def services_cashless(request, full_sap):
 
 
 # ГЛАВНАЯ
-@login_required
+@login_required(redirect_field_name='')
 def index(request):
-    if request.method == 'POST':
-        search = request.POST.get('store').upper()
-        store = store_class.get_full_sap(search)
-        return redirect('dashboard', store)
-    else:
-        return render(request, 'main/index.html')
-
+    dirs = Directors.objects.all()
+    for d in dirs:
+        if request.user.username in d.director:
+            store = store_class.get_full_sap(d.sap)
+            if request.method == 'POST':
+                return redirect('dashboard', store)
+            else:
+                return redirect('dashboard', store)
 
 
 
 # КАССЫ
-@login_required   
+@login_required(redirect_field_name='') 
 def poses(request, full_sap):
     poses = store_class.poses(full_sap)
     return JsonResponse(poses)
@@ -397,7 +448,7 @@ def poses(request, full_sap):
 
 
 # КСО
-@login_required
+@login_required(redirect_field_name='')
 def kso(request, full_sap):
     kso = store_class.kso(full_sap)
     return JsonResponse(kso)
@@ -406,7 +457,7 @@ def kso(request, full_sap):
 
 
 # ВЕСЫ
-@login_required
+@login_required(redirect_field_name='')
 def scales(request, full_sap):
     scales = store_class.scales(full_sap)
     return JsonResponse(scales)
@@ -415,23 +466,34 @@ def scales(request, full_sap):
 
 
 # ДАШБОРД
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def dashboard(request, full_sap):
-    if request.method == 'POST':
-        search = request.POST.get('store').upper()
-        store = store_class.get_full_sap(search)
-        return redirect('dashboard', store)
-    else:
-        store = store_class.get_full_sap(full_sap)
-        return render(request, 'main/dashboard.html', {
-                                                    'full_sap': full_sap,
+    dirs = Directors.objects.all()
+    for d in dirs:
+        if request.user.username in d.director:
+            if request.method == 'POST':
+                if full_sap == d.sap:
+                    search = request.POST.get('store').upper()
+                    store = store_class.get_full_sap(search)
+                    return redirect('dashboard', store)
+                else:
+                    search = request.POST.get('store').upper()
+                    return render(request, 'main/access.html', {
+                                                    'full_sap': store_class.get_full_sap(search),
+                                                    })
+            else:
+                store = store_class.get_full_sap(d.sap)
+                return render(request, 'main/dashboard.html', {
+                                                    'full_sap': store_class.get_full_sap(store),
                                                     })
 
 
 
 # ЛОГИРОВАНИЕ
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def download_activity_log(request):
     header = ["Дата", "Время", "Пользователь", "Действие", "SAP №", 'Блок']
@@ -464,6 +526,7 @@ def download_activity_log(request):
 
 # АВТОРИЗАЦИЯ
 def sign_in(request):
+    dirs = Directors.objects.all()
     if request.user.is_authenticated:
         return redirect(index)
     else:
@@ -485,21 +548,24 @@ def sign_in(request):
                             user = authenticate(request, username=username, password=password)
                             if user is not None:
                                 login(request, user)
-                                if 'next' in request.GET:
-                                    return HttpResponseRedirect(request.GET['next'])
-                                return redirect(index)
-                            else:
-                                if User.objects.filter(username=username).exists():
-                                    user = User.objects.get(username__exact=username)
-                                    user.set_password(password)
-                                    user.save()
-                                    login(request, user)
-                                    return redirect(index)
-                                else:
-                                    user = User.objects.create_user(username, username+'@x5.ru', password)
-                                    user.save()
-                                    login(request, user)
-                                    return redirect(index)
+                                for d in dirs:
+                                    if (username + '@x5.ru') in d.director:
+                                        store = d.sap
+                                # if 'next' in request.GET:
+                                #     return HttpResponseRedirect(request.GET['next'])
+                                return redirect('dashboard', store_class.get_full_sap(store))
+                            # else:
+                            #     if User.objects.filter(username=username).exists():
+                            #         user = User.objects.get(username__exact=username)
+                            #         user.set_password(password)
+                            #         user.save()
+                            #         login(request, user)
+                            #         return redirect(index)
+                            #     else:
+                            #         user = User.objects.create_user(username, username+'@x5.ru', password)
+                            #         user.save()
+                            #         login(request, user)
+                            #         return redirect(index)
                         else:
                             messages.error(request, 'У вас нет доступа к данному сайту. Чтобы запросить доступ к сайту, обратитесь на DASHBOARD-DIR-PRODUCT@X5.RU')
                             return redirect(sign_in)
@@ -510,24 +576,29 @@ def sign_in(request):
                 messages.error(request, 'Неверный логин/пароль')
                 return redirect(sign_in)
         else:
-            form =LoginForm()
+            form = LoginForm()
     return render(request, 'main/sign_in.html', {'form':form})
 
 
 
 
 # ВЫХОД
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def do_logout(request):
     logout(request)
     return redirect(sign_in)
 
 
-@login_required
+@login_required(redirect_field_name='')
+# @cef_logging
 @do_logging
 def click_detect(request, full_sap, action):
     return HttpResponse()
 
-# def process_request(request):
-    # last_activity = request.session['user']
+@login_required(redirect_field_name='')
+# @cef_logging
+@do_logging
+def go_back(request, full_sap):
+    return redirect('dashboard', full_sap)

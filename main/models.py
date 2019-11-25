@@ -42,4 +42,14 @@ class Message(models.Model):
     def __str__(self):
         return self.store
 
+class Directors(models.Model):
+    sap = models.CharField(max_length=4)
+    director = models.EmailField()
 
+    class Meta:
+        ordering = ('-sap',)
+        verbose_name = 'Директора'
+        verbose_name_plural = 'Директора'
+    
+    def __str__(self):
+        return self.sap
