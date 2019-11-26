@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from . import store_class
-from .models import Message, Incident, Directors
+from .models import Message, Incident, Dirs
 from django.contrib.auth.decorators import login_required
 from .ad import checkUserInAD, checkUserGroup
 from django.contrib.auth import authenticate, login, logout
@@ -427,7 +427,7 @@ def services_cashless(request, full_sap):
 # ГЛАВНАЯ
 @login_required(redirect_field_name='')
 def index(request):
-    dirs = Directors.objects.all()
+    dirs = Dirs.objects.all()
     for d in dirs:
         if request.user.username in d.director:
             store = store_class.get_full_sap(d.sap)
@@ -470,7 +470,7 @@ def scales(request, full_sap):
 # @cef_logging
 @do_logging
 def dashboard(request, full_sap):
-    dirs = Directors.objects.all()
+    dirs = Dirs.objects.all()
     for d in dirs:
         if request.user.username in d.director:
             if request.method == 'POST':
@@ -487,6 +487,7 @@ def dashboard(request, full_sap):
                 store = store_class.get_full_sap(d.sap)
                 return render(request, 'main/dashboard.html', {
                                                     'full_sap': store_class.get_full_sap(store),
+                                                    'name': d.last_name + ' ' + d.name
                                                     })
 
 
@@ -526,7 +527,7 @@ def download_activity_log(request):
 
 # АВТОРИЗАЦИЯ
 def sign_in(request):
-    dirs = Directors.objects.all()
+    dirs = Dirs.objects.all()
     if request.user.is_authenticated:
         return redirect(index)
     else:

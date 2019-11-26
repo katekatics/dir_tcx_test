@@ -42,8 +42,11 @@ class Message(models.Model):
     def __str__(self):
         return self.store
 
-class Directors(models.Model):
+class Dirs(models.Model):
     sap = models.CharField(max_length=4)
+    last_name = models.CharField(max_length=256, default='')
+    name = models.CharField(max_length=256, default='')
+    otchestvo = models.CharField(max_length=256, default='')
     director = models.EmailField()
 
     class Meta:
