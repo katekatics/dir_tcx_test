@@ -20,6 +20,10 @@ from django.contrib import messages
 import logging
 from logging.handlers import RotatingFileHandler
 
+dirs = Dirs.objects.all()
+directors = []
+[directors.append(d.director) for d in dirs]
+
 @login_required(redirect_field_name='')
 def upload_index(request):
     return render(request, 'main/upload.html')
@@ -427,14 +431,21 @@ def services_cashless(request, full_sap):
 # ГЛАВНАЯ
 @login_required(redirect_field_name='')
 def index(request):
-    dirs = Dirs.objects.all()
-    for d in dirs:
-        if request.user.username in d.director:
-            store = store_class.get_full_sap(d.sap)
-            if request.method == 'POST':
-                return redirect('dashboard', store)
-            else:
-                return redirect('dashboard', store)
+    if (request.user.username + '@x5.ru') in directors:
+        for d in dirs:
+            if (request.user.username + '@x5.ru') == d.director:
+                store = store_class.get_full_sap(d.sap)
+                if request.method == 'POST':
+                    return redirect('dashboard', store)
+                else:
+                    return redirect('dashboard', store)
+    else:
+        if request.method == 'POST':
+            search = request.POST.get('store').upper()
+            store = store_class.get_full_sap(search)
+            return redirect('dashboard', store)
+        else:
+            return render(request, 'main/index.html')
 
 
 
@@ -470,25 +481,39 @@ def scales(request, full_sap):
 # @cef_logging
 @do_logging
 def dashboard(request, full_sap):
-    dirs = Dirs.objects.all()
-    for d in dirs:
-        if request.user.username in d.director:
-            if request.method == 'POST':
-                if full_sap == d.sap:
+    if request.method == 'POST':
+        if (request.user.username + '@x5.ru') in directors:
+            for d in dirs:
+                if (request.user.username + '@x5.ru') == d.director:
                     search = request.POST.get('store').upper()
-                    store = store_class.get_full_sap(search)
-                    return redirect('dashboard', store)
-                else:
-                    search = request.POST.get('store').upper()
-                    return render(request, 'main/access.html', {
-                                                    'full_sap': store_class.get_full_sap(search),
+                    if search == d.sap:
+                        store = store_class.get_full_sap(search)
+                        return redirect('dashboard', store)
+                    else:
+                        return render(request, 'main/access.html', {
+                                                        'full_sap': store_class.get_full_sap(search),
+                                                        })
+        else:
+            search = request.POST.get('store').upper()
+            store = store_class.get_full_sap(search)
+            return redirect('dashboard', store)
+    else:
+        if (request.user.username + '@x5.ru') in directors:
+            for d in dirs:
+                if (request.user.username + '@x5.ru') == d.director:
+                    if full_sap == store_class.get_full_sap(d.sap):
+                        return render(request, 'main/dashboard.html', {
+                                                    'full_sap': full_sap,
                                                     })
-            else:
-                store = store_class.get_full_sap(d.sap)
-                return render(request, 'main/dashboard.html', {
-                                                    'full_sap': store_class.get_full_sap(store),
-                                                    'name': d.last_name + ' ' + d.name
+                    else:
+                        return render(request, 'main/access.html', {
+                                                        'full_sap': full_sap,
+                                                        })
+        else:
+            return render(request, 'main/dashboard.html', {
+                                                    'full_sap': full_sap,
                                                     })
+
 
 
 
@@ -527,7 +552,6 @@ def download_activity_log(request):
 
 # АВТОРИЗАЦИЯ
 def sign_in(request):
-    dirs = Dirs.objects.all()
     if request.user.is_authenticated:
         return redirect(index)
     else:
@@ -547,26 +571,35 @@ def sign_in(request):
                     if checkUserInAD(username+'@x5.ru', password):
                         if checkUserGroup(username+'@x5.ru', password):
                             user = authenticate(request, username=username, password=password)
-                            if user is not None:
-                                login(request, user)
-                                for d in dirs:
-                                    if (username + '@x5.ru') in d.director:
-                                        store = d.sap
-                                # if 'next' in request.GET:
-                                #     return HttpResponseRedirect(request.GET['next'])
-                                return redirect('dashboard', store_class.get_full_sap(store))
-                            # else:
-                            #     if User.objects.filter(username=username).exists():
-                            #         user = User.objects.get(username__exact=username)
-                            #         user.set_password(password)
-                            #         user.save()
-                            #         login(request, user)
-                            #         return redirect(index)
-                            #     else:
-                            #         user = User.objects.create_user(username, username+'@x5.ru', password)
-                            #         user.save()
-                            #         login(request, user)
-                            #         return redirect(index)
+                            if user is not None:   
+                                if (username + '@x5.ru') in directors: 
+                                    for d in dirs:
+                                        if (username + '@x5.ru') == d.director:
+                                            store = d.sap
+                                            user.last_name = d.last_name
+                                            user.first_name = d.name
+                                            login(request, user)
+                                            return redirect('dashboard', store_class.get_full_sap(store))
+                                else:
+                                    login(request, user)
+                                    return redirect(index)
+                            else:
+                                if (username + '@x5.ru') in directors: 
+                                    for d in dirs:
+                                        if (username + '@x5.ru') == d.director:
+                                            user = User.objects.create_user(username, username+'@x5.ru', password)
+                                            user.first_name = d.name
+                                            user.last_name = d.last_name
+                                            user.save()
+                                            login(request, user)
+                                            return redirect('dashboard', store_class.get_full_sap(d.sap))
+                                else:
+                                    user = User.objects.create_user(username, username+'@x5.ru', password)
+                                    user.first_name = username
+                                    user.save()
+                                    login(request, user)
+                                    return redirect(index)
+                            
                         else:
                             messages.error(request, 'У вас нет доступа к данному сайту. Чтобы запросить доступ к сайту, обратитесь на DASHBOARD-DIR-PRODUCT@X5.RU')
                             return redirect(sign_in)
@@ -602,4 +635,6 @@ def click_detect(request, full_sap, action):
 # @cef_logging
 @do_logging
 def go_back(request, full_sap):
-    return redirect('dashboard', full_sap)
+    for d in dirs:
+        if (request.user.username + '@x5.ru') == d.director:
+                return redirect('dashboard', store_class.get_full_sap(d.sap))

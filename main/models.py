@@ -50,7 +50,7 @@ class Dirs(models.Model):
     director = models.EmailField()
 
     class Meta:
-        ordering = ('-sap',)
+        ordering = ('sap',)
         verbose_name = 'Директора'
         verbose_name_plural = 'Директора'
     
