@@ -51,6 +51,7 @@ class Dirs(models.Model):
 
     class Meta:
         ordering = ('sap',)
+        ordering = ('sap',)
         verbose_name = 'Директора'
         verbose_name_plural = 'Директора'
     
