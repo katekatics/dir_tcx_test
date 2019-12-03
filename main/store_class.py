@@ -319,8 +319,9 @@ def get_full_sap(store):
         })['result']
         zabbix.session.close()
         if find:
-            return find[0]['name']
-
+            for i in find:
+                if i['name'].startswith('Super'):
+                    return i['name']
 
 def get_hostid(store):
     if store.upper().startswith("SUPER") or store.upper().startswith(bf_rule1) or store.upper() in bf_rule2:
