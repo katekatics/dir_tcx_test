@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from . import store_class
-from .models import Message, Incident, Dirs
+from .models import Message, Incident, Dirs, User_Info
 from django.contrib.auth.decorators import login_required
 from .ad import checkUserInAD, checkUserGroup
 from django.contrib.auth import authenticate, login, logout
@@ -14,7 +14,8 @@ import xlsxwriter
 from django.core.files.storage import FileSystemStorage
 import shutil
 from django.contrib import messages
-# from cefevent import CEFEvent
+from cefevent import CEFEvent
+import socket
 
 # LOGGER
 import logging
@@ -63,40 +64,58 @@ rotateHandler = RotatingFileHandler(logfile, maxBytes=1024 * 1024 * 50, backupCo
 rotateHandler.setFormatter(logFormatter)
 logger.addHandler(rotateHandler)
 
-# c = CEFEvent()
 
-# def cef_logging(function):
-#     def wrapper(request, full_sap=None, click=None):
-#         time = str(datetime.now().time()).split('.')[0]
-#         date = str(datetime.now().date())
-#         dns = request.META['CLIENTNAME']
-#         if full_sap:
-#             if click:
-#                 c.set_field('start', date + ' ' + time)
-#                 c.set_field('deviceDns Domain', dns)
-#                 c.set_field('name', 'click')
-#                 c.set_field('msg', 'store: ' + full_sap)
-#                 c.set_field('click', click)
-#                 c.build_cef()
-#                 print(c)
-#                 return function(request, full_sap, click)
-#             else:
-#                 c.set_field('start', date + ' ' + time)
-#                 c.set_field('deviceDns Domain', dns)
-#                 c.set_field('name', function.__name__)
-#                 c.set_field('msg', 'store: ' + full_sap)
-#                 c.build_cef()
-#                 print(c)
-#                 return function(request, full_sap)
+# from time import sleep
+# UDP_PORT = 514
+# sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+# sock.connect(('192.168.70.204', UDP_PORT))
+  
+# while True:
+#     sock.send(b'Hello, World!')
+#     sleep(1)
 
-#         else:
-#             c.set_field('start', date + ' ' + time)
-#             c.set_field('deviceDns Domain', dns)
-#             c.set_field('name', function.__name__)
-#             c.build_cef()
-#             print(c)
-#             return function(request)
-#     return wrapper
+c = CEFEvent()
+
+def cef_logging(function):
+    def wrapper(request, full_sap=None, click=None):
+        time = str(datetime.now().time()).split('.')[0]
+        date = str(datetime.now().date())
+        ip = request.META['REMOTE_ADDR']
+        user = request.META['USERNAME']
+        app_ip = request.META['HTTP_HOST'].split(':')[0]
+        if full_sap:
+            if click:
+                c.set_field('start', date + ' ' + time)
+                c.set_field('src', ip)
+                c.set_field('dst', app_ip)
+                c.set_field('duser', user)
+                c.set_field('name', 'click')
+                c.set_field('msg', 'store: ' + full_sap)
+                c.set_field('click', click)
+                c.build_cef()
+                print(c)
+                return function(request, full_sap, click)
+            else:
+                c.set_field('start', date + ' ' + time)
+                c.set_field('src', ip)
+                c.set_field('dst', app_ip)
+                c.set_field('duser', user)
+                c.set_field('name', function.__name__)
+                c.set_field('msg', 'store: ' + full_sap)
+                c.build_cef()
+                print(c)
+                return function(request, full_sap)
+
+        else:
+            c.set_field('start', date + ' ' + time)
+            c.set_field('src', ip)
+            c.set_field('dst', app_ip)
+            c.set_field('duser', user)
+            c.set_field('name', function.__name__)
+            c.build_cef()
+            print(c)
+            return function(request)
+    return wrapper
 
 
 
@@ -139,6 +158,25 @@ def hr_indicators_original(request):
 def business_revenue(request, full_sap):
     result = store_class.business_revenue(full_sap)
     return JsonResponse(result)
+
+# Продажи (новые)
+@login_required(redirect_field_name='')
+def business_revenue_new(request, full_sap):
+    result = store_class.business_revenue_new(full_sap)
+    return JsonResponse(result)
+
+# Продажи (новые) (отчет)
+@login_required(redirect_field_name='')
+# @cef_logging
+@do_logging
+def business_revenue_new_report(request, full_sap):
+    with open('reports/{0}/business_revenue_new_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_business_revenue_new_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
 
 
 # Приемка алкоголя(отчет)
@@ -368,10 +406,61 @@ def products_stoped_report(request, full_sap):
     response.write(data)
     return response
 
+@login_required(redirect_field_name='')
+# @cef_logging
+@do_logging
+def products_stoped_food_report(request, full_sap):
+    with open('reports/{0}/stoped_products_food_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_stoped_products_food_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
+@login_required(redirect_field_name='')
+# @cef_logging
+@do_logging
+def products_stoped_nonfood_report(request, full_sap):
+    with open('reports/{0}/stoped_products_nonfood_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_stoped_products_nonfood_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
+@login_required(redirect_field_name='')
+# @cef_logging
+@do_logging
+def products_stoped_fresh_report(request, full_sap):
+    with open('reports/{0}/stoped_products_fresh_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_stoped_products_fresh_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
 # Товары без движения
 @login_required(redirect_field_name='')
 def products_stoped(request, full_sap):
     result = store_class.products_stoped(full_sap)
+    return JsonResponse(result)
+
+@login_required(redirect_field_name='')
+def products_stoped_food(request, full_sap):
+    result = store_class.products_stoped_food(full_sap)
+    return JsonResponse(result)
+
+@login_required(redirect_field_name='')
+def products_stoped_nonfood(request, full_sap):
+    result = store_class.products_stoped_nonfood(full_sap)
+    return JsonResponse(result)
+
+@login_required(redirect_field_name='')
+def products_stoped_fresh(request, full_sap):
+    result = store_class.products_stoped_fresh(full_sap)
     return JsonResponse(result)
 
 
@@ -392,6 +481,42 @@ def products_minus_report(request, full_sap):
 @login_required(redirect_field_name='')
 def products_minus(request, full_sap):
     result = store_class.products_minus(full_sap)
+    return JsonResponse(result)
+
+@login_required(redirect_field_name='')
+# @cef_logging
+@do_logging
+def products_top30_report(request, full_sap):
+    with open('reports/{0}/top30_products_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_top30_products_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
+# Топ 30
+@login_required(redirect_field_name='')
+def products_top30(request, full_sap):
+    result = store_class.products_top30(full_sap)
+    return JsonResponse(result)
+
+@login_required(redirect_field_name='')
+# @cef_logging
+@do_logging
+def products_topvd_report(request, full_sap):
+    with open('reports/{0}/topvd_products_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_topvd_products_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
+# Топ ВД
+@login_required(redirect_field_name='')
+def products_topvd(request, full_sap):
+    result = store_class.products_topvd(full_sap)
     return JsonResponse(result)
 
 
@@ -478,8 +603,8 @@ def scales(request, full_sap):
 
 # ДАШБОРД
 @login_required(redirect_field_name='')
-# @cef_logging
-@do_logging
+@cef_logging
+# @do_logging
 def dashboard(request, full_sap):
     if request.method == 'POST':
         if (request.user.username + '@x5.ru') in directors:
@@ -519,8 +644,8 @@ def dashboard(request, full_sap):
 
 # ЛОГИРОВАНИЕ
 @login_required(redirect_field_name='')
-# @cef_logging
-@do_logging
+@cef_logging
+# @do_logging
 def download_activity_log(request):
     header = ["Дата", "Время", "Пользователь", "Действие", "SAP №", 'Блок']
     with open(os.getcwd() + '/logs/activity.csv', 'r') as fp:
@@ -551,6 +676,7 @@ def download_activity_log(request):
 
 
 # АВТОРИЗАЦИЯ
+@cef_logging
 def sign_in(request):
     if request.user.is_authenticated:
         return redirect(index)
@@ -571,7 +697,7 @@ def sign_in(request):
                     if checkUserInAD(username+'@x5.ru', password):
                         if checkUserGroup(username+'@x5.ru', password):
                             user = authenticate(request, username=username, password=password)
-                            if user is not None:   
+                            if user is not None:
                                 if (username + '@x5.ru') in directors: 
                                     for d in dirs:
                                         if (username + '@x5.ru') == d.director:
@@ -594,11 +720,19 @@ def sign_in(request):
                                             login(request, user)
                                             return redirect('dashboard', store_class.get_full_sap(d.sap))
                                 else:
-                                    user = User.objects.create_user(username, username+'@x5.ru', password)
-                                    user.first_name = username
-                                    user.save()
-                                    login(request, user)
-                                    return redirect(index)
+                                    if User.objects.filter(username=username).exists():
+                                        user = User.objects.get(username__exact=username)
+                                        user.set_password(password)
+                                        user.save()
+                                        login(request, user)
+                                        return redirect(index)
+                                    else:
+                                        user = User.objects.create_user(username, username+'@x5.ru', password)
+                                        user = form.save(commit=False)
+                                        user.first_name = username
+                                        user.save()
+                                        login(request, user)
+                                        return redirect(index)
                             
                         else:
                             messages.error(request, 'У вас нет доступа к данному сайту. Чтобы запросить доступ к сайту, обратитесь на DASHBOARD-DIR-PRODUCT@X5.RU')
@@ -618,8 +752,8 @@ def sign_in(request):
 
 # ВЫХОД
 @login_required(redirect_field_name='')
-# @cef_logging
-@do_logging
+@cef_logging
+# @do_logging
 def do_logout(request):
     logout(request)
     return redirect(sign_in)
@@ -638,3 +772,4 @@ def go_back(request, full_sap):
     for d in dirs:
         if (request.user.username + '@x5.ru') == d.director:
                 return redirect('dashboard', store_class.get_full_sap(d.sap))
+

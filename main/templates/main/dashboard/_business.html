@@ -12,7 +12,7 @@
             <div class="row">
 
                 <!-- Продажи -->
-                <div class="col-xl-6 col-lg-6 col-md-12">
+                <div class="col-xl-6 col-lg-6 col-md-12" style="display: none;">
                     <div class="card bg-dark text-white my-1" id="business_revenue_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
                             data-placement="right" data-original-title="Выручка за сегодня | выручка неделей ранее<br>Блок обновляется каждые 15 минут">
@@ -31,9 +31,51 @@
                                     <small class="float-right" id="business_revenue_footer_time" data-toggle="tooltip"
                             data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
-                                {% comment %} <div class="col-1 mb-0">
-                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
-                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продажи (новые) -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="business_revenue_new_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="" id="business_revenue_new_tooltip">
+                            <h6 class="card-title text-center">Продажи на текущий день | Продажи прошлой недели | Год назад</h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="business_revenue_new_body">
+                            <h4 class="card-text text-center" id="business_revenue_new_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_revenue_new_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_revenue_new_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="business_revenue_new_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Продажи</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="business_revenue_new_modal_body">
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'business_revenue_new_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
                             </div>
                         </div>
                     </div>
@@ -58,9 +100,6 @@
                                     <small class="float-right" id="business_rto_footer_time" data-toggle="tooltip"
                             data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
-                                {% comment %} <div class="col-1 mb-0">
-                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
-                                </div> {% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -89,9 +128,6 @@
                                     <small class="float-right" id="business_average_check_footer_time" data-toggle="tooltip"
                             data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
-                                {% comment %} <div class="col-1 mb-0">
-                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
-                                </div> {% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -124,7 +160,7 @@
                 <div class="col-xl-6 col-lg-6 col-md-12">
                     <div class="card bg-dark text-white my-1" id="business_canceled_checks_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Аннулированные чеки за текущий день<br>Блок обновляется каждые 15 минут">
+                            data-placement="right" data-original-title="Аннулированные чеки за текущий день<br><br>Блок обновляется каждые 15 минут<br>(При нажатии на блок можно получить дополнительную информацию и скачать отчет)">
                             <h6 class="card-title text-center">Отмененные чеки</h6>
                         </div>
 
@@ -140,9 +176,6 @@
                                     <small class="float-right" id="business_canceled_checks_footer_time" data-toggle="tooltip"
                             data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
-                                {% comment %} <div class="col-1 mb-0">
-                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
-                                </div> {% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -196,9 +229,6 @@
                                     <small class="float-right" id="business_write_offs_footer_time" data-toggle="tooltip"
                             data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
-                                {% comment %} <div class="col-1 mb-0">
-                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
-                                </div> {% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -226,9 +256,6 @@
                                     <small class="float-right" id="business_sellers_perfom_footer_time" data-toggle="tooltip"
                             data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
-                                {% comment %} <div class="col-1 mb-0">
-                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
-                                </div> {% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -357,7 +384,7 @@
 
 
                 <!-- HR-показатели -->
-                <div class="col-xl-6 col-lg-6 col-md-12">
+                <div class="col-xl-6 col-lg-6 col-md-12" style="display: none;"">
                     <div class="card bg-dark text-white my-1" id="hr_indicators_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
                             data-placement="right" data-original-title="HR-показатели">
@@ -451,9 +478,6 @@
                                     <small class="float-right" id="business_markdown_footer_time" data-toggle="tooltip"
                             data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
-                                {% comment %} <div class="col-1 mb-0">
-                                    <div class="spinner-border spinner-border-sm mb-0 float-right" role="status"></div>
-                                </div> {% endcomment %}
                             </div>
                         </div>
                     </div>

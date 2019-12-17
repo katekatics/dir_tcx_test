@@ -8,10 +8,22 @@ urlpatterns = [
     path('store/<str:full_sap>/products_low_saled/', views.products_low_saled, name='products_low_saled'),
 
     path('store/<str:full_sap>/products_stoped_report/', views.products_stoped_report, name='products_stoped_report'),
+    path('store/<str:full_sap>/products_stoped_food_report/', views.products_stoped_food_report, name='products_stoped_food_report'),
+    path('store/<str:full_sap>/products_stoped_nonfood_report/', views.products_stoped_nonfood_report, name='products_stoped_nonfood_report'),
+    path('store/<str:full_sap>/products_stoped_fresh_report/', views.products_stoped_fresh_report, name='products_stoped_fresh_report'),
     path('store/<str:full_sap>/products_stoped/', views.products_stoped, name='products_stoped'),
+    path('store/<str:full_sap>/products_stoped_food/', views.products_stoped_food, name='products_stoped_food'),
+    path('store/<str:full_sap>/products_stoped_nonfood/', views.products_stoped_nonfood, name='products_stoped_nonfood'),
+    path('store/<str:full_sap>/products_stoped_fresh/', views.products_stoped_fresh, name='products_stoped_fresh'),
 
     path('store/<str:full_sap>/products_minus_report/', views.products_minus_report, name='products_minus_report'),
     path('store/<str:full_sap>/products_minus/', views.products_minus, name='products_minus'),
+
+    path('store/<str:full_sap>/products_top30_report/', views.products_top30_report, name='products_top30_report'),
+    path('store/<str:full_sap>/products_top30/', views.products_top30, name='products_top30'),
+
+    path('store/<str:full_sap>/products_topvd_report/', views.products_topvd_report, name='products_topvd_report'),
+    path('store/<str:full_sap>/products_topvd/', views.products_topvd, name='products_topvd'),
 
     path('store/<str:full_sap>/products_overdue_report/', views.products_overdue_report, name='products_overdue_report'),
     path('store/<str:full_sap>/products_overdue/', views.products_overdue, name='products_overdue'),
@@ -56,6 +68,9 @@ urlpatterns = [
     path('store/<str:full_sap>/services_net/', views.services_net, name='services_net'),
 
     path('store/<str:full_sap>/business_revenue/', views.business_revenue, name='business_revenue'),
+
+    path('store/<str:full_sap>/business_revenue_new_report/', views.business_revenue_new_report, name='business_revenue_new_report'),
+    path('store/<str:full_sap>/business_revenue_new/', views.business_revenue_new, name='business_revenue_new'),
 
     path('store/<str:full_sap>/services_alcohol/', views.services_alcohol, name='services_alcohol'),
 

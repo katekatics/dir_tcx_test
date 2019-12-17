@@ -18,17 +18,21 @@ def checkUserGroup(login, password):
     conn.bind()
     response = conn.extend.standard.paged_search(
         search_base='OU=Main,DC=X5,DC=ru',
-        search_filter='(mail={})'.format(login),
+        search_filter='(sAMAccountName={})'.format(login.split('@')[0]),
         search_scope=SUBTREE,
         attributes=ALL_ATTRIBUTES,
-        generator=False)[0]['attributes']
-    groups = response._store['memberOf']
-    target = 0
-    for group in groups:
-        if group == 'CN=Operational_DB_DM_TSX,OU=Security,OU=Groups,OU=Central,OU=Main,DC=X5,DC=ru':
-            target = 1
-            break
-    conn.unbind()
-    if target == 1:
-        return True
-    return False
+        generator=False)
+    if response:
+        response = response[0]['attributes']
+        groups = response._store['memberOf']
+        target = 0
+        for group in groups:
+            if group == 'CN=Operational_DB_DM_TSX,OU=Security,OU=Groups,OU=Central,OU=Main,DC=X5,DC=ru':
+                target = 1
+                break
+        conn.unbind()
+        if target == 1:
+            return True
+        return False
+    else:
+        return False

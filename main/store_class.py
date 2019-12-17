@@ -49,6 +49,12 @@ def find_data(col, store):
 def business_revenue(store):
     return find_data('business_revenue', store)
 
+def business_revenue_new(store):
+    result = find_data('business_revenue_new', store)
+    if 'thead' in result:
+        write_report('business_revenue_new_report',
+                    result['thead'], result['tbody'], store)
+    return result
 
 
 # Незакрытие документы приемки алкоголя
@@ -128,7 +134,7 @@ def business_markdown(store):
 
 # Просроченая продукция
 def products_overdue(store):
-    result = find_data('products_overdue', store)
+    result = find_data('products_overdue_new', store)
     if 'thead' in result:
         write_report('overdue_products_report',
                     result['thead'], result['tbody'], store)
@@ -158,12 +164,49 @@ def products_stoped(store):
                     result['thead'], result['tbody'], store)
     return result
 
+def products_stoped_food(store):
+    result = find_data('products_stoped_food', store)
+    if 'thead' in result:
+        write_report('stoped_products_food_report',
+                    result['thead'], result['tbody'], store)
+    return result
+
+def products_stoped_nonfood(store):
+    result = find_data('products_stoped_nonfood', store)
+    if 'thead' in result:
+        write_report('stoped_products_nonfood_report',
+                    result['thead'], result['tbody'], store)
+    return result
+
+def products_stoped_fresh(store):
+    result = find_data('products_stoped_fresh', store)
+    if 'thead' in result:
+        write_report('stoped_products_fresh_report',
+                    result['thead'], result['tbody'], store)
+    return result
+
 
 # Товары с отрицательными остатками
 def products_minus(store):
     result = find_data('products_minus', store)
     if 'thead' in result:
-        write_report('minus_products_report',
+        write_report('top30_products_report',
+                    result['thead'], result['tbody'], store)
+    return result
+
+# Топ 30
+def products_top30(store):
+    result = find_data('products_top30', store)
+    if 'thead' in result:
+        write_report('top30_products_report',
+                    result['thead'], result['tbody'], store)
+    return result
+
+# Топ ВД
+def products_topvd(store):
+    result = find_data('products_topvd', store)
+    if 'thead' in result:
+        write_report('topvd_products_report',
                     result['thead'], result['tbody'], store)
     return result
 
