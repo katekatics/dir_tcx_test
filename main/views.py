@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from . import store_class
-from .models import Message, Incident, Dirs, User_Info
+from .models import Message, Incident, Dirs
 from django.contrib.auth.decorators import login_required
 from .ad import checkUserInAD, checkUserGroup
 from django.contrib.auth import authenticate, login, logout
@@ -14,8 +14,8 @@ import xlsxwriter
 from django.core.files.storage import FileSystemStorage
 import shutil
 from django.contrib import messages
-from cefevent import CEFEvent
-import socket
+import pymongo
+
 
 # LOGGER
 import logging
@@ -25,9 +25,51 @@ dirs = Dirs.objects.all()
 directors = []
 [directors.append(d.director) for d in dirs]
 
+# import numpy as np
+# import seaborn as sns
+# import matplotlib.pyplot as plt
+
+# val = np.random.rand(10, 12)
+# fig, ax = plt.subplots(figsize=(12,10))
+# sns.heatmap(val, ax = ax, annot=True)
+# fig.savefig('static/main/img/heatmap.png')
+
+# def get_heatmap(request):
+#     return render(request, 'main/heatmap_1_0.html')
+
+
+def get_feedback(request):
+    response = {'connect': False, 'msg': ''}
+    now = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
+    user = request.user.username
+    feedback = request.POST['feedback']
+    sent_from = request.POST['sap']
+    if ((user + '@x5.ru') in directors) or ((user) in directors):
+        for d in dirs:
+            if ((user + '@x5.ru') == d.director) or (user == d.director):
+                sap = d.sap
+    else:
+        sap = ''
+    mongo = pymongo.MongoClient('192.168.200.73', 27017)
+    db = mongo['tcx']
+    col = db['feedback']
+    row = {'date': now, 'user': user, 'feedback': feedback}
+    try:
+        mongo.server_info()
+        response['connect'] = True
+        response['msg'] = 'Ваше сообщение отправлено!'
+        row['sap'] = sap
+        row['sent_from'] = sent_from
+        col.insert_one(row)
+    except:
+        response['connect'] = False
+        response['msg'] = 'Ваше сообщение не отправлено!'   
+    mongo.close()                                                                                                                                                                     
+    return JsonResponse(response)
+
 @login_required(redirect_field_name='')
 def upload_index(request):
-    return render(request, 'main/upload.html')
+    return render(request, 'main/upload_1_0.html')
 
 @login_required(redirect_field_name='')
 def upload(request):
@@ -69,58 +111,75 @@ logger.addHandler(rotateHandler)
 # UDP_PORT = 514
 # sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 # sock.connect(('192.168.70.204', UDP_PORT))
-  
-# while True:
-#     sock.send(b'Hello, World!')
-#     sleep(1)
+# c = CEFEvent()
 
-c = CEFEvent()
+# def cef_logging(function):   
+#     def wrapper(request, full_sap=None, click=None):
+#         time = str(datetime.now().time()).split('.')[0]
+#         date = str(datetime.now().date())
+#         ip = request.META['REMOTE_ADDR']
+#         user = request.user.username
+#         app_ip = request.META['HTTP_HOST'].split(':')[0]
+#         if full_sap:
+#             if click:
+#                 c.set_field('deviceVendor', 'Operational_DB_DM')
+#                 c.set_field('deviceProduct', 'DB DM Test')
+#                 c.set_field('severity', 4)
+#                 c.set_field('end', date + ' ' + time)
+#                 c.set_field('src', ip)
+#                 c.set_field('dst', app_ip)
+#                 c.set_field('duser', user)
+#                 c.set_field('name', 'click')
+#                 c.set_field('msg', 'store: ' + full_sap)
+#                 c.set_field('click', click)
+#                 c.build_cef()
+#                 string = str(c)
+#                 byte_string = bytes(string, 'utf-8')
+#                 print(c)
+#                 sock.send(byte_string)
+#                 sleep(1)
+#                 return function(request, full_sap, click)
+#             else:
+#                 c.set_field('deviceVendor', 'Operational_DB_DM')
+#                 c.set_field('deviceProduct', 'DB DM Test')
+#                 c.set_field('severity', 4)
+#                 c.set_field('end', date + ' ' + time)
+#                 c.set_field('src', ip)
+#                 c.set_field('dst', app_ip)
+#                 c.set_field('duser', user)
+#                 c.set_field('name', function.__name__)
+#                 c.set_field('msg', 'store: ' + full_sap)
+#                 c.build_cef()
+#                 string = str(c)
+#                 byte_string = bytes(string, 'utf-8')
+#                 print(c)
+#                 sock.send(byte_string)
+#                 sleep(1)
+#                 return function(request, full_sap)
 
-def cef_logging(function):
-    def wrapper(request, full_sap=None, click=None):
-        time = str(datetime.now().time()).split('.')[0]
-        date = str(datetime.now().date())
-        ip = request.META['REMOTE_ADDR']
-        user = request.META['USERNAME']
-        app_ip = request.META['HTTP_HOST'].split(':')[0]
-        if full_sap:
-            if click:
-                c.set_field('start', date + ' ' + time)
-                c.set_field('src', ip)
-                c.set_field('dst', app_ip)
-                c.set_field('duser', user)
-                c.set_field('name', 'click')
-                c.set_field('msg', 'store: ' + full_sap)
-                c.set_field('click', click)
-                c.build_cef()
-                print(c)
-                return function(request, full_sap, click)
-            else:
-                c.set_field('start', date + ' ' + time)
-                c.set_field('src', ip)
-                c.set_field('dst', app_ip)
-                c.set_field('duser', user)
-                c.set_field('name', function.__name__)
-                c.set_field('msg', 'store: ' + full_sap)
-                c.build_cef()
-                print(c)
-                return function(request, full_sap)
-
-        else:
-            c.set_field('start', date + ' ' + time)
-            c.set_field('src', ip)
-            c.set_field('dst', app_ip)
-            c.set_field('duser', user)
-            c.set_field('name', function.__name__)
-            c.build_cef()
-            print(c)
-            return function(request)
-    return wrapper
+#         else:
+#             c.set_field('deviceVendor', 'Operational_DB_DM')
+#             c.set_field('deviceProduct', 'DB DM Test')
+#             c.set_field('severity', 4)
+#             c.set_field('end', date + ' ' + time)
+#             c.set_field('src', ip)
+#             c.set_field('dst', app_ip)
+#             c.set_field('duser', user)
+#             c.set_field('name', function.__name__)
+#             c.build_cef()
+#             string = str(c)
+#             byte_string = bytes(string, 'utf-8')
+#             print(c)
+#             sock.send(byte_string)
+#             sleep(1)
+#             return function(request)
+#     return wrapper
 
 
 
 
 def do_logging(function):
+    # @wraps(function)
     def wrapper(request,full_sap=None, click=None):
         time = str(datetime.now().time()).split('.')[0]
         date = str(datetime.now().date())
@@ -555,10 +614,11 @@ def services_cashless(request, full_sap):
 
 # ГЛАВНАЯ
 @login_required(redirect_field_name='')
+# @cef_logging
 def index(request):
-    if (request.user.username + '@x5.ru') in directors:
+    if ((request.user.username + '@x5.ru') in directors) or ((request.user.username) in directors):
         for d in dirs:
-            if (request.user.username + '@x5.ru') == d.director:
+            if ((request.user.username + '@x5.ru') == d.director) or (request.user.username) == d.director:
                 store = store_class.get_full_sap(d.sap)
                 if request.method == 'POST':
                     return redirect('dashboard', store)
@@ -570,7 +630,7 @@ def index(request):
             store = store_class.get_full_sap(search)
             return redirect('dashboard', store)
         else:
-            return render(request, 'main/index.html')
+            return render(request, 'main/index_1_0.html')
 
 
 
@@ -598,24 +658,28 @@ def scales(request, full_sap):
     scales = store_class.scales(full_sap)
     return JsonResponse(scales)
 
-
+# Обратная связь
+@login_required(redirect_field_name='')
+def feedback(request):
+    feedback = store_class.feedback()
+    return JsonResponse(feedback, safe=False)
 
 
 # ДАШБОРД
 @login_required(redirect_field_name='')
-@cef_logging
-# @do_logging
+# @cef_logging
+@do_logging
 def dashboard(request, full_sap):
     if request.method == 'POST':
-        if (request.user.username + '@x5.ru') in directors:
+        if ((request.user.username + '@x5.ru') in directors) or ((request.user.username) in directors):
             for d in dirs:
-                if (request.user.username + '@x5.ru') == d.director:
+                if ((request.user.username + '@x5.ru') == d.director) or ((request.user.username) == d.director):
                     search = request.POST.get('store').upper()
                     if search == d.sap:
                         store = store_class.get_full_sap(search)
                         return redirect('dashboard', store)
                     else:
-                        return render(request, 'main/access.html', {
+                        return render(request, 'main/access_1_0.html', {
                                                         'full_sap': store_class.get_full_sap(search),
                                                         })
         else:
@@ -623,19 +687,19 @@ def dashboard(request, full_sap):
             store = store_class.get_full_sap(search)
             return redirect('dashboard', store)
     else:
-        if (request.user.username + '@x5.ru') in directors:
+        if ((request.user.username + '@x5.ru') in directors) or ((request.user.username) in directors):
             for d in dirs:
-                if (request.user.username + '@x5.ru') == d.director:
+                if ((request.user.username + '@x5.ru') == d.director) or ((request.user.username) == d.director):
                     if full_sap == store_class.get_full_sap(d.sap):
-                        return render(request, 'main/dashboard.html', {
+                        return render(request, 'main/dashboard_1_0.html', {
                                                     'full_sap': full_sap,
                                                     })
                     else:
-                        return render(request, 'main/access.html', {
+                        return render(request, 'main/access_1_0.html', {
                                                         'full_sap': full_sap,
                                                         })
         else:
-            return render(request, 'main/dashboard.html', {
+            return render(request, 'main/dashboard_1_0.html', {
                                                     'full_sap': full_sap,
                                                     })
 
@@ -644,8 +708,8 @@ def dashboard(request, full_sap):
 
 # ЛОГИРОВАНИЕ
 @login_required(redirect_field_name='')
-@cef_logging
-# @do_logging
+# @cef_logging
+@do_logging
 def download_activity_log(request):
     header = ["Дата", "Время", "Пользователь", "Действие", "SAP №", 'Блок']
     with open(os.getcwd() + '/logs/activity.csv', 'r') as fp:
@@ -673,10 +737,41 @@ def download_activity_log(request):
     response.write(data)
     return response
 
+# ЛОГИРОВАНИЕ
+@login_required(redirect_field_name='')
+# @cef_logging
+@do_logging
+def download_feedback(request):
+    mongo = pymongo.MongoClient('192.168.200.73', 27017)
+    db = mongo['tcx']
+    collection = db['feedback']
+    result = collection.find({})
+    data = [[record['date'], record['user'], record['sap'], record['sent_from'], record['feedback']] for record in result]
+    header = ["Дата", "Пользователь", "SAP", "Отправлено с", "Сообщение"]
+    workbook = xlsxwriter.Workbook(os.getcwd() + '/logs/feedback.xlsx')
+    worksheet = workbook.add_worksheet()
+    col = 0
+    for h in header:
+        worksheet.write_string(0, col, str(h).capitalize())
+        col += 1
+    col = 0
+    row = 1
+    for d in data:
+        for i in range(len(d)):
+            worksheet.write_string(row, col+i, str(d[i]).capitalize())
+        row += 1
+    workbook.close()
+    with open(os.getcwd() + "/logs/feedback.xlsx", "rb") as fp:
+        data = fp.read()
+    os.remove(os.getcwd() + "/logs/feedback.xlsx")
+    filename = 'feedback.xlsx'
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
 
 
 # АВТОРИЗАЦИЯ
-@cef_logging
 def sign_in(request):
     if request.user.is_authenticated:
         return redirect(index)
@@ -698,24 +793,40 @@ def sign_in(request):
                         if checkUserGroup(username+'@x5.ru', password):
                             user = authenticate(request, username=username, password=password)
                             if user is not None:
-                                if (username + '@x5.ru') in directors: 
+                                if ((username + '@x5.ru') in directors) or (username in directors): 
                                     for d in dirs:
-                                        if (username + '@x5.ru') == d.director:
+                                        if ((username + '@x5.ru') == d.director) or ((username) == d.director):
                                             store = d.sap
-                                            user.last_name = d.last_name
-                                            user.first_name = d.name
+                                            if (d.last_name == ''):
+                                                user.last_name = (d.director).split('@')[0]
+                                            else:
+                                                user.last_name = d.last_name
+                                                user.first_name = d.name
                                             login(request, user)
                                             return redirect('dashboard', store_class.get_full_sap(store))
                                 else:
                                     login(request, user)
                                     return redirect(index)
                             else:
-                                if (username + '@x5.ru') in directors: 
+                                if ((username + '@x5.ru') in directors) or ((username) in directors): 
                                     for d in dirs:
                                         if (username + '@x5.ru') == d.director:
                                             user = User.objects.create_user(username, username+'@x5.ru', password)
-                                            user.first_name = d.name
-                                            user.last_name = d.last_name
+                                            if (d.last_name == ''):
+                                                user.last_name = (d.director).split('@')[0]
+                                            else:
+                                                user.first_name = d.name
+                                                user.last_name = d.last_name
+                                            user.save()
+                                            login(request, user)
+                                            return redirect('dashboard', store_class.get_full_sap(d.sap))
+                                        elif (username) == d.director:
+                                            user = User.objects.create_user(username, username, password)
+                                            if (d.last_name == ''):
+                                                user.last_name = (d.director).split('@')[0]
+                                            else:
+                                                user.first_name = d.name
+                                                user.last_name = d.last_name
                                             user.save()
                                             login(request, user)
                                             return redirect('dashboard', store_class.get_full_sap(d.sap))
@@ -745,15 +856,15 @@ def sign_in(request):
                 return redirect(sign_in)
         else:
             form = LoginForm()
-    return render(request, 'main/sign_in.html', {'form':form})
+    return render(request, 'main/sign_in_1_0.html', {'form':form})
 
 
 
 
 # ВЫХОД
 @login_required(redirect_field_name='')
-@cef_logging
-# @do_logging
+# @cef_logging
+@do_logging
 def do_logout(request):
     logout(request)
     return redirect(sign_in)
@@ -770,6 +881,6 @@ def click_detect(request, full_sap, action):
 @do_logging
 def go_back(request, full_sap):
     for d in dirs:
-        if (request.user.username + '@x5.ru') == d.director:
+        if ((request.user.username + '@x5.ru') == d.director) or ((request.user.username) == d.director):
                 return redirect('dashboard', store_class.get_full_sap(d.sap))
 

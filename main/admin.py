@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Incident, Message, User_Info
+from .models import Incident, Message
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -22,10 +22,6 @@ class MessageAdmin(admin.ModelAdmin):
     list_filter = ('store',)
     search_fields = ('store',)
     ordering = ('store',)
-
-class ProfileInline(admin.StackedInline):
-    model = User_Info
-    can_delete = False
 
 
 

@@ -7,19 +7,20 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="{%  static 'main/img/favicon.ico' %}">
-    <link rel="stylesheet" href="{%  static 'main/css/font_awesome.css' %}">
-    <link rel="stylesheet" href="{%  static 'main/css/base.css' %}">
-    <link rel="stylesheet" href="{%  static 'main/css/sticky-footer.css' %}">
-    <link rel="stylesheet" href="{%  static 'main/css/datatables.min.css' %}">
-    <script src="{% static 'main/js/jquery.min.js' %}"></script>
-    <script src="{% static 'main/js/popper.min.js' %}"></script>
-    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'main/js/jquery.easing.min.js' %}"></script>
-    <script src="{% static 'main/js/sb-admin-2.min.js' %}"></script>
-    <script src="{% static 'main/js/datatables.min.js' %}"></script>
+    <link rel="shortcut icon" href="{%  static 'main/img/favicon_1_0.ico' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/font_awesome_1_0.css' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/base_1_0.css' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/sticky-footer_1_0.css' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/datatables_1_0.min.css' %}">
+    <script src="{% static 'main/js/jquery_1_0.min.js' %}"></script>
+    <script src="{% static 'main/js/popper_1_0.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap_1_0.min.js' %}"></script>
+    <script src="{% static 'main/js/jquery_1_0.easing.min.js' %}"></script>
+    <script src="{% static 'main/js/sb-admin-2_1_0.min.js' %}"></script>
+    <script src="{% static 'main/js/datatables_1_0.min.js' %}"></script>
+    <script src="{% static 'main/js/feedback_1_0.js' %}"></script>
 
-    {% block script %}
+    {% block script %}   
     {% endblock %}
     <title>
         X5 Retail Group
@@ -89,13 +90,40 @@
                                 </form>
                             </div>
                         </li>
+                        
+                        <!-- Nav Item - Messages -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Оставить отзыв</span>
+                                <!-- Counter - Messages -->
+                                <span class="badge badge-danger badge-counter"></span>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="messagesDropdown">
+                                <h6 class="dropdown-header">
+                                    Оставить отзыв
+                                </h6>
+                                <div class="container my-2 px-2">
+                                    <div class="form-group" id="feedback">
+                                        <textarea type="text" class="form-control" id="feedback_input" placeholder="Напишите тут свой отзыв или предложения" style="size: 2x;"></textarea>
+                                        <button type="button" class="btn btn-dark my-2" id="feedback_send">Отправить</button>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                        </li>
+
                         <div class="topbar-divider d-none d-sm-block"></div>
+
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{user.get_full_name}}</span>
-                                <img class="img-profile rounded-circle" src="{% static 'main/img/user.png' %}">
+                                <img class="img-profile rounded-circle" src="{% static 'main/img/user_1_0.png' %}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -124,6 +152,12 @@
                                 <a class="dropdown-item" href="{% url 'upload_index' %}">
                                     <i class="fa fa-arrow-up fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Загрузчик
+                                </a>
+                                {% endif %}
+                                {% if user|has_group:"Admin" %}
+                                <a class="dropdown-item" href="{% url 'download_feedback' %}">
+                                    <i class="fa fa-arrow-up fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Обратная связь
                                 </a>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>

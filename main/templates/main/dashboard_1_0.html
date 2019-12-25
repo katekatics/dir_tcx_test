@@ -1,0 +1,36 @@
+{% extends 'main/base_1_0.html'%}
+{% load static %}
+{% load filters %}
+
+{% block script %}
+<script>
+    var full_sap = '{{full_sap}}';
+    </script>
+    <script src="{% static 'main/js/dashboard/kso_1_0.js' %}"></script>
+    <script src="{% static 'main/js/dashboard/business_1_0.js' %}"></script>
+    <script src="{% static 'main/js/dashboard/products_1_0.js' %}"></script>
+    <script src="{% static 'main/js/dashboard/services_1_0.js' %}"></script>
+    <script src="{% static 'main/js/dashboard/poses_1_0.js' %}"></script>
+    <script src="{% static 'main/js/dashboard/scales_1_0.js' %}"></script>
+    <script src="{% static 'main/js/dashboard/dashboard_1_0.js' %}"></script>
+{% endblock %}
+{% block title %}
+X5 Retail Group
+{% endblock %}
+
+
+
+{% block Content %}
+    <div class="row">
+        <div class="col-xl-6 col-md-12">
+            {% include "main/dashboard/_business_1_0.html" %}
+        </div>
+        <div class="col-xl-6 col-md-12">
+            {% include "main/dashboard/_products_1_0.html" %} 
+            {% include "main/dashboard/_poses_1_0.html" %}
+            {% include "main/dashboard/_kso_1_0.html" %}
+            {% include "main/dashboard/_scales_1_0.html" %}
+            {% include "main/dashboard/_services_1_0.html" %}   
+        </div> 
+    </div>
+{% endblock %}

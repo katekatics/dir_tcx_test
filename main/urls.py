@@ -78,6 +78,14 @@ urlpatterns = [
 
     path('store/<str:full_sap>/services_cashless/', views.services_cashless, name='services_cashless'),
 
+    # path('get_heatmap/', views.get_heatmap, name='get_heatmap'),
+
+    path('get_feedback/', views.get_feedback, name='get_feedback'),
+
+    path('feedback/', views.feedback, name='feedback'),
+
+    path('download_feedback/', views.download_feedback, name='download_feedback'),
+
     path('upload/', views.upload_index, name='upload_index'),
 
     path('upload/file/', views.upload, name='upload'),

@@ -58,17 +58,17 @@ class Dirs(models.Model):
     def __str__(self):
         return self.sap
 
-class User_Info(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    sap = models.CharField(max_length=4)
-    middle_name = models.CharField(max_length=255, default='')
-    is_dir = models.BooleanField(default=False)
-    is_rd = models.BooleanField(default=False)
-    is_personal = models.BooleanField(default=False)
+# class User_Info(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     sap = models.CharField(max_length=4)
+#     middle_name = models.CharField(max_length=255, default='')
+#     is_dir = models.BooleanField(default=False)
+#     is_rd = models.BooleanField(default=False)
+#     is_personal = models.BooleanField(default=False)
 
-    class Meta:
-        verbose_name = "Профиль"
-        verbose_name_plural = "Профили"
+#     class Meta:
+#         verbose_name = "Профиль"
+#         verbose_name_plural = "Профили"
 
-    def __str__(self):
-        return '{} {}'.format(self.user.last_name, self.user.first_name)
+#     def __str__(self):
+#         return '{} {}'.format(self.user.last_name, self.user.first_name)

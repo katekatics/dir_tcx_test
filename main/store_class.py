@@ -235,8 +235,14 @@ def services_cashless(store):
     result = find_data('services_cashless', store)
     return result
 
-
-
+# Обратная связь
+def feedback():
+    mongo = pymongo.MongoClient('192.168.200.73', 27017)
+    db = mongo['tcx']
+    collection = db['feedback']
+    result = collection.find({})
+    data = [{'date': record['date'], 'user': record['user'], 'msg': record['feedback']} for record in result]
+    return data
 
 
 def poses(store):

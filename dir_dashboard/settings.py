@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import socket
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,9 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ftznwp^o))vtulc4t4qzs0m1z=_l$@169syi6m91l35c@^m9)9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if socket.gethostname() == 'dbdmtest':
+    DEBUG = False
+else:
+    DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.200.72', '127.0.0.1', 'localhost', '192.168.200.72']
+ALLOWED_HOSTS = ['192.168.200.72', '127.0.0.1', 'localhost', '192.168.200.72', 'dbdmtest.x5.ru']
 
 
 # Application definition
@@ -38,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
+    'clear_cache',
 ]
 
 MIDDLEWARE = [
@@ -118,8 +123,7 @@ USE_TZ = True
 CSRF_COOKIE_NAME = 'tcx_token'
 SESSION_COOKIE_NAME = 'tcx_session'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 120
-# SESSION_COOKIE_AGE = 3600
+SESSION_COOKIE_AGE = 3600
 # SESSION_SAVE_EVERY_REQUEST = True
 
 # Static files (CSS, JavaScript, Images)
