@@ -2,33 +2,96 @@
     <!-- Заголовок карточки -->
     <div class="card-header bg-success text-white" id="headingBusiness" tabindex="0" data-toggle="collapse"
         data-target="#business" aria-expanded="true" aria-controls="business">
-        <h6 class=" mb-0">
-            <i class="fas fa-business-time pt-1"></i> Основные бизнес показатели "{{full_sap}}"
-        </h6>
+        <div class="row">
+            <div class="col-10">   
+                <h6 class="ml-1"><i class="fas fa-business-time pt-1"></i> Основные бизнес показатели "{{full_sap}}"</h6>
+            </div>
+            <div class="col-2">
+                <h6 class="text-right" id="open_close"></h6>
+            </div>
+        </div>
     </div>
     <!-- Тело карточки -->
     <div id="business" class="collapse show" aria-labelledby="headingBusiness">
         <div class="card-body-block bg-light">
             <div class="row">
 
+
                 <!-- Продажи -->
-                <div class="col-xl-6 col-lg-6 col-md-12" style="display: none;">
-                    <div class="card bg-dark text-white my-1" id="business_revenue_theme">
+                <div class="col-12">
+                    <div class="card bg-success text-white my-1" id="rto_traffic_check_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
                             data-placement="right" data-original-title="Выручка за сегодня | выручка неделей ранее<br>Блок обновляется каждые 15 минут">
-                            <h6 class="card-title text-center">Продажи на текущий день | Продажи прошлой недели</h6>
+                            <div class="row">
+                                <div class="col-3">
+                                    <h6 class="card-title text-center"></h6>
+                                </div>
+                                <div class="col-3">
+                                    <h6 class="card-title text-center">Сегодня</h6>
+                                </div>
+                                <div class="col-3">
+                                    <h6 class="card-title text-center">Неделю назад</h6>
+                                </div>
+                                <div class="col-3">
+                                    <h6 class="card-title text-center">Год назад</h6>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body" id="business_revenue_tooltip" tabindex="0" data-html="true"
-                            data-toggle="tooltip" data-placement="right">
-                            <h4 class="card-text text-center" id="business_revenue_body_text">-</h4>
+                        <div class="card-body click_detect" tabindex="0" data-toggle="modal" id="business_revenue_new_body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <h6 class="card-title">Продажи</h6>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id='today_revenue'>-</h4>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="lw_revenue">-</h4>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="ly_revenue">-</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="business_checks_traffic_body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <h6 class="card-title">Трафик</h6>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="today_traffic">-</h4>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="lw_traffic">-</h4>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="ly_traffic">-</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="business_average_check_body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <h6 class="card-title">Средний чек</h6>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="today_av_check">-</h4>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="lw_av_check">-</h4>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="ly_av_check">-</h4>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <div class="row text-center">
                                 <div class="col-6">
-                                    <small class="float-left" id="business_revenue_footer_msg"></small>
+                                    <small class="float-left" id="rto_traffic_check_footer_msg"></small>
                                 </div>
                                 <div class="col-6 mb-0">
-                                    <small class="float-right" id="business_revenue_footer_time" data-toggle="tooltip"
+                                    <small class="float-right" id="rto_traffic_check_footer_time" data-toggle="tooltip"
                             data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
                             </div>
@@ -43,7 +106,7 @@
                             data-placement="right" data-original-title="" id="business_revenue_new_tooltip">
                             <h6 class="card-title text-center">Продажи на текущий день | Продажи прошлой недели | Год назад</h6>
                         </div>
-                        <div class="card-body" tabindex="0" data-toggle="modal" id="business_revenue_new_body">
+                        <div class="card-body click_detect" tabindex="0" data-toggle="modal" id="business_revenue_new_body">
                             <h4 class="card-text text-center" id="business_revenue_new_body_text">-</h4>
                         </div>
                         <div class="card-footer">
@@ -85,10 +148,10 @@
                 <div class="col-xl-6 col-lg-6 col-md-12">
                     <div class="card bg-dark text-white my-1" id="business_rto_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Суммарный РТО за месяц на текущую дату<br>Блок обновляется каждые 15 минут">
-                            <h6 class="card-title text-center">РТО накопленное на текущую дату</h6>
+                            data-placement="right" data-original-title="Суммарный РТО за месяц на текущую дату | Плановый РТО на текущий месяц<br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title text-center">РТО накопленное на текущую дату | План РТО на месяц</h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" id="business_rto_body">
                             <h4 class="card-text text-center" id="business_rto_body_text">-</h4>
                         </div>
                         <div class="card-footer">
@@ -115,8 +178,7 @@
                             <h6 class="card-title text-center">Средний чек за неделю | Средний чек прошлой недели</h6>
                         </div>
 
-                        <div class="card-body" tabindex="0" data-toggle="modal"
-                            id="business_average_check">
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="business_average_check_body">
                             <h4 class="card-text text-center" id="business_average_check_body_text">-</h4>
                         </div>
                         <div class="card-footer">
@@ -210,7 +272,7 @@
                             data-original-title="Общая сумма фактически закрытых<br>списаний за текущий месяц по<br>магазину (Процент от суммарного РТО)<br><br>Общая сумма фактически закрытых<br>списаний за текущую неделю по<br>магазину (Процент от суммарного РТО)<br><br>Блок обновляется каждые 15 минут">
                             <h6 class="card-title text-center">Списания без учета компенсаций</h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" id="business_write_offs_body">
                             <div class="row">
                                 <div class="col-6">
                                     <h5 class="card-text text-center" id="business_write_offs_body_text_m">-</h5>
@@ -240,7 +302,7 @@
                     <div class="card bg-dark text-white my-1" id="business_sellers_perfom_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
                             data-placement="right"
-                            data-original-title="Кол-во кассиров<br>(При нажатии на блок можно получить дополнительную информацию)<br>Блок обновляется раз в день (в 8 утра)">
+                            data-original-title="Скорость сканирования кассиров<br><br>Блок обновляется раз в день (в 8 утра)<br>(При нажатии на блок можно получить дополнительную информацию)">
                             <h6 class="card-title text-center">Скорость сканирования кассиров</h6>
                         </div>
                         <div class="card-body" tabindex="0" data-toggle="modal"
@@ -334,46 +396,92 @@
                     </div>
                 </div>
 
-
-                <!-- Незакрытие документы приемки АП -->
+                <!-- Трафик чеков -->
                 <div class="col-xl-6 col-lg-6 col-md-12">
-                    <div class="card bg-dark text-white my-1" id="business_open_alcohol_documents_theme">
+                    <div class="card bg-dark text-white my-1" id="business_checks_traffic_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Незакрытые документы приемки АП<br>Блок обновляется каждые 15 минут">
-                            <h6 class="card-title text-center">Незакрытые документы приемки АП</h6>
+                            data-placement="right" data-original-title="Информация по количеству закрытых чеков по всем кассам<br><br>Блок обновляется каждые 15 минут<br>(При нажатии на блок можно получить подробную информацию и скачать отчет)">
+                            <h6 class="card-title text-center">Трафик на текущий день | Трафик прошлой недели | Трафик год назад</h6>
                         </div>
                         <div class="card-body" tabindex="0" data-toggle="modal"
-                            id="business_open_alcohol_documents_body">
-                            <h4 class="card-text text-center" id="business_open_alcohol_documents_body_text">-</h4>
+                            id="business_checks_traffic_body">
+                            <h4 class="card-text text-center" id="business_checks_traffic_body_text">-</h4>
                         </div>
                         <div class="card-footer">
                             <div class="row text-center">
                                 <div class="col-6">
-                                    <small class="float-left" id="business_open_alcohol_documents_footer_msg"></small>
+                                    <small class="float-left" id="business_checks_traffic_footer_msg"></small>
                                 </div>
                                 <div class="col-6 mb-0">
-                                    <small class="float-right" id="business_open_alcohol_documents_footer_time" data-toggle="tooltip"
+                                    <small class="float-right" id="business_checks_traffic_footer_time" data-toggle="tooltip"
                             data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="business_open_alcohol_documents_modal" tabindex="-1" role="dialog"
+                <div class="modal fade" id="business_checks_traffic_modal" tabindex="-1" role="dialog"
                     aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h6 class="modal-title">Незакрытые документы приемки АП</h6>
+                                <h6 class="modal-title">Трафик чеков</h6>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body" id="business_open_alcohol_documents_modal_body">
+                            <div class="modal-body" id="business_checks_traffic_modal_body">
                             </div>
                             <div class="modal-footer">
                                 <a type="button" class="btn btn-primary text-white"
-                                    href="{% url 'business_open_alcohol_documents_report' full_sap=full_sap %}"
+                                    href="{% url 'business_checks_traffic_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Продажи по старой цене -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="business_old_price_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Количество продаж на кассах по старой цене за сегодня и вчерашний день<br><br>Блок обновляется раз в день (в 8 утра)<br>(При нажатии на блок можно получить подробную информацию и скачать отчет)">
+                            <h6 class="card-title text-center">Продажи по старой цене</h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal"
+                            id="business_old_price_body">
+                            <h4 class="card-text text-center" id="business_old_price_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_old_price_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_old_price_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="business_old_price_modal" tabindex="-1" role="dialog"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Продажи по старой цене</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="business_old_price_modal_body">
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'business_old_price_report' full_sap=full_sap %}"
                                     target="_blank">Скачать
                                     отчет</a>
                                 <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
@@ -384,7 +492,7 @@
 
 
                 <!-- HR-показатели -->
-                <div class="col-xl-6 col-lg-6 col-md-12">
+                <div class="col-xl-6 col-lg-6 col-md-12" style="display: none;">
                     <div class="card bg-dark text-white my-1" id="hr_indicators_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
                             data-placement="right" data-original-title="HR-показатели">
@@ -432,7 +540,6 @@
 
 
 
-
                 <!-- Markdown -->
                 <div class="col-12">
                     <div class="card bg-dark text-white my-1" id="business_markdown_theme">
@@ -453,7 +560,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body" tabindex="0" data-toggle="modal" id="markdown_body">
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="business_markdown_body">
                             <div class="row">
                                 <div class="col-3">
                                     <h4 class="card-text text-center" id="business_markdown_body_text_0"></h4>
@@ -464,7 +571,7 @@
                                 <div class="col-3">
                                     <h4 class="card-text text-center" id="business_markdown_body_text_2"></h4>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-3">
                                     <h4 class="card-text text-center" id="business_markdown_body_text_3"></h4>
                                 </div>
                             </div>

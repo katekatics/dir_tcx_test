@@ -7,18 +7,19 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="{%  static 'main/img/favicon_1_0.ico' %}">
-    <link rel="stylesheet" href="{%  static 'main/css/font_awesome_1_0.css' %}">
-    <link rel="stylesheet" href="{%  static 'main/css/base_1_0.css' %}">
-    <link rel="stylesheet" href="{%  static 'main/css/sticky-footer_1_0.css' %}">
-    <link rel="stylesheet" href="{%  static 'main/css/datatables_1_0.min.css' %}">
-    <script src="{% static 'main/js/jquery_1_0.min.js' %}"></script>
-    <script src="{% static 'main/js/popper_1_0.min.js' %}"></script>
-    <script src="{% static 'main/js/bootstrap_1_0.min.js' %}"></script>
-    <script src="{% static 'main/js/jquery_1_0.easing.min.js' %}"></script>
-    <script src="{% static 'main/js/sb-admin-2_1_0.min.js' %}"></script>
-    <script src="{% static 'main/js/datatables_1_0.min.js' %}"></script>
-    <script src="{% static 'main/js/feedback_1_0.js' %}"></script>
+    <link rel="shortcut icon" href="{%  static 'main/img/favicon_1_1.ico' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/font_awesome_1_1.css' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/base_1_2.css' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/sticky-footer_1_1.css' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/datatables_1_1.min.css' %}">
+    <script src="{% static 'main/js/jquery_1_1.min.js' %}"></script>
+    <script src="{% static 'main/js/popper_1_1.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap_1_1.min.js' %}"></script>
+    <script src="{% static 'main/js/jquery_1_1.easing.min.js' %}"></script>
+    <script src="{% static 'main/js/sb-admin-2_1_1.min.js' %}"></script>
+    <script src="{% static 'main/js/datatables_1_1.min.js' %}"></script>
+    <script src="{% static 'main/js/feedback_1_1.js' %}"></script>
+    <script src="{% static 'main/js/heatmap_1_1.js' %}"></script>
 
     {% block script %}   
     {% endblock %}
@@ -123,7 +124,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{user.get_full_name}}</span>
-                                <img class="img-profile rounded-circle" src="{% static 'main/img/user_1_0.png' %}">
+                                <img class="img-profile rounded-circle" src="{% static 'main/img/user_1_1.png' %}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -156,8 +157,14 @@
                                 {% endif %}
                                 {% if user|has_group:"Admin" %}
                                 <a class="dropdown-item" href="{% url 'download_feedback' %}">
-                                    <i class="fa fa-arrow-up fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    <i class="fa fa-comment fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Обратная связь
+                                </a>
+                                {% endif %}
+                                {% if user|has_group:"Admin" %}
+                                <a class="dropdown-item" href="{% url 'heatmap_page' %}">
+                                    <i class="fa fa-chart-bar fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Тепловая карта
                                 </a>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
@@ -189,7 +196,7 @@
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Все найденные ошибки и предложения по улучшению присылать на <a
-                                href="mailto:Ily.Kulikov@x5.ru?subject=DIR_TCX">Ily.Kulikov@x5.ru</a></span>
+                                href="mailto:dashboard-dir-product@x5.ru?subject=DIR_TCX">dashboard-dir-product@x5.ru</a></span>
                     </div>
                 </div>
             </footer>

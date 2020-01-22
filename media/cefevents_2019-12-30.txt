@@ -1,0 +1,23 @@
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:03:31 src=127.0.0.1 duser=dir_save
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Выход из системы|4|end=2019-12-30 09:03:40 src=127.0.0.1 duser=dir_save
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:03:53 src=127.0.0.1 duser=dir_save
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Выход из системы|4|end=2019-12-30 09:04:04 src=127.0.0.1 duser=dir_save
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:07:04 src=127.0.0.1 duser=dir_save
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:29:16 src=127.0.0.1 duser=dir_save
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Выход из системы|4|end=2019-12-30 09:29:20 src=127.0.0.1 duser=dir_save
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:29:27 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:30:01 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Выход из системы|4|end=2019-12-30 09:30:05 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:31:54 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:32:12 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Выход из системы|4|end=2019-12-30 09:32:15 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:33:09 src=127.0.0.1 duser=dir_save
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:34:48 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:35:05 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Выход из системы|4|end=2019-12-30 09:35:08 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Страница магазина|4|end=2019-12-30 09:35:53 src=127.0.0.1 duser=dir_save msg=store: Super-SAVE-B185
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Выход из системы|4|end=2019-12-30 09:36:02 src=127.0.0.1 duser=dir_save msg=store: Super-SAVE-B185
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:36:21 src=127.0.0.1 duser=e.astrakhantseva msg=store: Super-SAVE-B185
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 09:36:38 src=127.0.0.1 duser=e.astrakhantseva msg=store: Super-SAVE-B185
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Выход из системы|4|end=2019-12-30 09:36:42 src=127.0.0.1 duser=e.astrakhantseva msg=store: Super-SAVE-B185
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2019-12-30 14:37:09 src=127.0.0.1 duser=e.astrakhantseva

@@ -22,6 +22,15 @@ def checkUserGroup(login, password):
         search_scope=SUBTREE,
         attributes=ALL_ATTRIBUTES,
         generator=False)
+
+    # Вывод должности пользователя
+    params = conn.extend.standard.paged_search(
+        search_base='OU=Main,DC=X5,DC=ru',
+        search_filter='(mail={})'.format(login),
+        search_scope=SUBTREE,
+        attributes=['title'],
+        generator=False)[0]['attributes']
+        
     if response:
         response = response[0]['attributes']
         groups = response._store['memberOf']

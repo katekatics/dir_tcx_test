@@ -15,29 +15,70 @@ from django.core.files.storage import FileSystemStorage
 import shutil
 from django.contrib import messages
 import pymongo
-
+from cefevent import CEFEvent
+from functools import wraps
+import socket
+from . import heatmap
+from time import sleep
+import json 
+import calendar
 
 # LOGGER
 import logging
 from logging.handlers import RotatingFileHandler
 
+with open(os.getcwd() + '/logs/dir_tcx.log', "w+") as f:
+    f.write(socket.gethostname())
+
 dirs = Dirs.objects.all()
 directors = []
 [directors.append(d.director) for d in dirs]
 
-# import numpy as np
-# import seaborn as sns
-# import matplotlib.pyplot as plt
+error_sign_in = {'user': '', 'cause': ''}
 
-# val = np.random.rand(10, 12)
-# fig, ax = plt.subplots(figsize=(12,10))
-# sns.heatmap(val, ax = ax, annot=True)
-# fig.savefig('static/main/img/heatmap.png')
+events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получен отзыв', 'upload': 'Загрузка HR файла', 
+         'business_revenue_new_report': 'Скачивание отчета по продажам', 'business_open_alcohol_documents_report': 'Скачивание отчета по незакрытым документам приемки АП', 'business_open_documents': 'Незакрытые документы приемки',
+        'business_open_documents_report': 'Скачивание отчета по незакрытым документам приемки', 'business_average_check_report': 'Скачивание отчета по среднему чеку', 
+        'business_canceled_checks_report': 'Скачивание отчета по отмененным чекам', 'business_sellers_perfom_week_report': 'Скачивание отчета по скорости сканирования кассиров за неделю',
+        'business_sellers_perfom_month_report': 'Скачивание отчета по скорости сканирования кассиров за месяц', 'hr_indicators_report': 'Скачивание отчета по HR-показателям',
+        'business_checks_traffic_report': 'Скачивание отчета по трафику чеков', 'business_old_price_report': 'Скачивание отчета по продажам по старой цене',
+        'products_overdue_report': 'Скачивание отчета по просроченной продукции', 'products_alcohol_errors_report': 'Скачивание отчета по ошибкам продажи алкоголя',
+        'products_low_saled_report': 'Скачивание отчета по товарам с низкими продажами', 'products_stoped_report': 'Скачивание отчета по товарам без движения',
+        'products_stoped_nonfood_report': 'Скачивание отчета по товарам без движения NONFOOD', 'products_stoped_food_report': 'Скачивание отчета по товарам без движения FOOD',
+        'products_stoped_fresh_report': 'Скачивание отчета по товарам без движения FRESH', 'products_minus_report': 'Скачивание отчета по товарам с отрицательными остатками',
+        'products_topvd_report': 'Скачивание отчета по топ ВД', 'products_top30_report': 'Скачивание отчета по топ 30', 'index': 'Начальная страница', 
+        'dashboard': 'Страница магазина', 'download_activity_log': 'Скачивание отчета по активности пользователей', 'download_feedback': 'Скачивание отчета по обратной связи',
+        'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина'}
 
-# def get_heatmap(request):
-#     return render(request, 'main/heatmap_1_0.html')
+@login_required(redirect_field_name='')
+def heatmap_page(request):
+    return render(request, 'main/heatmap_1_1.html')
 
+@login_required(redirect_field_name='')
+def get_heatmap(request):
+    result = json.loads(request.POST['data'])
+    if result['status'] == 'day':
+        start = datetime.strptime(result['date'] + ' ' + '00:00:00', '%Y-%m-%d %H:%M:%S')
+        end = datetime.strptime(result['date'] + ' ' + '23:59:59', '%Y-%m-%d %H:%M:%S')
+        heatmap.build_heatmap(start, end)
+    elif result['status'] == 'period':
+        start = datetime.strptime(result['start'] + ' ' + '00:00:00', '%Y-%m-%d %H:%M:%S')
+        end = datetime.strptime(result['end'] + ' ' + '23:59:59', '%Y-%m-%d %H:%M:%S')
+        heatmap.build_heatmap(start, end)
+    elif result['status'] == 'month':
+        month = (result['month'].split('-'))[1]
+        year = (result['month'].split('-'))[0]
+        days = calendar.monthrange(int(year), int(month))[1]
+        start = datetime.strptime(year + '-' + month + '-1 ' + '00:00:00', '%Y-%m-%d %H:%M:%S')
+        end = datetime.strptime(year + '-' + month + '-' + str(days) + ' ' + '23:59:59', '%Y-%m-%d %H:%M:%S')
+        heatmap.build_heatmap(start, end)
+    else:
+        start = datetime.strptime('2019-11-01 00:00:00', '%Y-%m-%d %H:%M:%S')
+        end = datetime.now()
+        heatmap.build_heatmap(start, end)
+    return redirect(heatmap_page)
 
+@login_required(redirect_field_name='')
 def get_feedback(request):
     response = {'connect': False, 'msg': ''}
     now = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
@@ -60,16 +101,17 @@ def get_feedback(request):
         response['msg'] = 'Ваше сообщение отправлено!'
         row['sap'] = sap
         row['sent_from'] = sent_from
+        row['status'] = 'Новое'
         col.insert_one(row)
     except:
         response['connect'] = False
         response['msg'] = 'Ваше сообщение не отправлено!'   
     mongo.close()                                                                                                                                                                     
-    return JsonResponse(response)
+    return JsonResponse(response) 
 
 @login_required(redirect_field_name='')
 def upload_index(request):
-    return render(request, 'main/upload_1_0.html')
+    return render(request, 'main/upload_1_1.html')
 
 @login_required(redirect_field_name='')
 def upload(request):
@@ -107,79 +149,123 @@ rotateHandler.setFormatter(logFormatter)
 logger.addHandler(rotateHandler)
 
 
-# from time import sleep
-# UDP_PORT = 514
-# sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-# sock.connect(('192.168.70.204', UDP_PORT))
-# c = CEFEvent()
+UDP_PORT = 514
+sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+sock.connect(('192.168.70.200', UDP_PORT))
+c = CEFEvent()
 
-# def cef_logging(function):   
-#     def wrapper(request, full_sap=None, click=None):
-#         time = str(datetime.now().time()).split('.')[0]
-#         date = str(datetime.now().date())
-#         ip = request.META['REMOTE_ADDR']
-#         user = request.user.username
-#         app_ip = request.META['HTTP_HOST'].split(':')[0]
-#         if full_sap:
-#             if click:
-#                 c.set_field('deviceVendor', 'Operational_DB_DM')
-#                 c.set_field('deviceProduct', 'DB DM Test')
-#                 c.set_field('severity', 4)
-#                 c.set_field('end', date + ' ' + time)
-#                 c.set_field('src', ip)
-#                 c.set_field('dst', app_ip)
-#                 c.set_field('duser', user)
-#                 c.set_field('name', 'click')
-#                 c.set_field('msg', 'store: ' + full_sap)
-#                 c.set_field('click', click)
-#                 c.build_cef()
-#                 string = str(c)
-#                 byte_string = bytes(string, 'utf-8')
-#                 print(c)
-#                 sock.send(byte_string)
-#                 sleep(1)
-#                 return function(request, full_sap, click)
-#             else:
-#                 c.set_field('deviceVendor', 'Operational_DB_DM')
-#                 c.set_field('deviceProduct', 'DB DM Test')
-#                 c.set_field('severity', 4)
-#                 c.set_field('end', date + ' ' + time)
-#                 c.set_field('src', ip)
-#                 c.set_field('dst', app_ip)
-#                 c.set_field('duser', user)
-#                 c.set_field('name', function.__name__)
-#                 c.set_field('msg', 'store: ' + full_sap)
-#                 c.build_cef()
-#                 string = str(c)
-#                 byte_string = bytes(string, 'utf-8')
-#                 print(c)
-#                 sock.send(byte_string)
-#                 sleep(1)
-#                 return function(request, full_sap)
+def mongo_log(function):   
+    def wrapper(request, full_sap=None, click=None):
+        date = datetime.now()
+        user = request.user.username
+        mongo = pymongo.MongoClient('192.168.200.73', 27017)
+        db = mongo['tcx']
+        col = db['logs']
+        if full_sap:
+            if click:
+                col.insert_one({'date': date, 'user': user, 'action': 'click', 'sap': full_sap, 'block': click})
+                mongo.close()  
+                return function(request, full_sap, click)
+            else:
+                col.insert_one({'date': date, 'user': user, 'action': function.__name__, 'sap': full_sap, 'block': ''})
+                mongo.close()
+                return function(request, full_sap)
+        else:
+            col.insert_one({'date': date, 'user': user, 'action': function.__name__, 'sap': '', 'block': ''})
+            mongo.close()
+            return function(request)
+    return wrapper
 
-#         else:
-#             c.set_field('deviceVendor', 'Operational_DB_DM')
-#             c.set_field('deviceProduct', 'DB DM Test')
-#             c.set_field('severity', 4)
-#             c.set_field('end', date + ' ' + time)
-#             c.set_field('src', ip)
-#             c.set_field('dst', app_ip)
-#             c.set_field('duser', user)
-#             c.set_field('name', function.__name__)
-#             c.build_cef()
-#             string = str(c)
-#             byte_string = bytes(string, 'utf-8')
-#             print(c)
-#             sock.send(byte_string)
-#             sleep(1)
-#             return function(request)
-#     return wrapper
+def cef_logging(function): 
+    @wraps(function)  
+    def wrapper(request, full_sap=None, click=None):
+        time = str(datetime.now().time()).split('.')[0]
+        date = str(datetime.now().date())
+        f = open('media/cefevents_' + date + '.txt','a+')
+        ip = request.META['REMOTE_ADDR']
+        user = request.user.username
+        if full_sap:
+            if click:
+                c.set_field('deviceVendor', 'Operational_DB_DM')
+                c.set_field('deviceProduct', 'DB DM Test')
+                c.set_field('severity', 4)
+                c.set_field('end', date + ' ' + time)
+                c.set_field('src', ip)
+                c.set_field('duser', user)
+                c.set_field('name', 'click')
+                c.set_field('msg', 'store: ' + full_sap)
+                c.set_field('click', click)
+                c.build_cef()
+                string = str(c)
+                byte_string = bytes(string, 'utf-8')
+                f.write(string + '\n')
+                f.close()
+                print(c)
+                sock.send(byte_string)
+                sleep(1)
+                return function(request, full_sap, click)
+            else:
+                c.set_field('deviceVendor', 'Operational_DB_DM')
+                c.set_field('deviceProduct', 'DB DM Test')
+                c.set_field('severity', 4)
+                c.set_field('end', date + ' ' + time)
+                c.set_field('src', ip)
+                c.set_field('duser', user)
+                c.set_field('name', events[function.__name__])
+                c.set_field('msg', 'store: ' + full_sap)
+                c.build_cef()
+                string = str(c)
+                byte_string = bytes(string, 'utf-8')
+                f.write(string + '\n')
+                f.close()
+                print(c)
+                sock.send(byte_string)
+                sleep(1)
+                return function(request, full_sap)
 
-
+        else:
+            if function.__name__ == 'sign_in':
+                if error_sign_in:
+                    if error_sign_in['user']:
+                        c.set_field('deviceVendor', 'Operational_DB_DM')
+                        c.set_field('deviceProduct', 'DB DM Test')
+                        c.set_field('severity', 4)
+                        c.set_field('end', date + ' ' + time)
+                        c.set_field('src', ip)
+                        c.set_field('duser', error_sign_in['user'])
+                        c.set_field('name', 'Неуспешная попытка входа (' + error_sign_in['cause'] + ')')
+                        error_sign_in.clear()
+                        c.build_cef()
+                        string = str(c)
+                        byte_string = bytes(string, 'utf-8')
+                        f.write(string + '\n')
+                        f.close()
+                        print(c)
+                        sock.send(byte_string)
+                        sleep(1)
+            else:
+                error_sign_in.clear()
+                c.set_field('deviceVendor', 'Operational_DB_DM')
+                c.set_field('deviceProduct', 'DB DM Test')
+                c.set_field('severity', 4)
+                c.set_field('end', date + ' ' + time)
+                c.set_field('src', ip)
+                c.set_field('duser', user)
+                c.set_field('name', events[function.__name__])
+                c.build_cef()
+                string = str(c)
+                byte_string = bytes(string, 'utf-8')
+                f.write(string + '\n')
+                f.close()
+                print(c)
+                sock.send(byte_string)
+                sleep(1)
+            return function(request)
+    return wrapper
 
 
 def do_logging(function):
-    # @wraps(function)
+    @wraps(function)
     def wrapper(request,full_sap=None, click=None):
         time = str(datetime.now().time()).split('.')[0]
         date = str(datetime.now().date())
@@ -195,6 +281,7 @@ def do_logging(function):
             logger.info('{};{};{};{}'.format(date, time, request.user.username, function.__name__))
             return function(request)
     return wrapper
+
 
 # HR-показатели (отчет)
 @login_required(redirect_field_name='')
@@ -212,12 +299,6 @@ def hr_indicators_original(request):
 
 
 # ОСНОВНЫЕ БИЗНЕС ПОКАЗАТЕЛИ
-# Продажи
-@login_required(redirect_field_name='')
-def business_revenue(request, full_sap):
-    result = store_class.business_revenue(full_sap)
-    return JsonResponse(result)
-
 # Продажи (новые)
 @login_required(redirect_field_name='')
 def business_revenue_new(request, full_sap):
@@ -226,12 +307,13 @@ def business_revenue_new(request, full_sap):
 
 # Продажи (новые) (отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def business_revenue_new_report(request, full_sap):
-    with open('reports/{0}/business_revenue_new_report.xlsx'.format(full_sap), 'rb') as fp:
+    with open('reports/{0}/revenue_new_report.xlsx'.format(full_sap), 'rb') as fp:
         data = fp.read()
-    filename = '{}_business_revenue_new_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    filename = '{}_revenue_new_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
     response = HttpResponse(content_type="application/")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
     response.write(data)
@@ -240,7 +322,8 @@ def business_revenue_new_report(request, full_sap):
 
 # Приемка алкоголя(отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def business_open_alcohol_documents_report(request, full_sap):
     with open('reports/{0}/alcohol_documents_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -260,7 +343,8 @@ def business_open_alcohol_documents(request, full_sap):
 
 # # Незакрытие документы приемки(отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def business_open_documents_report(request, full_sap):
     with open('reports/{0}/open_documents_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -287,7 +371,8 @@ def business_rto(request, full_sap):
 
 # Средний чек(отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def business_average_check_report(request, full_sap):
     with open('reports/{0}/average_check_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -307,7 +392,8 @@ def business_average_check(request, full_sap):
 
 # Отмененные чеки(отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def business_canceled_checks_report(request, full_sap):
     with open('reports/{0}/cancel_check_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -334,7 +420,8 @@ def business_write_offs(request, full_sap):
 
 # Скорость сканирования кассиров(отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def business_sellers_perfom_week_report(request, full_sap):
     with open('reports/{0}/sellers_perfom_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -347,7 +434,8 @@ def business_sellers_perfom_week_report(request, full_sap):
 
 # Скорость сканирования кассиров(отчет за месяц)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def business_sellers_perfom_month_report(request, full_sap):
     with open('reports/{0}/month_sellers_perfom_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -364,10 +452,51 @@ def business_sellers_perfom(request, full_sap):
     result = store_class.business_sellers_perfom(full_sap)
     return JsonResponse(result)
 
+# Трафик чеков (отчет)
+@login_required(redirect_field_name='')
+@mongo_log
+@cef_logging
+@do_logging
+def business_checks_traffic_report(request, full_sap):
+    with open('reports/{0}/checks_traffic_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_checks_traffic_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
+# Трафик чеков
+@login_required(redirect_field_name='')
+def business_checks_traffic(request, full_sap):
+    result = store_class.business_checks_traffic(full_sap)
+    return JsonResponse(result)
+
+# Продажи по старой цене (отчет)
+@login_required(redirect_field_name='')
+@mongo_log
+@cef_logging
+@do_logging
+def business_old_price_report(request, full_sap):
+    with open('reports/{0}/old_price_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_old_price_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
+# Продажи по старой цене 
+@login_required(redirect_field_name='')
+def business_old_price(request, full_sap):
+    result = store_class.business_old_price(full_sap)
+    return JsonResponse(result)
+
 
 # # HR показатели (отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def hr_indicators_report(request, full_sap):
     with open('reports/{0}/hr_indicators_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -394,7 +523,8 @@ def business_markdown(request, full_sap):
 # ТОВАРЫ
 # Просроченая продукция(отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def products_overdue_report(request, full_sap):
     with open('reports/{0}/overdue_products_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -414,7 +544,8 @@ def products_overdue(request, full_sap):
 
 # Ошибки продажи алкоголя(отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def products_alcohol_errors_report(request, full_sap):
     with open('reports/{0}/alcohol_errors_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -434,7 +565,8 @@ def products_alcohol_errors(request, full_sap):
 
 # Товары с низкими продажами(отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def products_low_saled_report(request, full_sap):
     with open('reports/{0}/low_saled_products_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -454,7 +586,8 @@ def products_low_saled(request, full_sap):
 
 # Товары без движения(отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def products_stoped_report(request, full_sap):
     with open('reports/{0}/stoped_products_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -466,7 +599,8 @@ def products_stoped_report(request, full_sap):
     return response
 
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def products_stoped_food_report(request, full_sap):
     with open('reports/{0}/stoped_products_food_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -478,7 +612,8 @@ def products_stoped_food_report(request, full_sap):
     return response
 
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def products_stoped_nonfood_report(request, full_sap):
     with open('reports/{0}/stoped_products_nonfood_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -490,7 +625,8 @@ def products_stoped_nonfood_report(request, full_sap):
     return response
 
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def products_stoped_fresh_report(request, full_sap):
     with open('reports/{0}/stoped_products_fresh_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -525,7 +661,8 @@ def products_stoped_fresh(request, full_sap):
 
 # Товары с отрицательными остатками(отчет)
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def products_minus_report(request, full_sap):
     with open('reports/{0}/minus_products_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -543,7 +680,8 @@ def products_minus(request, full_sap):
     return JsonResponse(result)
 
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def products_top30_report(request, full_sap):
     with open('reports/{0}/top30_products_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -561,7 +699,8 @@ def products_top30(request, full_sap):
     return JsonResponse(result)
 
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def products_topvd_report(request, full_sap):
     with open('reports/{0}/topvd_products_report.xlsx'.format(full_sap), 'rb') as fp:
@@ -614,7 +753,7 @@ def services_cashless(request, full_sap):
 
 # ГЛАВНАЯ
 @login_required(redirect_field_name='')
-# @cef_logging
+@cef_logging
 def index(request):
     if ((request.user.username + '@x5.ru') in directors) or ((request.user.username) in directors):
         for d in dirs:
@@ -630,7 +769,7 @@ def index(request):
             store = store_class.get_full_sap(search)
             return redirect('dashboard', store)
         else:
-            return render(request, 'main/index_1_0.html')
+            return render(request, 'main/index_1_1.html')
 
 
 
@@ -667,7 +806,8 @@ def feedback(request):
 
 # ДАШБОРД
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def dashboard(request, full_sap):
     if request.method == 'POST':
@@ -679,7 +819,7 @@ def dashboard(request, full_sap):
                         store = store_class.get_full_sap(search)
                         return redirect('dashboard', store)
                     else:
-                        return render(request, 'main/access_1_0.html', {
+                        return render(request, 'main/access_1_1.html', {
                                                         'full_sap': store_class.get_full_sap(search),
                                                         })
         else:
@@ -691,15 +831,15 @@ def dashboard(request, full_sap):
             for d in dirs:
                 if ((request.user.username + '@x5.ru') == d.director) or ((request.user.username) == d.director):
                     if full_sap == store_class.get_full_sap(d.sap):
-                        return render(request, 'main/dashboard_1_0.html', {
+                        return render(request, 'main/dashboard_1_1.html', {
                                                     'full_sap': full_sap,
                                                     })
                     else:
-                        return render(request, 'main/access_1_0.html', {
+                        return render(request, 'main/access_1_1.html', {
                                                         'full_sap': full_sap,
                                                         })
         else:
-            return render(request, 'main/dashboard_1_0.html', {
+            return render(request, 'main/dashboard_1_1.html', {
                                                     'full_sap': full_sap,
                                                     })
 
@@ -708,7 +848,8 @@ def dashboard(request, full_sap):
 
 # ЛОГИРОВАНИЕ
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def download_activity_log(request):
     header = ["Дата", "Время", "Пользователь", "Действие", "SAP №", 'Блок']
@@ -737,17 +878,18 @@ def download_activity_log(request):
     response.write(data)
     return response
 
-# ЛОГИРОВАНИЕ
+# ОБРАТНАЯ СВЯЗЬ
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def download_feedback(request):
     mongo = pymongo.MongoClient('192.168.200.73', 27017)
     db = mongo['tcx']
     collection = db['feedback']
     result = collection.find({})
-    data = [[record['date'], record['user'], record['sap'], record['sent_from'], record['feedback']] for record in result]
-    header = ["Дата", "Пользователь", "SAP", "Отправлено с", "Сообщение"]
+    data = [[record['date'], record['user'], record['sap'], record['sent_from'], record['feedback'], record['status']] for record in result]
+    header = ["Дата", "Пользователь", "SAP", "Отправлено с", "Сообщение", "Статус"]
     workbook = xlsxwriter.Workbook(os.getcwd() + '/logs/feedback.xlsx')
     worksheet = workbook.add_worksheet()
     col = 0
@@ -772,6 +914,7 @@ def download_feedback(request):
 
 
 # АВТОРИЗАЦИЯ
+@cef_logging
 def sign_in(request):
     if request.user.is_authenticated:
         return redirect(index)
@@ -802,6 +945,7 @@ def sign_in(request):
                                             else:
                                                 user.last_name = d.last_name
                                                 user.first_name = d.name
+                                            user.save()
                                             login(request, user)
                                             return redirect('dashboard', store_class.get_full_sap(store))
                                 else:
@@ -839,7 +983,6 @@ def sign_in(request):
                                         return redirect(index)
                                     else:
                                         user = User.objects.create_user(username, username+'@x5.ru', password)
-                                        user = form.save(commit=False)
                                         user.first_name = username
                                         user.save()
                                         login(request, user)
@@ -847,23 +990,28 @@ def sign_in(request):
                             
                         else:
                             messages.error(request, 'У вас нет доступа к данному сайту. Чтобы запросить доступ к сайту, обратитесь на DASHBOARD-DIR-PRODUCT@X5.RU')
+                            error_sign_in['user'] = username
+                            error_sign_in['cause'] = 'Пользователя нет в системе'
                             return redirect(sign_in)
                     else:
                         messages.error(request, 'Неверный логин/пароль')
+                        error_sign_in['user'] = username
+                        error_sign_in['cause'] = 'Неверный пароль'
                         return redirect(sign_in)
             else:
                 messages.error(request, 'Неверный логин/пароль')
                 return redirect(sign_in)
         else:
             form = LoginForm()
-    return render(request, 'main/sign_in_1_0.html', {'form':form})
+    return render(request, 'main/sign_in_1_1.html', {'form':form})
 
 
 
 
 # ВЫХОД
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def do_logout(request):
     logout(request)
@@ -871,13 +1019,14 @@ def do_logout(request):
 
 
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
 @do_logging
 def click_detect(request, full_sap, action):
     return HttpResponse()
 
 @login_required(redirect_field_name='')
-# @cef_logging
+@mongo_log
+@cef_logging
 @do_logging
 def go_back(request, full_sap):
     for d in dirs:

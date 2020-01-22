@@ -1,0 +1,13 @@
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2020-01-22 08:58:36 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2020-01-22 08:59:56 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2020-01-22 09:01:00 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2020-01-22 10:59:19 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2020-01-22 10:59:42 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2020-01-22 11:02:43 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Скачивание отчета по обратной связи|4|end=2020-01-22 11:02:48 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Скачивание отчета по обратной связи|4|end=2020-01-22 11:07:42 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2020-01-22 11:07:48 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2020-01-22 11:14:40 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2020-01-22 11:42:46 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2020-01-22 11:42:50 src=127.0.0.1 duser=e.astrakhantseva
+CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Страница магазина|4|end=2020-01-22 11:42:52 src=127.0.0.1 duser=e.astrakhantseva msg=store: Super-SCSH-2333

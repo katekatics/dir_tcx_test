@@ -11,7 +11,7 @@ import platform
 import pymongo
 
 
-bf_rule1 = ('1', '2', 'B')
+bf_rule1 = ('1', '2', 'B', 'H')
 bf_rule2 = ('4000', '4001', '4002', '4003', '4004', '4005', '4006')
 
 os.environ['PATH'] = 'C:\oracle\instantclient_19_3/'
@@ -45,14 +45,10 @@ def find_data(col, store):
         find = find_errors({"host": store})
     return find
 
-
-def business_revenue(store):
-    return find_data('business_revenue', store)
-
 def business_revenue_new(store):
     result = find_data('business_revenue_new', store)
     if 'thead' in result:
-        write_report('business_revenue_new_report',
+        write_report('revenue_new_report',
                     result['thead'], result['tbody'], store)
     return result
 
@@ -129,12 +125,28 @@ def business_markdown(store):
     result = find_data('business_markdown', store)
     return result
 
+# Трафик чеков
+def business_checks_traffic(store):
+    result = find_data('business_checks_traffic', store)
+    if 'thead' in result:
+        write_report('checks_traffic_report',
+                    result['thead'], result['tbody'], store)
+    return result
+
+# Продажи по старой цене
+def business_old_price(store):
+    result = find_data('business_old_price', store)
+    if 'thead' in result:
+        write_report('old_price_report',
+                    result['thead'], result['tbody'], store)
+    return result
+
 
 # ТОВАРЫ
 
 # Просроченая продукция
 def products_overdue(store):
-    result = find_data('products_overdue_new', store)
+    result = find_data('products_overdue', store)
     if 'thead' in result:
         write_report('overdue_products_report',
                     result['thead'], result['tbody'], store)
@@ -190,7 +202,7 @@ def products_stoped_fresh(store):
 def products_minus(store):
     result = find_data('products_minus', store)
     if 'thead' in result:
-        write_report('top30_products_report',
+        write_report('minus_products_report',
                     result['thead'], result['tbody'], store)
     return result
 
@@ -241,7 +253,7 @@ def feedback():
     db = mongo['tcx']
     collection = db['feedback']
     result = collection.find({})
-    data = [{'date': record['date'], 'user': record['user'], 'msg': record['feedback']} for record in result]
+    data = [{'date': record['date'], 'user': record['user'], 'msg': record['feedback'], 'sap': record['sap'], 'sent_from': record['sent_from'], 'status': record['status']} for record in result]
     return data
 
 

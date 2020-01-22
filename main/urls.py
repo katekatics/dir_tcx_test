@@ -55,6 +55,12 @@ urlpatterns = [
 
     path('store/<str:full_sap>/business_markdown/', views.business_markdown, name='business_markdown'),
 
+    path('store/<str:full_sap>/business_checks_traffic_report/', views.business_checks_traffic_report, name='business_checks_traffic_report'),
+    path('store/<str:full_sap>/business_checks_traffic/', views.business_checks_traffic, name='business_checks_traffic'),
+
+    path('store/<str:full_sap>/business_old_price_report/', views.business_old_price_report, name='business_old_price_report'),
+    path('store/<str:full_sap>/business_old_price/', views.business_old_price, name='business_old_price'),
+
     path('store/<str:full_sap>/business_write_offs/', views.business_write_offs, name='business_write_offs'),
 
     path('store/<str:full_sap>/business_rto/', views.business_rto, name='business_rto'),
@@ -67,8 +73,6 @@ urlpatterns = [
 
     path('store/<str:full_sap>/services_net/', views.services_net, name='services_net'),
 
-    path('store/<str:full_sap>/business_revenue/', views.business_revenue, name='business_revenue'),
-
     path('store/<str:full_sap>/business_revenue_new_report/', views.business_revenue_new_report, name='business_revenue_new_report'),
     path('store/<str:full_sap>/business_revenue_new/', views.business_revenue_new, name='business_revenue_new'),
 
@@ -78,7 +82,9 @@ urlpatterns = [
 
     path('store/<str:full_sap>/services_cashless/', views.services_cashless, name='services_cashless'),
 
-    # path('get_heatmap/', views.get_heatmap, name='get_heatmap'),
+    path('heatmap_page/', views.heatmap_page, name='heatmap_page'),
+
+    path('get_heatmap/', views.get_heatmap, name='get_heatmap'),
 
     path('get_feedback/', views.get_feedback, name='get_feedback'),
 
