@@ -1,5 +1,4 @@
 .vscode/
-static/
 *.csv
 *.log
 *.xlsx
