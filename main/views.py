@@ -22,17 +22,25 @@ from . import heatmap
 from time import sleep
 import json 
 import calendar
+import time, sys
 
 # LOGGER
 import logging
 from logging.handlers import RotatingFileHandler
 
-with open(os.getcwd() + '/logs/dir_tcx.log', "w+") as f:
-    f.write(socket.gethostname())
+# with open(os.getcwd() + '/logs/dir_tcx.log', "w+") as f:
+#     f.write(socket.gethostname())
 
 dirs = Dirs.objects.all()
 directors = []
 [directors.append(d.director) for d in dirs]
+
+path = os.getcwd() + '/media/heatmap'
+now = time.time()
+for f in os.listdir(path):
+    file_date = os.stat(os.path.join(path, f))
+    if os.stat(os.path.join(path,f)).st_mtime < now - 1800:
+        os.remove(os.path.join(path, f))
 
 error_sign_in = {'user': '', 'cause': ''}
 
@@ -46,7 +54,7 @@ events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получе
         'products_low_saled_report': 'Скачивание отчета по товарам с низкими продажами', 'products_stoped_report': 'Скачивание отчета по товарам без движения',
         'products_stoped_nonfood_report': 'Скачивание отчета по товарам без движения NONFOOD', 'products_stoped_food_report': 'Скачивание отчета по товарам без движения FOOD',
         'products_stoped_fresh_report': 'Скачивание отчета по товарам без движения FRESH', 'products_minus_report': 'Скачивание отчета по товарам с отрицательными остатками',
-        'products_topvd_report': 'Скачивание отчета по топ ВД', 'products_top30_report': 'Скачивание отчета по топ 30', 'index': 'Начальная страница', 
+        'products_topvd_report': 'Скачивание отчета по топ ВД', 'products_top30_today_report': 'Скачивание отчета по топ 30 (за сегодня)', 'products_top30_week_report': 'Скачивание отчета по топ 30 (за неделю)', 'index': 'Начальная страница', 
         'dashboard': 'Страница магазина', 'download_activity_log': 'Скачивание отчета по активности пользователей', 'download_feedback': 'Скачивание отчета по обратной связи',
         'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина'}
 
@@ -57,6 +65,7 @@ def heatmap_page(request):
 @login_required(redirect_field_name='')
 def get_heatmap(request):
     result = json.loads(request.POST['data'])
+    response = {}
     if result['status'] == 'day':
         start = datetime.strptime(result['date'] + ' ' + '00:00:00', '%Y-%m-%d %H:%M:%S')
         end = datetime.strptime(result['date'] + ' ' + '23:59:59', '%Y-%m-%d %H:%M:%S')
@@ -76,7 +85,9 @@ def get_heatmap(request):
         start = datetime.strptime('2019-11-01 00:00:00', '%Y-%m-%d %H:%M:%S')
         end = datetime.now()
         heatmap.build_heatmap(start, end)
-    return redirect(heatmap_page)
+    response['start'] = datetime.strftime(start, '%Y-%m-%d_%H-%M-%S')
+    response['end'] = datetime.strftime(end, '%Y-%m-%d_%H-%M-%S')
+    return JsonResponse(response)
 
 @login_required(redirect_field_name='')
 def get_feedback(request):
@@ -683,10 +694,23 @@ def products_minus(request, full_sap):
 @mongo_log
 @cef_logging
 @do_logging
-def products_top30_report(request, full_sap):
-    with open('reports/{0}/top30_products_report.xlsx'.format(full_sap), 'rb') as fp:
+def products_top30_today_report(request, full_sap):
+    with open('reports/{0}/top30_products_today_report.xlsx'.format(full_sap), 'rb') as fp:
         data = fp.read()
-    filename = '{}_top30_products_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    filename = '{}_top30_products_today_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
+@login_required(redirect_field_name='')
+@mongo_log
+@cef_logging
+@do_logging
+def products_top30_week_report(request, full_sap):
+    with open('reports/{0}/top30_products_week_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_top30_products_week_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
     response = HttpResponse(content_type="application/")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
     response.write(data)

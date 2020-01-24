@@ -7,6 +7,7 @@ import pandas as pd
 import xlsxwriter
 from datetime import datetime
 import pymongo
+import os
 
 def get_data(start_date, end_date):
     """Создание словаря на основе данных из лога, в словаре содержится количество кликов и количество скачанных отчетов в дашборде для директоров."""
@@ -134,11 +135,15 @@ def build_heatmap(start_date, end_date):
     fig, axes = plt.subplots(figsize=(6,9)) # (Ширина, высота)
     axes.tick_params(axis="x", labelsize=8)
     axes.tick_params(axis="y", labelsize=10)
-    sns.heatmap(action_matrix, ax = axes, annot=True, square=True, cmap='PuBu',fmt='d',linewidths=.5)
+    sns.heatmap(action_matrix, ax = axes, annot=True, square=True, cmap='PuBu', fmt='d', linewidths=.5)
     start = datetime.strftime(start_date, '%Y-%m-%d %H:%M:%S')
     end = datetime.strftime(end_date, '%Y-%m-%d %H:%M:%S')
-    axes.set_title('Тепловая карта за период' + '\n' + start + ' - ' + end,pad=10)
+    file_start = datetime.strftime(start_date, '%Y-%m-%d_%H-%M-%S')
+    file_end = datetime.strftime(end_date, '%Y-%m-%d_%H-%M-%S')
+    axes.set_title('Тепловая карта за период' + '\n' + start + ' - ' + end, pad=10)
     axes.xaxis.labelpad=40   
     axes.xaxis.set_tick_params(rotation=50)
     
-    fig.savefig('media/heatmap.png')
+    if not os.path.exists('media/heatmap'):
+        os.makedirs('media/heatmap')
+    fig.savefig('media/heatmap/heatmap_' + file_start + '_' + file_end + '.png')

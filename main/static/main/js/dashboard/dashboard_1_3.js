@@ -1,7 +1,8 @@
 $(document).ready(function () {
     data();
     setInterval('data()', 180000);
-    $('#open_close')[0].textContent = 'Свернуть';
+    $('#open_close_business')[0].textContent = 'Свернуть';
+    $('#open_close_products')[0].textContent = 'Свернуть';
 });
 
 
@@ -68,14 +69,30 @@ $(document).on("click", ".click_detect", function () {
     $.get("/click_detect/" + full_sap + "/" + action + "/")
 })
 
+var n = 0;
 $(document).on("click", "#headingBusiness", function () {
-    var cl = $('#business').attr('class');
-    if (cl == 'collapsing') {
-        $('#open_close')[0].textContent = 'Развернуть';
+    n += 1;
+    res = n%2;
+    if (res == 0) {
+        $('#open_close_business')[0].textContent = 'Свернуть';
     }
     else {
-        $('#open_close')[0].textContent = 'Свернуть';
+        $('#open_close_business')[0].textContent = 'Развернуть';
     }
+    
+})
+
+var k = 0;
+$(document).on("click", "#headingProducts", function () {
+    k += 1;
+    res =k%2;
+    if (res == 0) {
+        $('#open_close_products')[0].textContent = 'Свернуть';
+    }
+    else {
+        $('#open_close_products')[0].textContent = 'Развернуть';
+    }
+    
 })
 
 function data() {

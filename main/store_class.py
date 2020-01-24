@@ -29,7 +29,6 @@ def find_errors(store):
         store['errors'] = []
     return store
 
-
 def find_data(col, store):
     mongo = pymongo.MongoClient('192.168.200.73', 27017)
     db = mongo['tcx']
@@ -51,7 +50,6 @@ def business_revenue_new(store):
         write_report('revenue_new_report',
                     result['thead'], result['tbody'], store)
     return result
-
 
 # Незакрытие документы приемки алкоголя
 def business_open_alcohol_documents(store):
@@ -92,8 +90,6 @@ def business_write_offs(store):
     return result
 
 # Отмененные чеки
-
-
 def business_canceled_checks(store):
     result = find_data('business_canceled_checks', store)
     if 'thead' in result:
@@ -209,9 +205,12 @@ def products_minus(store):
 # Топ 30
 def products_top30(store):
     result = find_data('products_top30', store)
-    if 'thead' in result:
-        write_report('top30_products_report',
-                    result['thead'], result['tbody'], store)
+    if 'thead1' in result:
+        write_report('top30_products_today_report',
+                    result['thead1'], result['tbody1'], store)
+    if 'thead2' in result:
+        write_report('top30_products_week_report',
+                    result['thead2'], result['tbody2'], store)
     return result
 
 # Топ ВД

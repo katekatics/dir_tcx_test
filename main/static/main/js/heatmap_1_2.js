@@ -20,10 +20,13 @@ $(document).ready(function () {
         if (option == 'day') {
             $('#day_div').css('display', '');
             $('#period_div').css('display', 'none');
+            $('#month_div').css('display', 'none');
+
         } 
         else if (option == 'period') {
             $('#day_div').css('display', 'none');
             $('#period_div').css('display', '');
+            $('#month_div').css('display', 'none');
         } 
         else if (option == 'month') {
             $('#day_div').css('display', 'none');
@@ -70,7 +73,7 @@ $(document).on('click', '#get_heatmap_button', function() {
             data: JSON.stringify(result)
         },
         success: function(data) {
-            document.location.reload();
+            $('#heatmap_img').html('<img src="/media/heatmap/heatmap_' + data.start + '_' + data.end + '.png">');
         }
     });
 })

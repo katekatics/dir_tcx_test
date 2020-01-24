@@ -1,8 +1,15 @@
 <div class="card mb-3">
     <div class="card-header bg-success text-white" id="headingProducts" tabindex="0" data-toggle="collapse" data-target="#products" aria-expanded="true" aria-controls="products">
-        <h6 class=" mb-0">
-            <i class="fas fa-apple-alt pt-1"></i> Товары
-        </h6>
+        <div class="row">
+            <div class="col-10"> 
+                <h6 class=" mb-0">
+                    <i class="fas fa-apple-alt pt-1"></i> Товары
+                </h6>
+            </div>
+            <div class="col-2">
+                <h6 class="text-right" id="open_close_products"></h6>
+            </div>
+        </div>
     </div>
 
     <div id="products" class="collapse show" aria-labelledby="headingProducts">
@@ -239,8 +246,10 @@
                             </div>
                             <div class="modal-body" id="products_top30_modal_body"></div>
                             <div class="modal-footer">
-                                <a type="button" class="btn btn-primary text-white" href="{% url 'products_top30_report' full_sap=full_sap %}" target="_blank">Скачать
-                                        отчет</a>
+                                <a type="button" class="btn btn-primary text-white" href="{% url 'products_top30_week_report' full_sap=full_sap %}" target="_blank">Скачать
+                                        отчет (за неделю)</a>
+                                <a type="button" class="btn btn-primary text-white" href="{% url 'products_top30_today_report' full_sap=full_sap %}" target="_blank">Скачать
+                                        отчет (за сегодня)</a>
                                 <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
                             </div>
                         </div>

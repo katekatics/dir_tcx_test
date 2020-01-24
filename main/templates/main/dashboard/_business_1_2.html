@@ -7,7 +7,7 @@
                 <h6 class="ml-1"><i class="fas fa-business-time pt-1"></i> Основные бизнес показатели "{{full_sap}}"</h6>
             </div>
             <div class="col-2">
-                <h6 class="text-right" id="open_close"></h6>
+                <h6 class="text-right" id="open_close_business"></h6>
             </div>
         </div>
     </div>
@@ -20,8 +20,7 @@
                 <!-- Продажи -->
                 <div class="col-12">
                     <div class="card bg-success text-white my-1" id="rto_traffic_check_theme">
-                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Выручка за сегодня | выручка неделей ранее<br>Блок обновляется каждые 15 минут">
+                        <div class="card-header">
                             <div class="row">
                                 <div class="col-3">
                                     <h6 class="card-title text-center"></h6>
@@ -38,9 +37,12 @@
                             </div>
                         </div>
                         <div class="card-body click_detect" tabindex="0" data-toggle="modal" id="business_revenue_new_body">
-                            <div class="row">
+                            <div class="row" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="" id="business_revenue_new_tooltip">
                                 <div class="col-3">
-                                    <h6 class="card-title">Продажи</h6>
+                                        <h5 class="card-title">Продажи (₽)</h5>                             
+                                    <small class="float-left" id="business_revenue_new_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
                                 <div class="col-3">
                                     <h4 class="card-title text-center" id='today_revenue'>-</h4>
@@ -56,7 +58,9 @@
                         <div class="card-body" tabindex="0" data-toggle="modal" id="business_checks_traffic_body">
                             <div class="row">
                                 <div class="col-3">
-                                    <h6 class="card-title">Трафик</h6>
+                                        <h5 class="card-title">Трафик</h5>
+                                    <small class="float-left" id="business_checks_traffic_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
                                 <div class="col-3">
                                     <h4 class="card-title text-center" id="today_traffic">-</h4>
@@ -72,7 +76,9 @@
                         <div class="card-body" tabindex="0" data-toggle="modal" id="business_average_check_body">
                             <div class="row">
                                 <div class="col-3">
-                                    <h6 class="card-title">Средний чек</h6>
+                                        <h5 class="card-title">Средний чек (₽)</h5>
+                                    <small class="float-left" id="business_average_check_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
                                 <div class="col-3">
                                     <h4 class="card-title text-center" id="today_av_check">-</h4>
@@ -85,7 +91,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer">
+                        {% comment %} <div class="card-footer">
                             <div class="row text-center">
                                 <div class="col-6">
                                     <small class="float-left" id="rto_traffic_check_footer_msg"></small>
@@ -95,12 +101,12 @@
                             data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
 
                 <!-- Продажи (новые) -->
-                <div class="col-xl-6 col-lg-6 col-md-12">
+                <div class="col-xl-6 col-lg-6 col-md-12" style="display: none;">
                     <div class="card bg-dark text-white my-1" id="business_revenue_new_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
                             data-placement="right" data-original-title="" id="business_revenue_new_tooltip">
@@ -170,7 +176,7 @@
 
 
                 <!-- Средний чек -->
-                <div class="col-xl-6 col-lg-6 col-md-12">
+                <div class="col-xl-6 col-lg-6 col-md-12" style="display: none;">
                     <div class="card bg-dark text-white my-1 business_collection" id="business_average_check_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
                             data-placement="right"
@@ -397,7 +403,7 @@
                 </div>
 
                 <!-- Трафик чеков -->
-                <div class="col-xl-6 col-lg-6 col-md-12">
+                <div class="col-xl-6 col-lg-6 col-md-12" style="display: none;">
                     <div class="card bg-dark text-white my-1" id="business_checks_traffic_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
                             data-placement="right" data-original-title="Информация по количеству закрытых чеков по всем кассам<br><br>Блок обновляется каждые 15 минут<br>(При нажатии на блок можно получить подробную информацию и скачать отчет)">

@@ -19,7 +19,8 @@ urlpatterns = [
     path('store/<str:full_sap>/products_minus_report/', views.products_minus_report, name='products_minus_report'),
     path('store/<str:full_sap>/products_minus/', views.products_minus, name='products_minus'),
 
-    path('store/<str:full_sap>/products_top30_report/', views.products_top30_report, name='products_top30_report'),
+    path('store/<str:full_sap>/products_top30_today_report/', views.products_top30_today_report, name='products_top30_today_report'),
+    path('store/<str:full_sap>/products_top30_week_report/', views.products_top30_week_report, name='products_top30_week_report'),
     path('store/<str:full_sap>/products_top30/', views.products_top30, name='products_top30'),
 
     path('store/<str:full_sap>/products_topvd_report/', views.products_topvd_report, name='products_topvd_report'),
