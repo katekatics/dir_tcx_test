@@ -63,7 +63,14 @@
                             </div>
                         </div>
                     </form>
-                    <h5>Тестовая версия</h5>
+                    <div class="container px-2">
+                        {% for message in messages %}
+                        <div class="alert alert-danger my-0">
+                            <h6 class="my-0"><strong>{{ message }}</strong></h6>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% comment %} <h5>Тестовая версия</h5> {% endcomment %}
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -193,11 +200,19 @@
             <!-- End of Main Content -->
             <!-- Footer -->
             <footer class="footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Все найденные ошибки и предложения по улучшению присылать на <a
-                                href="mailto:dashboard-dir-product@x5.ru?subject=DIR_TCX">dashboard-dir-product@x5.ru</a></span>
+                <div class="row">
+                    <div class="col-2">
+                        <small class="text-left mx-1"><i>&copy; 2019-2020</i></small>
+                        <small class="text-left"><i><strong>Версия: </strong>2.1</i></small>
                     </div>
+                    <div class="col-10">
+                        <div class="container">
+                            <div class="copyright text-center">
+                                <span>Все найденные ошибки и предложения по улучшению присылать на <a
+                                    href="mailto:dashboard-dir-product@x5.ru?subject=DIR_TCX">dashboard-dir-product@x5.ru</a></span>
+                            </div>
+                        </div>
+                    </div>                   
                 </div>
             </footer>
             <!-- End of Footer -->

@@ -28,6 +28,9 @@ import time, sys
 import logging
 from logging.handlers import RotatingFileHandler
 
+sprint = '_2_'
+version = '1'
+
 # with open(os.getcwd() + '/logs/dir_tcx.log', "w+") as f:
 #     f.write(socket.gethostname())
 
@@ -73,7 +76,11 @@ def get_heatmap(request):
     elif result['status'] == 'period':
         start = datetime.strptime(result['start'] + ' ' + '00:00:00', '%Y-%m-%d %H:%M:%S')
         end = datetime.strptime(result['end'] + ' ' + '23:59:59', '%Y-%m-%d %H:%M:%S')
-        heatmap.build_heatmap(start, end)
+        if (end - start).days < 0:
+            response['text'] ='Вы ввели неправильный период!'
+            return JsonResponse(response)
+        else:
+            heatmap.build_heatmap(start, end)
     elif result['status'] == 'month':
         month = (result['month'].split('-'))[1]
         year = (result['month'].split('-'))[0]
@@ -782,7 +789,7 @@ def index(request):
     if ((request.user.username + '@x5.ru') in directors) or ((request.user.username) in directors):
         for d in dirs:
             if ((request.user.username + '@x5.ru') == d.director) or (request.user.username) == d.director:
-                store = store_class.get_full_sap(d.sap)
+                store = store_class.get_full_sap(d.sap)['sap']
                 if request.method == 'POST':
                     return redirect('dashboard', store)
                 else:
@@ -791,7 +798,11 @@ def index(request):
         if request.method == 'POST':
             search = request.POST.get('store').upper()
             store = store_class.get_full_sap(search)
-            return redirect('dashboard', store)
+            if store == None:
+                messages.warning(request, 'Вы ввели неверный магазин!')
+                return redirect(index)
+            else:
+                return redirect('dashboard', store['sap'])
         else:
             return render(request, 'main/index_1_1.html')
 
@@ -840,16 +851,20 @@ def dashboard(request, full_sap):
                 if ((request.user.username + '@x5.ru') == d.director) or ((request.user.username) == d.director):
                     search = request.POST.get('store').upper()
                     if search == d.sap:
-                        store = store_class.get_full_sap(search)
+                        store = store_class.get_full_sap(search)['sap']
                         return redirect('dashboard', store)
                     else:
                         return render(request, 'main/access_1_1.html', {
-                                                        'full_sap': store_class.get_full_sap(search),
+                                                        'full_sap': store_class.get_full_sap(search)['sap'],
                                                         })
         else:
             search = request.POST.get('store').upper()
             store = store_class.get_full_sap(search)
-            return redirect('dashboard', store)
+            if store == None:
+                messages.warning(request, 'Вы ввели неверный магазин!')
+                return redirect('dashboard', full_sap)
+            else:
+                return redirect('dashboard', store['sap'])
     else:
         if ((request.user.username + '@x5.ru') in directors) or ((request.user.username) in directors):
             for d in dirs:
@@ -866,6 +881,10 @@ def dashboard(request, full_sap):
             return render(request, 'main/dashboard_1_1.html', {
                                                     'full_sap': full_sap,
                                                     })
+
+def sap_name(request, full_sap):
+    name = store_class.get_full_sap(full_sap)['name']
+    return JsonResponse(name, safe=False)
 
 
 

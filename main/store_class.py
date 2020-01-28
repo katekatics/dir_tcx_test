@@ -375,13 +375,16 @@ def get_full_sap(store):
                 'name': store
             },
             'monitored_hosts': 'true',
+            'selectInventory': ['name'],
             'output': ['name']
         })['result']
         zabbix.session.close()
         if find:
             for i in find:
                 if i['name'].startswith('Super'):
-                    return i['name']
+                    return {'sap': i['name'], 'name': i['inventory']['name']}
+        else:
+            return None
 
 def get_hostid(store):
     if store.upper().startswith("SUPER") or store.upper().startswith(bf_rule1) or store.upper() in bf_rule2:

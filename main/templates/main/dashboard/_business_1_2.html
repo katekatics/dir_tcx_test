@@ -3,10 +3,24 @@
     <div class="card-header bg-success text-white" id="headingBusiness" tabindex="0" data-toggle="collapse"
         data-target="#business" aria-expanded="true" aria-controls="business">
         <div class="row">
-            <div class="col-10">   
-                <h6 class="ml-1"><i class="fas fa-business-time pt-1"></i> Основные бизнес показатели "{{full_sap}}"</h6>
+            <div class="col-5">
+                <h6 class="mb-0">
+                    <div class="row">
+                        <div class="col-1">
+                            <i class="fas fa-business-time pt-1"></i>
+                        </div>
+                        <div class="col-11">
+                            <div class="card-title" tabindex="0" data-html="true" data-toggle="tooltip"
+                                data-placement="right" data-original-title="Основные бизнес поакзатели">ОБТ "{{full_sap}}"
+                            </div>
+                        </div>
+                    </div>                      
+                </h6>
             </div>
-            <div class="col-2">
+            <div class="col-4">
+                <h6><div id="sap_name"></div></h6>
+            </div>
+            <div class="col-3">
                 <h6 class="text-right" id="open_close_business"></h6>
             </div>
         </div>

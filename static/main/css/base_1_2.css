@@ -68,6 +68,7 @@ hr {
   box-sizing: content-box;
   height: 0;
   overflow: visible;
+  background-color: #fff;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -8612,6 +8613,7 @@ button.bg-dark:focus {
 .ml-auto,
 .mx-auto {
   margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 @media (min-width: 576px) {
@@ -11999,4 +12001,12 @@ form.user .btn-user {
 .accordion .card:last-of-type {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.mycontent-left {
+  border-right: 1px solid rgb(255, 255, 255);
+}
+
+.mycontent-bottom {
+  border-bottom: 1px solid rgb(255, 255, 255);
 }
