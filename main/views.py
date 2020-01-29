@@ -63,7 +63,7 @@ events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получе
 
 @login_required(redirect_field_name='')
 def heatmap_page(request):
-    return render(request, 'main/heatmap_1_1.html')
+    return render(request, 'main/heatmap' + sprint + version + '.html')
 
 @login_required(redirect_field_name='')
 def get_heatmap(request):
@@ -129,7 +129,7 @@ def get_feedback(request):
 
 @login_required(redirect_field_name='')
 def upload_index(request):
-    return render(request, 'main/upload_1_1.html')
+    return render(request, 'main/upload' + sprint + version + '.html')
 
 @login_required(redirect_field_name='')
 def upload(request):
@@ -804,7 +804,7 @@ def index(request):
             else:
                 return redirect('dashboard', store['sap'])
         else:
-            return render(request, 'main/index_1_1.html')
+            return render(request, 'main/index' + sprint + version + '.html')
 
 
 
@@ -854,7 +854,7 @@ def dashboard(request, full_sap):
                         store = store_class.get_full_sap(search)['sap']
                         return redirect('dashboard', store)
                     else:
-                        return render(request, 'main/access_1_1.html', {
+                        return render(request, 'main/access' + sprint + version + '.html', {
                                                         'full_sap': store_class.get_full_sap(search)['sap'],
                                                         })
         else:
@@ -870,15 +870,15 @@ def dashboard(request, full_sap):
             for d in dirs:
                 if ((request.user.username + '@x5.ru') == d.director) or ((request.user.username) == d.director):
                     if full_sap == store_class.get_full_sap(d.sap):
-                        return render(request, 'main/dashboard_1_1.html', {
+                        return render(request, 'main/dashboard' + sprint + version + '.html', {
                                                     'full_sap': full_sap,
                                                     })
                     else:
-                        return render(request, 'main/access_1_1.html', {
+                        return render(request, 'main/access' + sprint + version + '.html', {
                                                         'full_sap': full_sap,
                                                         })
         else:
-            return render(request, 'main/dashboard_1_1.html', {
+            return render(request, 'main/dashboard' + sprint + version + '.html', {
                                                     'full_sap': full_sap,
                                                     })
 
@@ -1046,7 +1046,7 @@ def sign_in(request):
                 return redirect(sign_in)
         else:
             form = LoginForm()
-    return render(request, 'main/sign_in_1_1.html', {'form':form})
+    return render(request, 'main/sign_in' + sprint + version + '.html', {'form':form})
 
 
 
