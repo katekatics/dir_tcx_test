@@ -4,6 +4,8 @@ $(document).ready(function () {
     setInterval('data()', 180000);
     $('#open_close_business')[0].textContent = 'Свернуть';
     $('#open_close_products')[0].textContent = 'Свернуть';
+    $('#sap').html('ОБП' + ((window.location.pathname).split('-')[2]).slice(0, 4));
+    $('#rto_traffic_check_theme')[0].clildNodes;
 });
 
 function sap_name() {
@@ -47,6 +49,51 @@ function create_report_modal(body, head, block_name) {
             var line = body[i];
             for (var j = 0; j < line.length; j++) {
                 table += '<td>';
+                table += line[j];
+                table += '</td>';
+            }
+            table += '</tr>';
+        }
+        table += '</tbody></table>';
+        $("#" + block_name + "_modal_body").html(table);
+        $("#" + block_name + "_table").DataTable();
+        $('.dataTables_length').addClass('bs-select');
+    }
+}
+
+function range_revenue(min, max, step) {
+    lst = [];
+    for (var i = min; i <= max;) {
+        lst.push(i);
+        i += step;        
+    }
+    return lst;
+}
+
+function create_revenue_report_modal(body, head, block_name, colors) {
+    if (body.length > 0) {
+        $("#" + block_name + "_body").attr('class', "card-body click_detect");
+        $("#" + block_name + "_body").attr('data-target', "#" + block_name + "_modal");
+        var table = '<table id="' + block_name + '_table" class="table table-striped table-bordered" cellspacing="0" width="100%"><thead><tr>';
+        for (var i = 0; i < head.length; i++) {
+            table += '<th>';
+            table += head[i];
+            table += '</th>';
+        }
+        table += '</tr></thead><tbody>';
+        for (var i = 0; i < body.length; i++) {
+            table += '<tr>';
+            var line = body[i];
+            for (var j = 0; j < line.length; j++) {
+                for (k of range_revenue(1, line.length, 4)) {
+                    if (j == k) {
+                        table += '<td class="' + colors[i] + '">';
+                    }
+                    else {
+                        table += '<td>';
+                    }
+                }
+                
                 table += line[j];
                 table += '</td>';
             }
@@ -129,6 +176,7 @@ function data() {
     products_stoped_fresh();
     products_minus();
     products_top30();
+    products_super_price();
     products_topvd();
 
     services_loyalty();

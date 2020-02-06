@@ -217,7 +217,7 @@
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12">
                     <div class="card bg-dark text-white my-1" id="products_top30_theme">
-                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="right" data-original-title="Топ товаров которые составляют основное РТО, Общее кол-во товара | Сколько продано за сегодня (% выполнения) Сколько продано за неделю (% выполнения) <br><br>(При нажатии на блок можно получить информацию о товарах и скачать отчет)<br>Блок обновляется каждые 15 минут">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="right" data-original-title="Топ товаров которые составляют основное РТО, Общее кол-во товара | Сколько продано за сегодня (% выполнения)<br><br>(При нажатии на блок можно получить информацию о товарах и скачать отчет)<br>Блок обновляется каждые 15 минут">
                             <h6 class="card-title">Топ 30</h6>
                         </div>
                         <div class="card-body" tabindex="0" data-toggle="modal" id="products_top30_body">
@@ -246,10 +246,47 @@
                             </div>
                             <div class="modal-body" id="products_top30_modal_body"></div>
                             <div class="modal-footer">
-                                <a type="button" class="btn btn-primary text-white" href="{% url 'products_top30_week_report' full_sap=full_sap %}" target="_blank">Скачать
-                                        отчет (за неделю)</a>
-                                <a type="button" class="btn btn-primary text-white" href="{% url 'products_top30_today_report' full_sap=full_sap %}" target="_blank">Скачать
-                                        отчет (за сегодня)</a>
+                                <a type="button" class="btn btn-primary text-white" href="{% url 'products_top30_report' full_sap=full_sap %}" target="_blank">Скачать
+                                        отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="products_super_price_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="right" data-original-title="Топ товаров которые составляют основное РТО, Общее кол-во товара | Сколько продано за сегодня (% выполнения)<br><br>(При нажатии на блок можно получить информацию о товарах и скачать отчет)<br>Блок обновляется каждые 15 минут">
+                            <h6 class="card-title">Супер цена</h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="products_super_price_body">
+                            <h4 class="card-text text-center" id="products_super_price_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="products_super_price_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="products_super_price_footer_time" data-toggle="tooltip" data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="products_super_price_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Супер цена</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="products_super_price_modal_body"></div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white" href="{% url 'products_super_price_report' full_sap=full_sap %}" target="_blank">Скачать
+                                        отчет</a>
                                 <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
                             </div>
                         </div>

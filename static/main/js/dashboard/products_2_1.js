@@ -97,6 +97,22 @@ function products_top30() {
     );
 }
 
+function products_super_price() {
+    // Супер цена
+    $.post("/store/" + full_sap + "/products_super_price/", { csrfmiddlewaretoken: getCookie('tcx_token') },
+        function (data) {
+            if (data.theme) {
+                $("#products_super_price_theme").attr('class', data.theme);
+                $("#products_super_price_body_text").html(data.body_text);
+                $("#products_super_price_footer_time").html(data.date);
+                create_report_modal(data.tbody, data.thead, 'products_super_price');
+                $("#products_super_price_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
+            }
+            block_errors("products_super_price", data);
+        }
+    );
+}
+
 function products_topvd() {
     // Топ ВД
     $.post("/store/" + full_sap + "/products_topvd/", { csrfmiddlewaretoken: getCookie('tcx_token') },

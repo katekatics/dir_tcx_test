@@ -1,2 +1,0 @@
-CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Начальная страница|4|end=2020-01-13 17:38:20 src=127.0.0.1 duser=e.astrakhantseva
-CEF:0|Operational_DB_DM|DB DM Test|1.0|0|Выход из системы|4|end=2020-01-13 17:38:28 src=127.0.0.1 duser=e.astrakhantseva

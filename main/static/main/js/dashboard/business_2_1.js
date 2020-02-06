@@ -11,7 +11,7 @@ function business_revenue_new() {
                 $('#ly_revenue').html(revenue[2]);
                 $("#business_revenue_new_tooltip").attr('data-original-title', data.tooltip);
                 $("#business_revenue_new_footer_time").html(data.date);
-                create_report_modal(data.tbody, data.thead, 'business_revenue_new');
+                create_revenue_report_modal(data.tbody, data.thead, 'business_revenue_new', data.colors);
                 $("#business_revenue_new_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
             }
             block_errors("business_revenue_new", data);
@@ -50,7 +50,6 @@ function business_average_check() {
                 $("#lw_av_check").html(av_check[1]);
                 $("#ly_av_check").html(av_check[2]);
                 $("#business_average_check_footer_time").html(data.date);
-                create_report_modal(data.tbody, data.thead, 'business_average_check');
                 $("#business_average_check_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
             }
             block_errors("business_average_check", data);

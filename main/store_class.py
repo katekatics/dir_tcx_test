@@ -205,12 +205,17 @@ def products_minus(store):
 # Топ 30
 def products_top30(store):
     result = find_data('products_top30', store)
-    if 'thead1' in result:
-        write_report('top30_products_today_report',
-                    result['thead1'], result['tbody1'], store)
-    if 'thead2' in result:
-        write_report('top30_products_week_report',
-                    result['thead2'], result['tbody2'], store)
+    if 'thead' in result:
+        write_report('top30_products_report',
+                    result['thead'], result['tbody'], store)
+    return result
+
+# Супер цена
+def products_super_price(store):
+    result = find_data('products_super_price', store)
+    if 'thead' in result:
+        write_report('super_price_products_report',
+                    result['thead'], result['tbody'], store)
     return result
 
 # Топ ВД
@@ -383,8 +388,6 @@ def get_full_sap(store):
             for i in find:
                 if i['name'].startswith('Super'):
                     return {'sap': i['name'], 'name': i['inventory']['name']}
-        else:
-            return None
 
 def get_hostid(store):
     if store.upper().startswith("SUPER") or store.upper().startswith(bf_rule1) or store.upper() in bf_rule2:

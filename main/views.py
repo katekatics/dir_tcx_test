@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .forms import LoginForm
 from django.http import JsonResponse
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from django.http import HttpResponse, HttpResponseRedirect
 import xlsxwriter
@@ -38,13 +38,6 @@ dirs = Dirs.objects.all()
 directors = []
 [directors.append(d.director) for d in dirs]
 
-path = os.getcwd() + '/media/heatmap'
-now = time.time()
-for f in os.listdir(path):
-    file_date = os.stat(os.path.join(path, f))
-    if os.stat(os.path.join(path,f)).st_mtime < now - 1800:
-        os.remove(os.path.join(path, f))
-
 error_sign_in = {'user': '', 'cause': ''}
 
 events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получен отзыв', 'upload': 'Загрузка HR файла', 
@@ -57,7 +50,7 @@ events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получе
         'products_low_saled_report': 'Скачивание отчета по товарам с низкими продажами', 'products_stoped_report': 'Скачивание отчета по товарам без движения',
         'products_stoped_nonfood_report': 'Скачивание отчета по товарам без движения NONFOOD', 'products_stoped_food_report': 'Скачивание отчета по товарам без движения FOOD',
         'products_stoped_fresh_report': 'Скачивание отчета по товарам без движения FRESH', 'products_minus_report': 'Скачивание отчета по товарам с отрицательными остатками',
-        'products_topvd_report': 'Скачивание отчета по топ ВД', 'products_top30_today_report': 'Скачивание отчета по топ 30 (за сегодня)', 'products_top30_week_report': 'Скачивание отчета по топ 30 (за неделю)', 'index': 'Начальная страница', 
+        'products_topvd_report': 'Скачивание отчета по топ ВД', 'products_top30_report': 'Скачивание отчета по топ 30', 'products_super_price_report': 'Скачивание отчета по супер цене', 'index': 'Начальная страница', 
         'dashboard': 'Страница магазина', 'download_activity_log': 'Скачивание отчета по активности пользователей', 'download_feedback': 'Скачивание отчета по обратной связи',
         'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина'}
 
@@ -67,6 +60,12 @@ def heatmap_page(request):
 
 @login_required(redirect_field_name='')
 def get_heatmap(request):
+    path = os.getcwd() + '/media/heatmap'
+    now = time.time()
+    for f in os.listdir(path):
+        file_date = os.stat(os.path.join(path, f))
+        if os.stat(os.path.join(path,f)).st_mtime < now - 1800:
+            os.remove(os.path.join(path, f))
     result = json.loads(request.POST['data'])
     response = {}
     if result['status'] == 'day':
@@ -116,14 +115,14 @@ def get_feedback(request):
     try:
         mongo.server_info()
         response['connect'] = True
-        response['msg'] = 'Ваше сообщение отправлено!'
+        response['msg'] = 'Спасибо за отзыв!\nВаше сообщение отправлено!'
         row['sap'] = sap
         row['sent_from'] = sent_from
         row['status'] = 'Новое'
         col.insert_one(row)
     except:
         response['connect'] = False
-        response['msg'] = 'Ваше сообщение не отправлено!'   
+        response['msg'] = 'К сожалению Ваше сообщение не отправлено!\nПопробуйте, пожалуйста, позже!'
     mongo.close()                                                                                                                                                                     
     return JsonResponse(response) 
 
@@ -174,7 +173,7 @@ c = CEFEvent()
 
 def mongo_log(function):   
     def wrapper(request, full_sap=None, click=None):
-        date = datetime.now()
+        date = datetime.now()  - timedelta(hours=3)
         user = request.user.username
         mongo = pymongo.MongoClient('192.168.200.73', 27017)
         db = mongo['tcx']
@@ -701,23 +700,10 @@ def products_minus(request, full_sap):
 @mongo_log
 @cef_logging
 @do_logging
-def products_top30_today_report(request, full_sap):
-    with open('reports/{0}/top30_products_today_report.xlsx'.format(full_sap), 'rb') as fp:
+def products_top30_report(request, full_sap):
+    with open('reports/{0}/top30_products_report.xlsx'.format(full_sap), 'rb') as fp:
         data = fp.read()
-    filename = '{}_top30_products_today_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
-    response = HttpResponse(content_type="application/")
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
-    response.write(data)
-    return response
-
-@login_required(redirect_field_name='')
-@mongo_log
-@cef_logging
-@do_logging
-def products_top30_week_report(request, full_sap):
-    with open('reports/{0}/top30_products_week_report.xlsx'.format(full_sap), 'rb') as fp:
-        data = fp.read()
-    filename = '{}_top30_products_week_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    filename = '{}_top30_products_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
     response = HttpResponse(content_type="application/")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
     response.write(data)
@@ -727,6 +713,25 @@ def products_top30_week_report(request, full_sap):
 @login_required(redirect_field_name='')
 def products_top30(request, full_sap):
     result = store_class.products_top30(full_sap)
+    return JsonResponse(result)
+
+@login_required(redirect_field_name='')
+@mongo_log
+@cef_logging
+@do_logging
+def products_super_price_report(request, full_sap):
+    with open('reports/{0}/super_price_products_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_super_price_products_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
+# Супер цена
+@login_required(redirect_field_name='')
+def products_super_price(request, full_sap):
+    result = store_class.products_super_price(full_sap)
     return JsonResponse(result)
 
 @login_required(redirect_field_name='')
@@ -869,7 +874,7 @@ def dashboard(request, full_sap):
         if ((request.user.username + '@x5.ru') in directors) or ((request.user.username) in directors):
             for d in dirs:
                 if ((request.user.username + '@x5.ru') == d.director) or ((request.user.username) == d.director):
-                    if full_sap == store_class.get_full_sap(d.sap):
+                    if full_sap == store_class.get_full_sap(d.sap)['sap']:
                         return render(request, 'main/dashboard' + sprint + version + '.html', {
                                                     'full_sap': full_sap,
                                                     })
@@ -885,7 +890,6 @@ def dashboard(request, full_sap):
 def sap_name(request, full_sap):
     name = store_class.get_full_sap(full_sap)['name']
     return JsonResponse(name, safe=False)
-
 
 
 
@@ -990,7 +994,7 @@ def sign_in(request):
                                                 user.first_name = d.name
                                             user.save()
                                             login(request, user)
-                                            return redirect('dashboard', store_class.get_full_sap(store))
+                                            return redirect('dashboard', store_class.get_full_sap(store)['sap'])
                                 else:
                                     login(request, user)
                                     return redirect(index)
@@ -1006,7 +1010,7 @@ def sign_in(request):
                                                 user.last_name = d.last_name
                                             user.save()
                                             login(request, user)
-                                            return redirect('dashboard', store_class.get_full_sap(d.sap))
+                                            return redirect('dashboard', store_class.get_full_sap(d.sap)['sap'])
                                         elif (username) == d.director:
                                             user = User.objects.create_user(username, username, password)
                                             if (d.last_name == ''):
@@ -1016,7 +1020,7 @@ def sign_in(request):
                                                 user.last_name = d.last_name
                                             user.save()
                                             login(request, user)
-                                            return redirect('dashboard', store_class.get_full_sap(d.sap))
+                                            return redirect('dashboard', store_class.get_full_sap(d.sap)['sap'])
                                 else:
                                     if User.objects.filter(username=username).exists():
                                         user = User.objects.get(username__exact=username)
@@ -1074,5 +1078,6 @@ def click_detect(request, full_sap, action):
 def go_back(request, full_sap):
     for d in dirs:
         if ((request.user.username + '@x5.ru') == d.director) or ((request.user.username) == d.director):
-                return redirect('dashboard', store_class.get_full_sap(d.sap))
+                return redirect('dashboard', store_class.get_full_sap(d.sap)['sap'])
+
 
