@@ -4,7 +4,7 @@ $(document).ready(function () {
     setInterval('data()', 180000);
     $('#open_close_business')[0].textContent = 'Свернуть';
     $('#open_close_products')[0].textContent = 'Свернуть';
-    $('#sap').html('ОБП' + ((window.location.pathname).split('-')[2]).slice(0, 4));
+    $('#sap').html('Бизнес показатели ' + ((window.location.pathname).split('-')[2]).slice(0, 4));
     $('#rto_traffic_check_theme')[0].clildNodes;
 });
 

@@ -89,6 +89,10 @@ urlpatterns = [
 
     path('get_heatmap/', views.get_heatmap, name='get_heatmap'),
 
+    path('kpi_page_graph/', views.kpi_page_graph, name='kpi_page_graph'),
+    
+    path('get_kpi_graph/', views.get_kpi_graph, name='get_kpi_graph'),
+
     path('get_feedback/', views.get_feedback, name='get_feedback'),
 
     path('feedback/', views.feedback, name='feedback'),

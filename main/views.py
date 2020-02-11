@@ -23,6 +23,7 @@ from time import sleep
 import json 
 import calendar
 import time, sys
+from . import kpi
 
 # LOGGER
 import logging
@@ -36,7 +37,9 @@ version = '1'
 
 dirs = Dirs.objects.all()
 directors = []
+dir_all = []
 [directors.append(d.director) for d in dirs]
+[dir_all.append((d.director).split('@')[0]) for d in dirs]
 
 error_sign_in = {'user': '', 'cause': ''}
 
@@ -57,6 +60,10 @@ events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получе
 @login_required(redirect_field_name='')
 def heatmap_page(request):
     return render(request, 'main/heatmap' + sprint + version + '.html')
+
+@login_required(redirect_field_name='')
+def kpi_page_graph(request):
+    return render(request, 'main/kpi_3_1.html')
 
 @login_required(redirect_field_name='')
 def get_heatmap(request):
@@ -91,6 +98,43 @@ def get_heatmap(request):
         start = datetime.strptime('2019-11-01 00:00:00', '%Y-%m-%d %H:%M:%S')
         end = datetime.now()
         heatmap.build_heatmap(start, end)
+    response['start'] = datetime.strftime(start, '%Y-%m-%d_%H-%M-%S')
+    response['end'] = datetime.strftime(end, '%Y-%m-%d_%H-%M-%S')
+    return JsonResponse(response)
+
+@login_required(redirect_field_name='')
+def get_kpi_graph(request):
+    result = json.loads(request.POST['data'])
+    response = {}
+
+    if result['status'] == 'period':
+        start = datetime.strptime(result['start'] + ' ' + '00:00:00', '%Y-%m-%d %H:%M:%S')
+        end = datetime.strptime(result['end'] + ' ' + '23:59:59', '%Y-%m-%d %H:%M:%S')
+        if (end - start).days < 0:
+            response['text'] ='Вы ввели неправильный период!'
+            return JsonResponse(response)
+        else:
+            kpi.create_kpi_graph(dir_all, start, end)
+
+    elif result['status'] == 'month':
+        month = (result['month'].split('-'))[1]
+        year = (result['month'].split('-'))[0]
+        days = calendar.monthrange(int(year), int(month))[1]
+        start = datetime.strptime(year + '-' + month + '-1 ' + '00:00:00', '%Y-%m-%d %H:%M:%S')
+        end = datetime.strptime(year + '-' + month + '-' + str(days) + ' ' + '23:59:59', '%Y-%m-%d %H:%M:%S')
+        kpi.create_kpi_graph(dir_all, start, end)
+   
+    elif result['status'] == 'week':
+        week = result['week']
+        start = datetime.strptime(week + '-1', '%G-W%V-%u')
+        end = start + timedelta(days=7)
+        kpi.create_kpi_graph(dir_all, start, end)
+
+    else:
+        start = datetime.strptime('2019-11-01 00:00:00', '%Y-%m-%d %H:%M:%S')
+        end = datetime.now()
+        kpi.create_kpi_graph(dir_all, start, end)
+    
     response['start'] = datetime.strftime(start, '%Y-%m-%d_%H-%M-%S')
     response['end'] = datetime.strftime(end, '%Y-%m-%d_%H-%M-%S')
     return JsonResponse(response)
