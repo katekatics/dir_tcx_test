@@ -23,7 +23,7 @@ from time import sleep
 import json 
 import calendar
 import time, sys
-from . import kpi
+from . import kpi_4_1
 
 # LOGGER
 import logging
@@ -114,7 +114,7 @@ def get_kpi_graph(request):
             response['text'] ='Вы ввели неправильный период!'
             return JsonResponse(response)
         else:
-            kpi.create_kpi_graph(dir_all, start, end)
+            kpi_4_1.create_kpi_graph(dir_all, start, end)
 
     elif result['status'] == 'month':
         month = (result['month'].split('-'))[1]
@@ -122,18 +122,18 @@ def get_kpi_graph(request):
         days = calendar.monthrange(int(year), int(month))[1]
         start = datetime.strptime(year + '-' + month + '-1 ' + '00:00:00', '%Y-%m-%d %H:%M:%S')
         end = datetime.strptime(year + '-' + month + '-' + str(days) + ' ' + '23:59:59', '%Y-%m-%d %H:%M:%S')
-        kpi.create_kpi_graph(dir_all, start, end)
+        kpi_4_1.create_kpi_graph(start, end)
    
     elif result['status'] == 'week':
         week = result['week']
         start = datetime.strptime(week + '-1', '%G-W%V-%u')
         end = start + timedelta(days=7)
-        kpi.create_kpi_graph(dir_all, start, end)
+        kpi_4_1.create_kpi_graph(dir_all, start, end)
 
     else:
         start = datetime.strptime('2019-11-01 00:00:00', '%Y-%m-%d %H:%M:%S')
         end = datetime.now()
-        kpi.create_kpi_graph(dir_all, start, end)
+        kpi_4_1.create_kpi_graph(dir_all, start, end)
     
     response['start'] = datetime.strftime(start, '%Y-%m-%d_%H-%M-%S')
     response['end'] = datetime.strftime(end, '%Y-%m-%d_%H-%M-%S')

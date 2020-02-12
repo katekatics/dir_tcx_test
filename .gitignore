@@ -1,4 +1,5 @@
 .vscode/
+main/migrations/
 *.csv
 *.log
 *.xlsx
