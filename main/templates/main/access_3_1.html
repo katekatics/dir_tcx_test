@@ -1,0 +1,30 @@
+{% extends 'main/base_2_1.html'%}
+{% load static %}
+
+<head>
+    <!-- Required meta tags -->
+    <link rel="shortcut icon" href="{%  static 'main/img/favicon_3_1.ico' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/font_awesome_3_1.css' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/base_3_1.css' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/sticky-footer_3_1.css' %}">
+    <link rel="stylesheet" href="{%  static 'main/css/datatables_3_1.min.css' %}">
+    <script src="{% static 'main/js/jquery_3_1.min.js' %}"></script>
+    <script src="{% static 'main/js/popper_3_1.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap_3_1.min.js' %}"></script>
+    <script src="{% static 'main/js/jquery_3_1.easing.min.js' %}"></script>
+    <script src="{% static 'main/js/sb-admin-2_3_1.min.js' %}"></script>
+    <script src="{% static 'main/js/datatables_3_1.min.js' %}"></script>
+
+    {% block script %}
+    {% endblock %}
+    <title>
+        X5 Reatail Group
+    </title>
+</head>
+
+<div class="container" style="margin-left: 40px;margin-top: 40px;">
+    <h4>Извините, у Вас нету доступа к магазину <strong>{{full_sap}}</strong></h4>
+    <form action='go_back' method='GET'>
+        <button type="submit" class="btn btn-dark">Вернуться назад</button>
+    </form>
+</div>
