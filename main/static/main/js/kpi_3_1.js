@@ -103,7 +103,7 @@ $(document).on('click', '#get_kpi_button', function() {
                 $('#kpi_img').html('<img src="/media/kpi/kpi_' + data.start + '_' + data.end + '.png" style="width: 110%" class="mx-3">');
                 $('#excel_all').attr('href', '/media/report_all_' + data.start + '_' + data.end + '.xlsx');
                 $('#excel_all').attr('class', 'btn btn-success');
-                $('#excel_active').attr('href', '/media/report_active_' + data.start + '_' + data.end + '.xlsx');
+                $('#excel_active').attr('href', '/media/activity_' + data.start + '_' + data.end + '.xlsx');
                 $('#excel_active').attr('class', 'btn btn-success');
                 $('#excel_kpi').attr('href', '/media/kpi_report_' + data.start + '_' + data.end + '.xlsx');
                 $('#excel_kpi').attr('class', 'btn btn-success');

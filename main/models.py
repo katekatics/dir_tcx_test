@@ -72,3 +72,19 @@ class Dirs(models.Model):
 
 #     def __str__(self):
 #         return '{} {}'.format(self.user.last_name, self.user.first_name)
+
+
+# class Profile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     mobile_num = models.CharField(max_length=30, default='')
+#     position = models.CharField(max_length=60, default='')
+#     subdivision = models.CharField(max_length=500, default='')
+#     whenCreated = models.DateField(null=True, blank=True)
+#     manager = models.ForeignKey(Manager, on_delete=models.CASCADE, blank=True, null=True)
+#     # image = models.ImageField(upload_to='profile_image', blank=True)
+#     class Meta:
+#         verbose_name = "Профиль"
+#         verbose_name_plural = "Профили"
+
+#     def __str__(self):
+#         return '{} {}'.format(self.user.last_name, self.user.first_name)
