@@ -53,8 +53,6 @@ def get_user_and_date(start_date, end_date):
 def create_kpi_graph(dirs, start_date, end_date):
     par=5
     users_and_date=get_user_and_date(start_date, end_date)
-
-
     df = pd.DataFrame(users_and_date, columns=['user','date'])
     df["clean_data"] = df["date"].dt.date
     grouped_on_dt_and_user = df.groupby(['user','clean_data'])['date'].count().reset_index()
