@@ -70,7 +70,9 @@
                             </div>
                         </div>
                         <div class="card-body" tabindex="0" data-toggle="modal" id="business_checks_traffic_body">
-                            <div class="row">
+                            <div class="row" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Количество продаж за сегодня | Количество продаж неделей ранее | Количество продаж год назад<br>
+                                                                        Блок обновляется каждые 15 минут">
                                 <div class="col-3">
                                         <h5 class="card-title">Трафик</h5>
                                     <small class="float-left" id="business_checks_traffic_footer_time" data-toggle="tooltip"
@@ -88,7 +90,9 @@
                             </div>
                         </div>
                         <div class="card-body" tabindex="0" data-toggle="modal" id="business_average_check_body">
-                            <div class="row">
+                            <div class="row" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Средний чек за сегодня | Средний чек неделей ранее | Средний чек год назад<br>
+                                                                        Блок обновляется каждые 15 минут">
                                 <div class="col-3">
                                         <h5 class="card-title">Средний чек (₽)</h5>
                                     <small class="float-left" id="business_average_check_footer_time" data-toggle="tooltip"
@@ -105,45 +109,12 @@
                                 </div>
                             </div>
                         </div>
-                        {% comment %} <div class="card-footer">
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <small class="float-left" id="rto_traffic_check_footer_msg"></small>
-                                </div>
-                                <div class="col-6 mb-0">
-                                    <small class="float-right" id="rto_traffic_check_footer_time" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
-                                </div>
-                            </div>
-                        </div> {% endcomment %}
                     </div>
                 </div>
 
-                <!-- Продажи (новые) -->
-                <div class="col-xl-6 col-lg-6 col-md-12" style="display: none;">
-                    <div class="card bg-dark text-white my-1" id="business_revenue_new_theme">
-                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right" data-original-title="" id="business_revenue_new_tooltip">
-                            <h6 class="card-title text-center">Продажи на текущий день | Продажи прошлой недели | Год назад</h6>
-                        </div>
-                        <div class="card-body click_detect" tabindex="0" data-toggle="modal" id="business_revenue_new_body">
-                            <h4 class="card-text text-center" id="business_revenue_new_body_text">-</h4>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <small class="float-left" id="business_revenue_new_footer_msg"></small>
-                                </div>
-                                <div class="col-6 mb-0">
-                                    <small class="float-right" id="business_revenue_new_footer_time" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Отчет (Продажи) -->
                 <div class="modal fade" id="business_revenue_new_modal" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h6 class="modal-title">Продажи</h6>
@@ -164,59 +135,10 @@
                     </div>
                 </div>
 
-                <!-- РТО -->
-                <div class="col-xl-6 col-lg-6 col-md-12">
-                    <div class="card bg-dark text-white my-1" id="business_rto_theme">
-                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Плановый РТО на текущий месяц | Суммарный РТО за месяц на текущий закрытый кассовый день<br>Плановый % по удельным весам | % суммарного РТО за месяц<br>Блок обновляется 1 раз в день">
-                            <h6 class="card-title text-center">План РТО на месяц | РТО накопленное на текущий закрытый кассовый день</h6>
-                        </div>
-                        <div class="card-body" id="business_rto_body">
-                            <h4 class="card-text text-center" id="business_rto_body_text">-</h4>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <small class="float-left" id="business_rto_footer_msg"></small>
-                                </div>
-                                <div class="col-6 mb-0">
-                                    <small class="float-right" id="business_rto_footer_time" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!-- Средний чек -->
-                <div class="col-xl-6 col-lg-6 col-md-12" style="display: none;">
-                    <div class="card bg-dark text-white my-1 business_collection" id="business_average_check_theme">
-                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right"
-                            data-original-title="Средний чек за неделю со<br>сравнением относительно прошлой недели<br>Блок обновляется каждые 15 минут">
-                            <h6 class="card-title text-center">Средний чек за неделю | Средний чек прошлой недели</h6>
-                        </div>
-
-                        <div class="card-body" tabindex="0" data-toggle="modal" id="business_average_check_body">
-                            <h4 class="card-text text-center" id="business_average_check_body_text">-</h4>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <small class="float-left" id="business_average_check_footer_msg"></small>
-                                </div>
-                                <div class="col-6 mb-0">
-                                    <small class="float-right" id="business_average_check_footer_time" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Отчет (Средний чек) -->
                 <div class="modal fade" id="business_average_check_modal" tabindex="-1" role="dialog"
                     aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h6 class="modal-title">Средний чек</h6>
@@ -236,6 +158,55 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Отчет (Трафик чеков) -->
+                <div class="modal fade" id="business_checks_traffic_modal" tabindex="-1" role="dialog"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Трафик чеков</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="business_checks_traffic_modal_body">
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'business_checks_traffic_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- РТО -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="business_rto_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Плановый РТО на текущий месяц | Суммарный РТО за месяц на текущий закрытый кассовый день<br>Плановый % по удельным весам | % накопленного РТО на текущий закрытый кассовый день по отношению к плану<br>Блок обновляется 1 раз в день">
+                            <h6 class="card-title text-center">План РТО на месяц | РТО накопленное на текущий закрытый кассовый день</h6>
+                        </div>
+                        <div class="card-body" id="business_rto_body">
+                            <h4 class="card-text text-center" id="business_rto_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_rto_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_rto_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
 
                 <!-- Отмененные чеки -->
@@ -263,7 +234,7 @@
                     </div>
                 </div>
                 <div class="modal fade" id="business_canceled_checks_modal" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h6 class="modal-title">Отмененные чеки</h6>
@@ -289,7 +260,9 @@
                     <div class="card bg-dark text-white my-1" id="business_write_offs_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
                             data-placement="right"
-                            data-original-title="Общая сумма фактически закрытых<br>списаний за текущий месяц по<br>магазину (Процент от суммарного РТО)<br><br>Общая сумма фактически закрытых<br>списаний за текущую неделю по<br>магазину (Процент от суммарного РТО)<br><br>Блок обновляется каждые 15 минут">
+                            data-original-title="Общая сумма фактических закрытых списаний за текущий месяц по магазину<br>(Процент от суммарного РТО на текущий закрытый кассовый день)<br><br>
+                                                Общая сумма фактических закрытых списаний за текущую неделю по магазину<br>(Процент от суммарного РТО на текущий закрытый кассовый день)<br><br>
+                                                Блок обновляется каждые 15 минут">
                             <h6 class="card-title text-center">Списания без учета компенсаций</h6>
                         </div>
                         <div class="card-body" id="business_write_offs_body">
@@ -344,7 +317,7 @@
                 </div>
                 <div class="modal fade" id="business_sellers_perfom_modal" tabindex="-1" role="dialog"
                     aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h6 class="modal-title">Скорость сканирования кассиров</h6>
@@ -369,11 +342,11 @@
                     </div>
                 </div>
 
-                <!-- # Незакрытие документы приемки -->
+                <!-- Незакрытие документы приемки -->
                 <div class="col-xl-6 col-lg-6 col-md-12">
                     <div class="card bg-dark text-white my-1" id="business_open_documents_theme">
                         <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Кол-во открытых документов<br>Блок обновляется каждые 15 минут">
+                            data-placement="right" data-original-title="Количество открытых буферных документов<br>Блок обновляется каждые 15 минут">
                             <h6 class="card-title text-center">Незакрытые документы приемки</h6>
                         </div>
                         <div class="card-body" tabindex="0" data-toggle="modal"
@@ -395,7 +368,7 @@
                 </div>
                 <div class="modal fade" id="business_open_documents_modal" tabindex="-1" role="dialog"
                     aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h6 class="modal-title">Незакрытые документы приемки</h6>
@@ -408,53 +381,6 @@
                             <div class="modal-footer">
                                 <a type="button" class="btn btn-primary text-white"
                                     href="{% url 'business_open_documents_report' full_sap=full_sap %}"
-                                    target="_blank">Скачать
-                                    отчет</a>
-                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Трафик чеков -->
-                <div class="col-xl-6 col-lg-6 col-md-12" style="display: none;">
-                    <div class="card bg-dark text-white my-1" id="business_checks_traffic_theme">
-                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Информация по количеству закрытых чеков по всем кассам<br><br>Блок обновляется каждые 15 минут<br>(При нажатии на блок можно получить подробную информацию и скачать отчет)">
-                            <h6 class="card-title text-center">Трафик на текущий день | Трафик прошлой недели | Трафик год назад</h6>
-                        </div>
-                        <div class="card-body" tabindex="0" data-toggle="modal"
-                            id="business_checks_traffic_body">
-                            <h4 class="card-text text-center" id="business_checks_traffic_body_text">-</h4>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <small class="float-left" id="business_checks_traffic_footer_msg"></small>
-                                </div>
-                                <div class="col-6 mb-0">
-                                    <small class="float-right" id="business_checks_traffic_footer_time" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal fade" id="business_checks_traffic_modal" tabindex="-1" role="dialog"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h6 class="modal-title">Трафик чеков</h6>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body" id="business_checks_traffic_modal_body">
-                            </div>
-                            <div class="modal-footer">
-                                <a type="button" class="btn btn-primary text-white"
-                                    href="{% url 'business_checks_traffic_report' full_sap=full_sap %}"
                                     target="_blank">Скачать
                                     отчет</a>
                                 <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
@@ -509,55 +435,6 @@
                         </div>
                     </div>
                 </div>
-
-
-                <!-- HR-показатели -->
-                <div class="col-xl-6 col-lg-6 col-md-12" style="display: none;">
-                    <div class="card bg-dark text-white my-1" id="hr_indicators_theme">
-                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right" data-original-title="HR-показатели">
-                            <h6 class="card-title text-center">HR-показатели</h6>
-                        </div>
-                        <div class="card-body" tabindex="0" data-toggle="modal"
-                            id="hr_indicators_body">
-                            <h4 class="card-text text-center" id="hr_indicators_body_text">-</h4>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <small class="float-left" id="hr_indicators_footer_msg"></small>
-                                </div>
-                                <div class="col-6 mb-0">
-                                    <small class="float-right" id="hr_indicators_footer_time" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal fade" id="hr_indicators_modal" tabindex="-1" role="dialog"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h6 class="modal-title">HR-показатели</h6>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body" id="hr_indicators_modal_body">
-                            </div>
-                            <div class="modal-footer">
-                                <a type="button" class="btn btn-primary text-white"
-                                    href="{% url 'hr_indicators_report' full_sap=full_sap %}"
-                                    target="_blank">Скачать
-                                    отчет</a>
-                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
 
 
                 <!-- Markdown -->

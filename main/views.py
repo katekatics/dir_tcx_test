@@ -29,7 +29,7 @@ from . import kpi_4_1
 import logging
 from logging.handlers import RotatingFileHandler
 
-sprint = '_2_'
+sprint = '_3_'
 version = '1'
 
 # with open(os.getcwd() + '/logs/dir_tcx.log', "w+") as f:
@@ -47,7 +47,7 @@ events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получе
          'business_revenue_new_report': 'Скачивание отчета по продажам', 'business_open_alcohol_documents_report': 'Скачивание отчета по незакрытым документам приемки АП', 'business_open_documents': 'Незакрытые документы приемки',
         'business_open_documents_report': 'Скачивание отчета по незакрытым документам приемки', 'business_average_check_report': 'Скачивание отчета по среднему чеку', 
         'business_canceled_checks_report': 'Скачивание отчета по отмененным чекам', 'business_sellers_perfom_week_report': 'Скачивание отчета по скорости сканирования кассиров за неделю',
-        'business_sellers_perfom_month_report': 'Скачивание отчета по скорости сканирования кассиров за месяц', 'hr_indicators_report': 'Скачивание отчета по HR-показателям',
+        'business_sellers_perfom_month_report': 'Скачивание отчета по скорости сканирования кассиров за месяц',
         'business_checks_traffic_report': 'Скачивание отчета по трафику чеков', 'business_old_price_report': 'Скачивание отчета по продажам по старой цене',
         'products_overdue_report': 'Скачивание отчета по просроченной продукции', 'products_alcohol_errors_report': 'Скачивание отчета по ошибкам продажи алкоголя',
         'products_low_saled_report': 'Скачивание отчета по товарам с низкими продажами', 'products_stoped_report': 'Скачивание отчета по товарам без движения',
@@ -261,7 +261,6 @@ def cef_logging(function):
                 byte_string = bytes(string, 'utf-8')
                 f.write(string + '\n')
                 f.close()
-                print(c)
                 sock.send(byte_string)
                 sleep(1)
                 return function(request, full_sap, click)
@@ -279,7 +278,6 @@ def cef_logging(function):
                 byte_string = bytes(string, 'utf-8')
                 f.write(string + '\n')
                 f.close()
-                print(c)
                 sock.send(byte_string)
                 sleep(1)
                 return function(request, full_sap)
@@ -301,7 +299,6 @@ def cef_logging(function):
                         byte_string = bytes(string, 'utf-8')
                         f.write(string + '\n')
                         f.close()
-                        print(c)
                         sock.send(byte_string)
                         sleep(1)
             else:
@@ -318,7 +315,6 @@ def cef_logging(function):
                 byte_string = bytes(string, 'utf-8')
                 f.write(string + '\n')
                 f.close()
-                print(c)
                 sock.send(byte_string)
                 sleep(1)
             return function(request)
@@ -344,18 +340,18 @@ def do_logging(function):
     return wrapper
 
 
-# HR-показатели (отчет)
-@login_required(redirect_field_name='')
-def hr_indicators_original(request):
-    filename = 'hr_test.xlsx'
-    if os.listdir(path='media/'):
-        if filename in os.listdir(path='media/')[0]:
-            with open('media/hr_test.xlsx', 'rb') as fp:
-                data = fp.read()
-        response = HttpResponse(content_type="application/")
-        response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
-        response.write(data)
-        return response
+# # HR-показатели (отчет)
+# @login_required(redirect_field_name='')
+# def hr_indicators_original(request):
+#     filename = 'hr_test.xlsx'
+#     if os.listdir(path='media/'):
+#         if filename in os.listdir(path='media/')[0]:
+#             with open('media/hr_test.xlsx', 'rb') as fp:
+#                 data = fp.read()
+#         response = HttpResponse(content_type="application/")
+#         response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+#         response.write(data)
+#         return response
 
 
 
@@ -554,19 +550,19 @@ def business_old_price(request, full_sap):
     return JsonResponse(result)
 
 
-# # HR показатели (отчет)
-@login_required(redirect_field_name='')
-@mongo_log
-@cef_logging
-@do_logging
-def hr_indicators_report(request, full_sap):
-    with open('reports/{0}/hr_indicators_report.xlsx'.format(full_sap), 'rb') as fp:
-        data = fp.read()
-    filename = '{}_hr_indicators_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
-    response = HttpResponse(content_type="application/")
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
-    response.write(data)
-    return response
+# # # HR показатели (отчет)
+# @login_required(redirect_field_name='')
+# @mongo_log
+# @cef_logging
+# @do_logging
+# def hr_indicators_report(request, full_sap):
+#     with open('reports/{0}/hr_indicators_report.xlsx'.format(full_sap), 'rb') as fp:
+#         data = fp.read()
+#     filename = '{}_hr_indicators_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+#     response = HttpResponse(content_type="application/")
+#     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+#     response.write(data)
+#     return response
 
 # # HR показатели
 @login_required(redirect_field_name='')
