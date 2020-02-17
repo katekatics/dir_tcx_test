@@ -39,7 +39,8 @@ def get_data(start_date, end_date):
         'products_stoped_food_body': 0,   
         'business_checks_traffic_body': 0, 
         'business_old_price_body': 0,
-        'hr_indicators_body': 0
+        'hr_indicators_body': 0,
+        'products_super_price_body': 0
     }
     reports = {
         'business_revenue_new_report': 0,
@@ -62,7 +63,8 @@ def get_data(start_date, end_date):
         'products_stoped_food_report': 0,   
         'business_checks_traffic_report': 0, 
         'business_old_price_report': 0,
-        'hr_indicators_report': 0 
+        'hr_indicators_report': 0,
+        'products_super_price_report': 0
     }
     data = {'clicks': clicks, 'reports': reports}#создаем словарь словарей
     for i in sp:
@@ -99,7 +101,8 @@ def build_excel(start_date, end_date):
         'products_stoped_fresh': 'Товары без движения FRESH',
         'products_minus': 'Товары с отрицательными остатками',
         'business_checks_traffic': 'Трафик чеков',
-        'business_old_price': 'Продажи по старой цене'
+        'business_old_price': 'Продажи по старой цене',
+        'products_super_price': 'Суперцена'
     }
     workbook = xlsxwriter.Workbook('media/heatmap.xlsx')#Создаем xlsx файл для тепловой карты
     worksheet = workbook.add_worksheet()#Добавляем в файле лист
