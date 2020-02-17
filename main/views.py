@@ -24,6 +24,8 @@ import json
 import calendar
 import time, sys
 from . import kpi_4_1
+from . import account
+import paramiko
 
 # LOGGER
 import logging
@@ -60,6 +62,34 @@ events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получе
         'products_topvd_report': 'Скачивание отчета по топ ВД', 'products_top30_report': 'Скачивание отчета по топ 30', 'products_super_price_report': 'Скачивание отчета по супер цене', 'index': 'Начальная страница', 
         'dashboard': 'Страница магазина', 'download_activity_log': 'Скачивание отчета по активности пользователей', 'download_feedback': 'Скачивание отчета по обратной связи',
         'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина'}
+
+@login_required(redirect_field_name='')
+def kick_stores_page(request):
+    return render(request, 'main/kick_stores.html')
+
+@login_required(redirect_field_name='')
+def kick_stores(request):
+    output = ''
+    with paramiko.SSHClient() as client:
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(hostname=account.collector_ip, username=account.collector_user, password=account.collector_password)
+        output = []
+        i, o, e = client.exec_command('supervisorctl restart collector')
+    return JsonResponse({'output': True}) 
+
+@login_required(redirect_field_name='')
+def kick_store(request):
+    sap = request.POST['sap']
+    output = ''
+    with paramiko.SSHClient() as client:
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(hostname=account.collector_ip, username=account.collector_user, password=account.collector_password)
+        output = []
+        errors = []
+        i, o, e = client.exec_command('source collector/venv/bin/activate; python collector/kick_store.py ' + sap)
+        output = o.read().decode('utf-8')
+        errors = e.read().decode('utf-8')
+    return JsonResponse({'output': output, 'errors': errors})       
 
 @login_required(redirect_field_name='')
 def heatmap_page(request):
