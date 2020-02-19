@@ -11821,9 +11821,8 @@ form.user .btn-user {
 #myProgress{
   width: 100% ;
   background-color: #a9fcde;
-  border: 3px double #042b1c;
- 
-  
+  border: 0.5px solid #042b1c;
+  border-radius: 0.25rem;
 
 }
 
