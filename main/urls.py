@@ -113,6 +113,12 @@ urlpatterns = [
     
     path('store/<str:full_sap>/go_back/', views.go_back, name='go_back'),
 
+    path('kick_stores_page/', views.kick_stores_page, name='kick_stores_page'),
+
+    path('kick_stores/', views.kick_stores, name='kick_stores'),
+
+    path('kick_store/', views.kick_store, name='kick_store'),
+
     path('', views.index, name='index'),
 ]
 
