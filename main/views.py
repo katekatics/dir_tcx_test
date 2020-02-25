@@ -63,6 +63,12 @@ events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получе
         'dashboard': 'Страница магазина', 'download_activity_log': 'Скачивание отчета по активности пользователей', 'download_feedback': 'Скачивание отчета по обратной связи',
         'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина'}
 
+
+@login_required(redirect_field_name='')
+def nps(request):
+    records = json.loads(request.POST['nps_records'])
+    print(records)
+
 @login_required(redirect_field_name='')
 def kick_stores_page(request):
     return render(request, 'main/kick_stores.html')

@@ -119,6 +119,8 @@ urlpatterns = [
 
     path('kick_store/', views.kick_store, name='kick_store'),
 
+    path('nps/', views.nps, name='nps'),
+
     path('', views.index, name='index'),
 ]
 
