@@ -264,19 +264,19 @@ def feedback():
 def poses(store):
     result = find_data('poses', store)
     offline = 0
-    if 'poses' in result:
-        for i, v in enumerate(result['poses']):
-            if ping(v['ip']):
-                result['poses'][i]['theme'] = 'card bg-success text-white my-1'
-            else:
-                offline += 1
-                result['poses'][i]['theme'] = 'card bg-dark text-white my-1'
-        if offline / len(result['poses']) <= 0.2:
-            result['theme'] = 'card-header bg-success text-white'
-        elif 0.2 < offline / len(result['poses']) < 0.6:
-            result['theme'] = 'card-header bg-warning text-white'
-        elif offline / len(result['poses']) >= 0.6:
-            poses['theme'] = 'card-header bg-danger text-white'
+    # if 'poses' in result:
+    #     for i, v in enumerate(result['poses']):
+    #         if ping(v['ip']):
+    #             result['poses'][i]['theme'] = 'card bg-success text-white my-1'
+    #         else:
+    #             offline += 1
+    #             result['poses'][i]['theme'] = 'card bg-dark text-white my-1'
+    #     if offline / len(result['poses']) <= 0.2:
+    #         result['theme'] = 'card-header bg-success text-white'
+    #     elif 0.2 < offline / len(result['poses']) < 0.6:
+    #         result['theme'] = 'card-header bg-warning text-white'
+    #     elif offline / len(result['poses']) >= 0.6:
+    #         poses['theme'] = 'card-header bg-danger text-white'
     return result
 
 
@@ -427,3 +427,5 @@ def get_interfaces(store):
 
 def raz_del(x):
     return '{0:,}'.format(x).replace(',', ' ')
+
+

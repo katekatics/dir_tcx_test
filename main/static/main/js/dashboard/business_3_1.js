@@ -28,8 +28,20 @@ function business_rto() {
             if (data.theme) {
                 $("#business_rto_theme").attr('class', data.theme);
                 $("#business_rto_body_text").html(data.body_text);
-                $("#business_rto_footer_time").html(data.date);
                 $("#business_rto_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
+                $("#business_bar_footer_time").html(data.date);
+                $("#business_rto_footer_time").html(data.date_rto);
+                $("#percent_and_saled").html(data.sales_today + ' ₽ (' + data.percent_today_fact + '%) / ' + data.plan_sales_today + ' ₽');
+                $("#myBar").css('width', data.percent_today_fact + '%');
+                if (data.percent_today_fact>100)
+                    {
+                        $("#myBar").css('width', 100 + '%');
+                    }
+                else
+                    {
+                        $("#myBar").css('width', data.percent_today_fact + '%');
+                    }
+                
             }
             block_errors("business_rto", data);
         }
