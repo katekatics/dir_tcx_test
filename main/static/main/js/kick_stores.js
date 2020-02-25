@@ -54,6 +54,7 @@ $(document).on('click', '#kick_store', function() {
                         {
                             $('#kick_store').attr('class', 'btn btn-danger');
                             $('#kick_store').html('Пнуть магазин');
+                            $('#kick_store').attr('disabled', false);
                         }, 10000);       
                 }
                 else {                
