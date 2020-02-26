@@ -429,3 +429,15 @@ def raz_del(x):
     return '{0:,}'.format(x).replace(',', ' ')
 
 
+# def nps_from_mongo(store):
+#     result = find_data('nps', store[-4:])
+#     print()
+#     return result
+
+
+def nps_from_mongo(store):
+    result = find_data('nps_report', store)
+    if 'thead' in result:
+        write_report('nps_report',
+                    result['thead'], result['tbody'], store)
+    return result

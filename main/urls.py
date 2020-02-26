@@ -85,6 +85,9 @@ urlpatterns = [
 
     path('store/<str:full_sap>/services_cashless/', views.services_cashless, name='services_cashless'),
 
+    path('store/<str:full_sap>/nps_report/', views.nps_report, name='nps_report'),
+    path('store/<str:full_sap>/nps_from_mongo/', views.nps_from_mongo, name='nps_from_mongo'),
+
     path('heatmap_page/', views.heatmap_page, name='heatmap_page'),
 
     path('get_heatmap/', views.get_heatmap, name='get_heatmap'),
@@ -119,6 +122,7 @@ urlpatterns = [
 
     path('kick_store/', views.kick_store, name='kick_store'),
 
+    path('get_date_nps/', views.get_date_nps, name='get_date_nps'),
     path('nps/', views.nps, name='nps'),
 
     path('', views.index, name='index'),

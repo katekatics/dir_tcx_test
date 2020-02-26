@@ -61,13 +61,39 @@ events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получе
         'products_stoped_fresh_report': 'Скачивание отчета по товарам без движения FRESH', 'products_minus_report': 'Скачивание отчета по товарам с отрицательными остатками',
         'products_topvd_report': 'Скачивание отчета по топ ВД', 'products_top30_report': 'Скачивание отчета по топ 30', 'products_super_price_report': 'Скачивание отчета по супер цене', 'index': 'Начальная страница', 
         'dashboard': 'Страница магазина', 'download_activity_log': 'Скачивание отчета по активности пользователей', 'download_feedback': 'Скачивание отчета по обратной связи',
-        'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина'}
+        'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина', 'nps_report': 'Скачивание отчета по NPS'}
 
 
 @login_required(redirect_field_name='')
+def get_date_nps(request):
+    today = datetime.today() 
+    tommorow = today + timedelta(days=1)
+    today_str = datetime.strftime(today, '%Y-%m-%dT00:00:00')
+    tommorow_str = datetime.strftime(tommorow, '%Y-%m-%dT00:00:00')
+    date_start_end = {"start": today_str, "end": tommorow_str}
+    return JsonResponse(date_start_end)
+
+@login_required(redirect_field_name='')
 def nps(request):
-    records = json.loads(request.POST['nps_records'])
-    print(records)
+    mongo = pymongo.MongoClient('192.168.200.73', 27017)
+    db = mongo['tcx']
+    col = db['nps']
+    cursor=col.find().sort("$natural",-1).limit(1)
+    last_row_nps = None
+    for i in cursor:
+        last_row_nps=i["Last_Modified"]
+    last_row_nps = last_row_nps.split("T")[0]
+    last_row_nps_date = datetime.strptime(last_row_nps, '%Y-%m-%d')
+
+    if last_row_nps_date.date() < datetime.today().date():
+        records = json.loads(request.POST['nps_records'])    
+        if datetime.today().date().day == 1 and (datetime.today().hour>22 and datetime.today().hour<23):
+            col.remove({})
+            col.insert_many(records)
+        elif datetime.today().hour == 23:
+            col.insert_many(records)
+            mongo.close()  
+    return JsonResponse({'output': 'success'}) 
 
 @login_required(redirect_field_name='')
 def kick_stores_page(request):
@@ -468,6 +494,26 @@ def business_open_documents(request, full_sap):
 def business_rto(request, full_sap):
     result = store_class.business_rto(full_sap)
     return JsonResponse(result)
+
+# NPS
+@login_required(redirect_field_name='')
+def nps_from_mongo(request, full_sap):
+    result = store_class.nps_from_mongo(full_sap)
+    return JsonResponse(result)
+
+@login_required(redirect_field_name='')
+@mongo_log
+@cef_logging
+@do_logging
+def nps_report(request, full_sap):
+    with open('reports/{0}/nps_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_nps_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
 
 
 # Средний чек(отчет)

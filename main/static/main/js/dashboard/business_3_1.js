@@ -88,6 +88,25 @@ function business_canceled_checks() {
 }
 
 
+
+function nps_from_mongo() {
+    // Количество аннулированных чеков
+    $.post("/store/" + full_sap + "/nps_from_mongo/", { csrfmiddlewaretoken: getCookie('tcx_token') },
+        function (data) {
+            if (data.theme) {
+                $("#nps_theme").attr('class', data.theme);
+                $("#nps_body_text").html(data.body_text);
+                $("#nps_footer_time").html(data.date);
+                create_report_modal(data.tbody, data.thead, 'nps');
+                $("#nps_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
+                
+            }
+            block_errors("nps", data);
+        }
+    );
+}
+
+
 function business_write_offs() {
     // Списания
     $.post("/store/" + full_sap + "/business_write_offs/", { csrfmiddlewaretoken: getCookie('tcx_token') },

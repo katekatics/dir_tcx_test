@@ -14,7 +14,7 @@ function pos() {
                 $.each(data.poses, function (index, i) {
                     poses += '<div class="col-xl-2 col-lg-3">';
                     if (i.theme != "card bg-dark text-white my-1") {
-                        poses += '<div class="' + i.theme + '" tabindex="0" data-toggle="popover" data-placement="top" data-html="true"  data-content="<b><i>Kacca недоступна более '+ i.minuts +' мин.</i></b></br>' + i.popover + '">';
+                        poses += '<div class="' + i.theme + '" tabindex="0" data-toggle="popover" data-placement="top" data-html="true"  data-content="">';
                     } else {
                         poses += '<div class="' + i.theme + '">';
                     }

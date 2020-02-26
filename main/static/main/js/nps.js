@@ -13,27 +13,63 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-
-var settings = {
-    "url": "https://app.te-ex.ru/Perekrestok/api/nps?last_modified=2020-01-25T10:00:00&last_modified_to=2020-02-25T11:00:00",
-    "method": "GET",
-    "timeout": 0,
-    "headers": {
-      "Authorization": "Basic cHJrbnBzMjpmZDNUZHM="
-    },
-  };
-  
-  $.ajax(settings).done(function (response) {
-    console.log(response);
+function get_date_nps(){
     $.ajax({
-      type: 'POST',
-      url: '/nps/', 
-      data: {
-          csrfmiddlewaretoken: getCookie('tcx_token'),
-          nps_records: JSON.stringify(response)
-      }
-    })
-  });
+        type: 'POST',
+        url: '/get_date_nps/', 
+        data: {
+            csrfmiddlewaretoken: getCookie('tcx_token'),
+           
+        },
+        success: function(data) {
+            start = data.start;
+            end = data.end;
+
+            var settings = {
+                "url": "https://app.te-ex.ru/Perekrestok/api/nps?last_modified=" + start + "&last_modified_to=" + end + "",
+                "method": "GET",
+                "timeout": 0,
+                "headers": {
+                  "Authorization": "Basic cHJrbnBzMjpmZDNUZHM="
+                },
+              };
+              
+              $.ajax(settings).done(function (response) {
+                console.log(response);
+                $.ajax({
+                  type: 'POST',
+                  url: '/nps/', 
+                  data: {
+                      csrfmiddlewaretoken: getCookie('tcx_token'),
+                      nps_records: JSON.stringify(response)
+                  }
+                })
+              });
+        }
+    });
+}
+
+
+// var settings = {
+//     "url": "https://app.te-ex.ru/Perekrestok/api/nps?last_modified=" + 2020-02-25T00:00:00 + "&last_modified_to=" + 2020-02-26T00:00:00 + "",
+//     "method": "GET",
+//     "timeout": 0,
+//     "headers": {
+//       "Authorization": "Basic cHJrbnBzMjpmZDNUZHM="
+//     },
+//   };
+  
+//   $.ajax(settings).done(function (response) {
+//     console.log(response);
+//     $.ajax({
+//       type: 'POST',
+//       url: '/nps/', 
+//       data: {
+//           csrfmiddlewaretoken: getCookie('tcx_token'),
+//           nps_records: JSON.stringify(response)
+//       }
+//     })
+//   });
 
 
   
