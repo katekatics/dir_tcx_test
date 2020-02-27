@@ -2,6 +2,7 @@ $(document).ready(function () {
     sap_name();
     data();
     setInterval('data()', 180000);
+    // setInterval('get_date_nps()',3600000)
     $('#open_close_business')[0].textContent = 'Свернуть';
     $('#open_close_products')[0].textContent = 'Свернуть';
     $('#sap').html('Бизнес показатели ' + ((window.location.pathname).split('-')[2]).slice(0, 4));
@@ -150,12 +151,13 @@ $(document).on("click", "#headingProducts", function () {
     
 })
 
+
 function data() {
     // Кассы
     pos();
     scale();
     kso();
-    get_date_nps();
+ 
 
     // Бизнес
     business_revenue_new();
@@ -184,4 +186,5 @@ function data() {
     services_cashless();
     services_net();
     services_alcohol();
+    get_date_nps();
 }

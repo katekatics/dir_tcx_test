@@ -35,7 +35,6 @@ function get_date_nps(){
               };
               
               $.ajax(settings).done(function (response) {
-                console.log(response);
                 $.ajax({
                   type: 'POST',
                   url: '/nps/', 

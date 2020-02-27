@@ -215,6 +215,40 @@
                     </div>
                 </div>
 
+                <!-- Списания -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="business_write_offs_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right"
+                            data-original-title="Общая сумма фактических закрытых списаний за текущий месяц по магазину<br>(Процент от суммарного РТО на текущий закрытый кассовый день)<br><br>
+                                                Общая сумма фактических закрытых списаний за текущую неделю по магазину<br>(Процент от суммарного РТО на текущий закрытый кассовый день)<br><br>
+                                                Блок обновляется каждые 15 минут">
+                            <h6 class="card-title text-center">Списания без учета компенсаций</h6></br>
+                        </div>
+                        <div class="card-body" id="business_write_offs_body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class="card-text text-center" id="business_write_offs_body_text_m">-</h5>
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="card-text text-center" id="business_write_offs_body_text_w">-</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="business_write_offs_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="business_write_offs_footer_time" data-toggle="tooltip"
+                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                             <!-- Бар -->
                
                 <div class="col-xl-6 col-lg-6 col-md-12">
@@ -255,12 +289,13 @@
 
                 <div class="col-xl-6 col-lg-6 col-md-12">
                     <div class="card bg-success text-white my-1" id="nps_theme">
-                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="right">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip" 
+                        data-placement="right" data-original-title="NPS магазина накопительный за текущий месяц.<br><br>Блок обновляется ежедневно в 23:00.<br>(При нажатии на блок можно получить информацию по анкетам и скачать отчёт)">
                             <h6 class="card-title text-center">NPS</h6>
                         </div>
 
                         <div class="card-body" tabindex="0" data-toggle="modal" id="nps_body">
-                            <h4 class="card-text text-center" id="nps_body_text">-</h4>
+                            <h4 class="card-text text-center" id="nps_body_text">-</h4></br>
                         </div>
                         <div class="card-footer">
                             <div class="row text-center">
@@ -343,41 +378,7 @@
                     </div>
                 </div>
 
-                <!-- Списания -->
-                <div class="col-xl-6 col-lg-6 col-md-12">
-                    <div class="card bg-dark text-white my-1" id="business_write_offs_theme">
-                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right"
-                            data-original-title="Общая сумма фактических закрытых списаний за текущий месяц по магазину<br>(Процент от суммарного РТО на текущий закрытый кассовый день)<br><br>
-                                                Общая сумма фактических закрытых списаний за текущую неделю по магазину<br>(Процент от суммарного РТО на текущий закрытый кассовый день)<br><br>
-                                                Блок обновляется каждые 15 минут">
-                            <h6 class="card-title text-center">Списания без учета компенсаций</h6>
-                        </div>
-                        <div class="card-body" id="business_write_offs_body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <h5 class="card-text text-center" id="business_write_offs_body_text_m">-</h5>
-                                </div>
-                                <div class="col-6">
-                                    <h5 class="card-text text-center" id="business_write_offs_body_text_w">-</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <small class="float-left" id="business_write_offs_footer_msg"></small>
-                                </div>
-                                <div class="col-6 mb-0">
-                                    <small class="float-right" id="business_write_offs_footer_time" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
+        
                 <!-- Скорость сканирования кассиров -->
                 <div class="col-xl-6 col-lg-6 col-md-12">
                     <div class="card bg-dark text-white my-1" id="business_sellers_perfom_theme">

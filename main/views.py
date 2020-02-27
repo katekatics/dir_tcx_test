@@ -87,10 +87,11 @@ def nps(request):
 
     if last_row_nps_date.date() < datetime.today().date():
         records = json.loads(request.POST['nps_records'])    
-        if datetime.today().date().day == 1 and (datetime.today().hour>22 and datetime.today().hour<23):
+        if datetime.today().date().day == 1 and datetime.today().hour == 23:
             col.remove({})
             col.insert_many(records)
-        elif datetime.today().hour == 23:
+            mongo.close()
+        elif  
             col.insert_many(records)
             mongo.close()  
     return JsonResponse({'output': 'success'}) 
