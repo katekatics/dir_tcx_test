@@ -53,9 +53,6 @@ urlpatterns = [
     path('click_detect/<str:full_sap>/<str:click>/', views.click_detect, name='click_detect'),
     path('download_activity_log/', views.download_activity_log, name='download_activity_log'),
 
-    # path('store/<str:full_sap>/hr_indicators_report/', views.hr_indicators_report, name='hr_indicators_report'),
-    # path('store/<str:full_sap>/hr_indicators/', views.hr_indicators, name='hr_indicators'),
-
     path('store/<str:full_sap>/business_markdown/', views.business_markdown, name='business_markdown'),
 
     path('store/<str:full_sap>/business_checks_traffic_report/', views.business_checks_traffic_report, name='business_checks_traffic_report'),
@@ -106,8 +103,6 @@ urlpatterns = [
 
     path('upload/file/', views.upload, name='upload'),
 
-    # path('upload/download/', views.hr_indicators_original, name='hr_indicators_original'),
-
     path('logout/', views.do_logout, name='logout'),
 
     path('store/<str:full_sap>/', views.dashboard, name='dashboard'),
@@ -123,7 +118,10 @@ urlpatterns = [
     path('kick_store/', views.kick_store, name='kick_store'),
 
     path('get_date_nps/', views.get_date_nps, name='get_date_nps'),
+
     path('nps/', views.nps, name='nps'),
+
+    path('nps_page/', views.nps_page, name='nps_page'),
 
     path('', views.index, name='index'),
 ]

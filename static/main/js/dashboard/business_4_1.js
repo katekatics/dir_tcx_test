@@ -156,22 +156,6 @@ function business_open_documents() {
     );
 }
 
-function hr_indicators() {
-    // Продажи
-    $.post("/store/" + full_sap + "/hr_indicators/", { csrfmiddlewaretoken: getCookie('tcx_token') },
-        function (data) {
-            if (data.theme) {
-                $("#hr_indicators_theme").attr('class', data.theme);
-                $("#hr_indicators_body_text").html(data.body_text);
-                $("#hr_indicators_footer_time").html(data.date);
-                create_report_modal(data.tbody, data.thead, 'hr_indicators');
-                $("#hr_indicators_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
-            }
-        }
-    );
-}
-
-
 function business_markdown() {
     // Незакрытые документы приемки АП
     $.post("/store/" + full_sap + "/business_markdown/", { csrfmiddlewaretoken: getCookie('tcx_token') },

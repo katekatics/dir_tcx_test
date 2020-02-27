@@ -31,7 +31,7 @@ import paramiko
 import logging
 from logging.handlers import RotatingFileHandler
 
-sprint = '_3_'
+sprint = '_4_'
 version = '1'
 
 # with open(os.getcwd() + '/logs/dir_tcx.log', "w+") as f:
@@ -44,7 +44,6 @@ dir_and_sap=[]
 [directors.append(d.director) for d in dirs]
 [dir_all.append((d.director).split('@')[0]) for d in dirs]
 [dir_and_sap.append([d.sap,(d.director).split('@')[0]]) for d in dirs]
-
 
 
 error_sign_in = {'user': '', 'cause': ''}
@@ -63,14 +62,18 @@ events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получе
         'dashboard': 'Страница магазина', 'download_activity_log': 'Скачивание отчета по активности пользователей', 'download_feedback': 'Скачивание отчета по обратной связи',
         'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина', 'nps_report': 'Скачивание отчета по NPS'}
 
+@login_required(redirect_field_name='')
+def nps_page(request):
+    return render(request, 'main/nps.html')
+
 
 @login_required(redirect_field_name='')
 def get_date_nps(request):
     today = datetime.today() 
-    tommorow = today + timedelta(days=1)
+    yesterday = today - timedelta(days=1)
     today_str = datetime.strftime(today, '%Y-%m-%dT00:00:00')
-    tommorow_str = datetime.strftime(tommorow, '%Y-%m-%dT00:00:00')
-    date_start_end = {"start": today_str, "end": tommorow_str}
+    yesterday_str = datetime.strftime(yesterday, '%Y-%m-%dT00:00:00')
+    date_start_end = {"start": yesterday_str, "end": today_str}
     return JsonResponse(date_start_end)
 
 @login_required(redirect_field_name='')
@@ -85,16 +88,19 @@ def nps(request):
     last_row_nps = last_row_nps.split("T")[0]
     last_row_nps_date = datetime.strptime(last_row_nps, '%Y-%m-%d')
 
-    if last_row_nps_date.date() < datetime.today().date():
+    if last_row_nps_date.date() < datetime.today().date() - timedelta(days=1):
         records = json.loads(request.POST['nps_records'])    
-        if datetime.today().date().day == 1 and datetime.today().hour == 23:
-            col.remove({})
-            col.insert_many(records)
-            mongo.close()
-        elif  
+        # if datetime.today().date().day == 1 and datetime.today().hour == 23:
+        #     col.remove({})
+        #     col.insert_many(records)
+        #     mongo.close()
+        if datetime.today().hour > 8:
             col.insert_many(records)
             mongo.close()  
-    return JsonResponse({'output': 'success'}) 
+        return JsonResponse({'output': 'Данные за вчера добавлены!'})
+    else:
+        return JsonResponse({'output': 'Данные уже собраны!'})
+
 
 @login_required(redirect_field_name='')
 def kick_stores_page(request):
@@ -130,7 +136,7 @@ def heatmap_page(request):
 
 @login_required(redirect_field_name='')
 def kpi_page_graph(request):
-    return render(request, 'main/kpi_3_1.html')
+    return render(request, 'main/kpi' + sprint + version + '.html')
 
 @login_required(redirect_field_name='')
 def get_heatmap(request):
@@ -410,22 +416,6 @@ def do_logging(function):
             return function(request)
     return wrapper
 
-
-# # HR-показатели (отчет)
-# @login_required(redirect_field_name='')
-# def hr_indicators_original(request):
-#     filename = 'hr_test.xlsx'
-#     if os.listdir(path='media/'):
-#         if filename in os.listdir(path='media/')[0]:
-#             with open('media/hr_test.xlsx', 'rb') as fp:
-#                 data = fp.read()
-#         response = HttpResponse(content_type="application/")
-#         response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
-#         response.write(data)
-#         return response
-
-
-
 # ОСНОВНЫЕ БИЗНЕС ПОКАЗАТЕЛИ
 # Продажи (новые)
 @login_required(redirect_field_name='')
@@ -638,27 +628,6 @@ def business_old_price_report(request, full_sap):
 @login_required(redirect_field_name='')
 def business_old_price(request, full_sap):
     result = store_class.business_old_price(full_sap)
-    return JsonResponse(result)
-
-
-# # # HR показатели (отчет)
-# @login_required(redirect_field_name='')
-# @mongo_log
-# @cef_logging
-# @do_logging
-# def hr_indicators_report(request, full_sap):
-#     with open('reports/{0}/hr_indicators_report.xlsx'.format(full_sap), 'rb') as fp:
-#         data = fp.read()
-#     filename = '{}_hr_indicators_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
-#     response = HttpResponse(content_type="application/")
-#     response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
-#     response.write(data)
-#     return response
-
-# # HR показатели
-@login_required(redirect_field_name='')
-def hr_indicators(request, full_sap):
-    result = store_class.hr_indicators(full_sap)
     return JsonResponse(result)
 
 # Markdown

@@ -28,8 +28,20 @@ function business_rto() {
             if (data.theme) {
                 $("#business_rto_theme").attr('class', data.theme);
                 $("#business_rto_body_text").html(data.body_text);
-                $("#business_rto_footer_time").html(data.date);
                 $("#business_rto_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
+                $("#business_bar_footer_time").html(data.date);
+                $("#business_rto_footer_time").html(data.date_rto);
+                $("#percent_and_saled").html(data.sales_today + ' ₽ (' + data.percent_today_fact + '%) / ' + data.plan_sales_today + ' ₽');
+                $("#myBar").css('width', data.percent_today_fact + '%');
+                if (data.percent_today_fact>100)
+                    {
+                        $("#myBar").css('width', 100 + '%');
+                    }
+                else
+                    {
+                        $("#myBar").css('width', data.percent_today_fact + '%');
+                    }
+                
             }
             block_errors("business_rto", data);
         }
@@ -71,6 +83,25 @@ function business_canceled_checks() {
                 
             }
             block_errors("business_canceled_checks", data);
+        }
+    );
+}
+
+
+
+function nps_from_mongo() {
+    // Количество аннулированных чеков
+    $.post("/store/" + full_sap + "/nps_from_mongo/", { csrfmiddlewaretoken: getCookie('tcx_token') },
+        function (data) {
+            if (data.theme) {
+                $("#nps_theme").attr('class', data.theme);
+                $("#nps_body_text").html(data.body_text);
+                $("#nps_footer_time").html(data.date);
+                create_report_modal(data.tbody, data.thead, 'nps');
+                $("#nps_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
+                
+            }
+            block_errors("nps", data);
         }
     );
 }
@@ -124,22 +155,6 @@ function business_open_documents() {
         }
     );
 }
-
-function hr_indicators() {
-    // Продажи
-    $.post("/store/" + full_sap + "/hr_indicators/", { csrfmiddlewaretoken: getCookie('tcx_token') },
-        function (data) {
-            if (data.theme) {
-                $("#hr_indicators_theme").attr('class', data.theme);
-                $("#hr_indicators_body_text").html(data.body_text);
-                $("#hr_indicators_footer_time").html(data.date);
-                create_report_modal(data.tbody, data.thead, 'hr_indicators');
-                $("#hr_indicators_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
-            }
-        }
-    );
-}
-
 
 function business_markdown() {
     // Незакрытые документы приемки АП

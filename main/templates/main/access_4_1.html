@@ -14,7 +14,6 @@
     <script src="{% static 'main/js/jquery_4_1.easing.min.js' %}"></script>
     <script src="{% static 'main/js/sb-admin-2_4_1.min.js' %}"></script>
     <script src="{% static 'main/js/datatables_4_1.min.js' %}"></script>
-    <script src="{% static 'main/js/kick_stores.js' %}"></script>
 
     {% block script %}
     {% endblock %}
@@ -24,11 +23,10 @@
 </head>
 
 {% block Content %}
-<div class="container mx-2 my-4">
-    <input class="form-control my-1" style="width: 200px;" placeholder="САП магазина" id='sap'>
-    <button type="button" class="btn btn-danger" id="kick_store" style="width: 200px;">Пнуть магазин</button>
-</div>
-<div class="container mx-2 my-6">
-    <button type="button" class="btn btn-warning" id="kick_all_stores" style="width: 200px;">Пнуть все магазины</button>
-</div>
+    <div class="container" style="margin-left: 40px;margin-top: 40px;">
+        <h4>Извините, у Вас нету доступа к магазину <strong>{{full_sap}}</strong></h4>
+        <form action='go_back' method='GET'>
+            <button type="submit" class="btn btn-dark">Вернуться назад</button>
+        </form>
+    </div>
 {% endblock %}

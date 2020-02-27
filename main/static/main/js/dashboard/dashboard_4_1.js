@@ -2,7 +2,6 @@ $(document).ready(function () {
     sap_name();
     data();
     setInterval('data()', 180000);
-    // setInterval('get_date_nps()',3600000)
     $('#open_close_business')[0].textContent = 'Свернуть';
     $('#open_close_products')[0].textContent = 'Свернуть';
     $('#sap').html('Бизнес показатели ' + ((window.location.pathname).split('-')[2]).slice(0, 4));
@@ -157,21 +156,19 @@ function data() {
     pos();
     scale();
     kso();
- 
 
     // Бизнес
     business_revenue_new();
     business_rto();
     business_average_check();
     business_canceled_checks();
-    nps_from_mongo();
     business_write_offs();
+    nps_from_mongo();
     business_sellers_perfom();
     business_open_documents();
     business_markdown();
     business_checks_traffic();
     business_old_price();
-
 
     products_overdue();
     products_low_saled();
@@ -186,5 +183,4 @@ function data() {
     services_cashless();
     services_net();
     services_alcohol();
-    get_date_nps();
 }

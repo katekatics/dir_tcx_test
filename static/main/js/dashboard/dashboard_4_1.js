@@ -150,6 +150,7 @@ $(document).on("click", "#headingProducts", function () {
     
 })
 
+
 function data() {
     // Кассы
     pos();
@@ -162,13 +163,12 @@ function data() {
     business_average_check();
     business_canceled_checks();
     business_write_offs();
+    nps_from_mongo();
     business_sellers_perfom();
     business_open_documents();
-    hr_indicators();
     business_markdown();
     business_checks_traffic();
     business_old_price();
-
 
     products_overdue();
     products_low_saled();
