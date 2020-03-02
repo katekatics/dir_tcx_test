@@ -22,21 +22,13 @@ def checkUserGroup(login, password):
         search_scope=SUBTREE,
         attributes=ALL_ATTRIBUTES,
         generator=False)
-
-    # Вывод должности пользователя
-    params = conn.extend.standard.paged_search(
-        search_base='OU=Main,DC=X5,DC=ru',
-        search_filter='(mail={})'.format(login),
-        search_scope=SUBTREE,
-        attributes=['title'],
-        generator=False)[0]['attributes']
         
     if response:
         response = response[0]['attributes']
         groups = response._store['memberOf']
         target = 0
         for group in groups:
-            if group == 'CN=Operational_DB_DM_TSX,OU=Security,OU=Groups,OU=Central,OU=Main,DC=X5,DC=ru':
+            if (group == 'CN=Operational_DB_DM_TSX,OU=Security,OU=Groups,OU=Central,OU=Main,DC=X5,DC=ru' or group == 'CN=Operational_DB_DM_Office,OU=Security,OU=Groups,OU=Central,OU=Main,DC=X5,DC=ru'):
                 target = 1
                 break
         conn.unbind()

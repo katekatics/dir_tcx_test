@@ -370,39 +370,16 @@ def get_bd_ip(store):
     db = get_interfaces(store)
     return db
 
-
-def get_full_sap(store):
-    if store.upper().startswith("SUPER") or store.upper().startswith(bf_rule1) or store.upper() in bf_rule2:
-        zabbix = ZabbixAPI('http://zabbix-head.x5.ru/')
-        zabbix.login(account.zabbix_login, account.zabbix_pass)
-        find = zabbix.do_request('host.get', {
-            'search': {
-                'name': store
-            },
-            'monitored_hosts': 'true',
-            'selectInventory': ['name'],
-            'output': ['name']
-        })['result']
-        zabbix.session.close()
-        if find:
-            for i in find:
-                if i['name'].startswith('Super'):
-                    return {'sap': i['name'], 'name': i['inventory']['name']}
-
 def get_hostid(store):
     if store.upper().startswith("SUPER") or store.upper().startswith(bf_rule1) or store.upper() in bf_rule2:
-        zabbix = ZabbixAPI('http://zabbix-head.x5.ru/')
-        zabbix.login(account.zabbix_login, account.zabbix_pass)
-        find = zabbix.do_request('host.get', {
-            'search': {
-                'name': store
-            },
-            'monitored_hosts': 'true',
-            'output': ['name']
-        })['result']
-        zabbix.session.close()
+        mongo = pymongo.MongoClient('192.168.200.73', 27017)
+        db = mongo['tcx']
+        collection = db['stores']
+        find = collection.find_one({"host": {"$regex": store + '$'}})
         if find:
-            return find[0]['hostid']
+            return find['hostid']
+        else:
+            return None
 
 
 def get_interfaces(store):
@@ -429,15 +406,19 @@ def raz_del(x):
     return '{0:,}'.format(x).replace(',', ' ')
 
 
-# def nps_from_mongo(store):
-#     result = find_data('nps', store[-4:])
-#     print()
-#     return result
-
-
 def nps_from_mongo(store):
     result = find_data('nps_report', store)
     if 'thead' in result:
         write_report('nps_report',
                     result['thead'], result['tbody'], store)
     return result
+
+def get_full_sap(store):
+    mongo = pymongo.MongoClient('192.168.200.73', 27017)
+    db = mongo['tcx']
+    collection = db['stores']
+    find = collection.find_one({"host": {"$regex": '.*' + store + '.*'}})
+    if find:
+        return {'sap': find['host'], 'name': find['name']}
+    else:
+        return None
