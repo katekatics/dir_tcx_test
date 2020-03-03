@@ -81,7 +81,7 @@ def nps(request):
     mongo = pymongo.MongoClient('192.168.200.73', 27017)
     db = mongo['tcx']
     col = db['nps']
-    cursor=col.find().sort("$natural",-1).limit(1)
+    cursor = col.find().sort("$natural",-1).limit(1)
     last_row_nps = None
     for i in cursor:
         last_row_nps=i["Last_Modified"]
@@ -988,7 +988,7 @@ def dashboard(request, full_sap):
                                                     })
 
 def sap_name(request, full_sap):
-    name = store_class.get_full_sap(full_sap)['name']
+    name = store_class.get_full_sap(full_sap[-4:])['name']
     return JsonResponse(name, safe=False)
 
 

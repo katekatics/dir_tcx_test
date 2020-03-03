@@ -139,3 +139,5 @@ MEDIA_URL = '/media/'
 #    os.path.join(BASE_DIR, 'static'),
 #]
 LOGIN_URL = '/sign_in'
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880

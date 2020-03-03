@@ -360,7 +360,7 @@ def write_report(name, header, data, store):
     row = 1
     for d in data:
         for i, v in enumerate(d):
-            worksheet.write_string(row, col+i, str(v).capitalize())
+            worksheet.write(row, col+i, v)
         row += 1
     workbook.close()
 
@@ -375,7 +375,7 @@ def get_hostid(store):
         mongo = pymongo.MongoClient('192.168.200.73', 27017)
         db = mongo['tcx']
         collection = db['stores']
-        find = collection.find_one({"host": {"$regex": store + '$'}})
+        find = collection.find_one({"host": {"$regex": '.*' + store.upper() + '.*'}})
         if find:
             return find['hostid']
         else:
@@ -417,7 +417,7 @@ def get_full_sap(store):
     mongo = pymongo.MongoClient('192.168.200.73', 27017)
     db = mongo['tcx']
     collection = db['stores']
-    find = collection.find_one({"host": {"$regex": '.*' + store + '.*'}})
+    find = collection.find_one({"host": {"$regex": '.*' + store.upper() + '.*'}})
     if find:
         return {'sap': find['host'], 'name': find['name']}
     else:
