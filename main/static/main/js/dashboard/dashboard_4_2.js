@@ -56,7 +56,13 @@ function create_report_modal(body, head, block_name) {
         }
         table += '</tbody></table>';
         $("#" + block_name + "_modal_body").html(table);
-        $("#" + block_name + "_table").DataTable();
+        if (block_name == 'nps') {
+            $("#" + block_name + "_table").DataTable({
+                "order": [[ 1, "desc" ]]
+            });
+        } else {
+            $("#" + block_name + "_table").DataTable();
+        } 
         $('.dataTables_length').addClass('bs-select');
     }
 }

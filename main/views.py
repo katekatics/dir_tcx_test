@@ -81,22 +81,25 @@ def nps(request):
     mongo = pymongo.MongoClient('192.168.200.73', 27017)
     db = mongo['tcx']
     col = db['nps']
-    cursor = col.find().sort("$natural",-1).limit(1)
+    cursor=col.find().sort("$natural",-1).limit(1)
     last_row_nps = None
     for i in cursor:
         last_row_nps=i["Last_Modified"]
-    last_row_nps = last_row_nps.split("T")[0]
-    last_row_nps_date = datetime.strptime(last_row_nps, '%Y-%m-%d')
 
-    if last_row_nps_date.date() < datetime.today().date() - timedelta(days=1):
-        records = json.loads(request.POST['nps_records'])    
-        # if datetime.today().date().day == 1 and datetime.today().hour == 23:
-        #     col.remove({})
-        #     col.insert_many(records)
-        #     mongo.close()
-        if datetime.today().hour > 8:
-            col.insert_many(records)
-            mongo.close()  
+    if last_row_nps.date() < datetime.today().date() - timedelta(days=1):
+        records = json.loads(request.POST['nps_records'])
+        for i in records:
+            date = i['Creation_Date'].split('T')
+            modified = i['Last_Modified'].split('T')
+            i['Creation_Date'] = datetime.strptime(date[0] + ' ' + date[1], '%Y-%m-%d %H:%M:%S')
+            i['Last_Modified'] = datetime.strptime(modified[0] + ' ' + modified[1], '%Y-%m-%d %H:%M:%S')
+    #     # if datetime.today().date().day == 1 and datetime.today().hour == 23:
+    #     #     col.remove({})
+    #     #     col.insert_many(records)
+    #     #     mongo.close()
+    #     if datetime.today().hour > 8:
+        col.insert_many(records)
+        mongo.close()  
         return JsonResponse({'output': 'Данные за вчера добавлены!'})
     else:
         return JsonResponse({'output': 'Данные уже собраны!'})

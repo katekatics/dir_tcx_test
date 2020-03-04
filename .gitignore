@@ -7,3 +7,4 @@ main/migrations/
 db.sqlite3
 main/migrations/0011_auto_20191127_1433.py
 *.txt
+*.png

@@ -28,7 +28,7 @@ def get_data(start_date, end_date):
         'business_write_offs_body': 0,
         'business_sellers_perfom_body': 0,
         'business_open_documents_body': 0,     
-        'markdown_body': 0,
+        'business_markdown_body': 0,
         'products_overdue_body': 0, 
         'products_low_saled_body': 0, 
         'products_minus_body': 0,
@@ -52,7 +52,7 @@ def get_data(start_date, end_date):
         'business_sellers_perfom_month_report': 0,
         'business_sellers_perfom_report': 0,
         'business_open_documents_report': 0,
-        'markdown_report': 0,
+        'business_markdown_report': 0,
         'products_overdue_report': 0, 
         'products_low_saled_report': 0, 
         'products_minus_report': 0,
@@ -84,14 +84,14 @@ def build_excel(start_date, end_date):
     data = get_data(start_date, end_date)
     names = {#Наименование блоков на русском языке
         'business_revenue_new': 'Продажи',
-        'RTO': 'РТО',
+        'business_rto': 'РТО',
         'business_average_check': 'Средний чек',
         'business_canceled_checks': 'Отмененные чеки',
         'business_write_offs': 'Списания',
         'business_sellers_perfom': 'Производительность кассиров',
         'business_open_documents': 'Открытые документы приемки',
         
-        'markdown': 'Markdown',
+        'business_markdown': 'Markdown',
         'products_overdue': 'Просроченная продукция',
         
         'products_low_saled': 'Низкие продажи',
