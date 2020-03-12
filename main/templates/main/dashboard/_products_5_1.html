@@ -367,6 +367,46 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="card bg-dark text-white my-1" id="products_recycle_theme">
+                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="right" data-original-title="<br><br>Блок обновляется раз в день (в 8 утра)<br>(При нажатии на блок можно получить дополнительную информацию и скачать отчет)">
+                            <h6 class="card-title">Вторсырье</h6>
+                        </div>
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="products_recycle_body">
+                            <h4 class="card-text text-center" id="products_recycle_body_text">-</h4>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="float-left" id="products_recycle_footer_msg"></small>
+                                </div>
+                                <div class="col-6 mb-0">
+                                    <small class="float-right" id="products_recycle_footer_time" data-toggle="tooltip" data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="products_recycle_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Вторсырье</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="products_recycle_modal_body"></div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white" href="{% url 'products_recycle_report' full_sap=full_sap %}" target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

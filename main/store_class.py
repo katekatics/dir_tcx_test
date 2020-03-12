@@ -226,6 +226,14 @@ def products_topvd(store):
                     result['thead'], result['tbody'], store)
     return result
 
+# Вторсырье
+def products_recycle(store):
+    result = find_data('products_recycle', store)
+    if 'thead' in result:
+        write_report('recycle_products_report',
+                    result['thead'], result['tbody'], store)
+    return result
+
 
 # ДОСТУПНОСТЬ ОСНОВНЫХ СЕРВИСОВ
 # Cвязь

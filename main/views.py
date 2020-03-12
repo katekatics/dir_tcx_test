@@ -23,7 +23,7 @@ from time import sleep
 import json 
 import calendar
 import time, sys
-from . import kpi_4_1
+from . import kpi
 from . import account
 import paramiko
 
@@ -31,11 +31,8 @@ import paramiko
 import logging
 from logging.handlers import RotatingFileHandler
 
-sprint = '_4_'
+sprint = '_5_'
 version = '1'
-
-# with open(os.getcwd() + '/logs/dir_tcx.log', "w+") as f:
-#     f.write(socket.gethostname())
 
 dirs = Dirs.objects.all()
 directors = []
@@ -60,7 +57,7 @@ events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получе
         'products_stoped_fresh_report': 'Скачивание отчета по товарам без движения FRESH', 'products_minus_report': 'Скачивание отчета по товарам с отрицательными остатками',
         'products_topvd_report': 'Скачивание отчета по топ ВД', 'products_top30_report': 'Скачивание отчета по топ 30', 'products_super_price_report': 'Скачивание отчета по супер цене', 'index': 'Начальная страница', 
         'dashboard': 'Страница магазина', 'download_activity_log': 'Скачивание отчета по активности пользователей', 'download_feedback': 'Скачивание отчета по обратной связи',
-        'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина', 'nps_report': 'Скачивание отчета по NPS'}
+        'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина', 'nps_report': 'Скачивание отчета по NPS', 'products_recycle_report': 'Скачивание отчета по вторсырью'}
 
 @login_required(redirect_field_name='')
 def nps_page(request):
@@ -199,21 +196,21 @@ def get_kpi_graph(request):
         days = calendar.monthrange(int(year), int(month))[1]
         start = datetime.strptime(year + '-' + month + '-1 ' + '00:00:00', '%Y-%m-%d %H:%M:%S')
         end = datetime.strptime(year + '-' + month + '-' + str(days) + ' ' + '23:59:59', '%Y-%m-%d %H:%M:%S')
-        kpi_4_1.create_kpi_graph(start, end)
-        kpi_4_1.get_result_activity(dir_and_sap, start, end)
+        kpi.create_kpi_graph(start, end)
+        kpi.get_result_activity(dir_and_sap, start, end)
    
     elif result['status'] == 'week':
         week = result['week']
         start = datetime.strptime(week + '-1', '%G-W%V-%u')
         end = start + timedelta(days=7)
-        kpi_4_1.create_kpi_graph(dir_all, start, end)
-        kpi_4_1.get_result_activity(dir_and_sap, start, end)
+        kpi.create_kpi_graph(dir_all, start, end)
+        kpi.get_result_activity(dir_and_sap, start, end)
 
     else:
         start = datetime.strptime('2019-11-01 00:00:00', '%Y-%m-%d %H:%M:%S')
         end = datetime.now()
-        kpi_4_1.create_kpi_graph(dir_all, start, end)
-        kpi_4_1.get_result_activity(dir_and_sap, start, end)
+        kpi.create_kpi_graph(dir_all, start, end)
+        kpi.get_result_activity(dir_and_sap, start, end)
     
     response['start'] = datetime.strftime(start, '%Y-%m-%d_%H-%M-%S')
     response['end'] = datetime.strftime(end, '%Y-%m-%d_%H-%M-%S')
@@ -855,6 +852,27 @@ def products_topvd_report(request, full_sap):
 def products_topvd(request, full_sap):
     result = store_class.products_topvd(full_sap)
     return JsonResponse(result)
+
+# Вторсырье    
+@login_required(redirect_field_name='')
+@mongo_log
+@cef_logging
+@do_logging
+def products_recycle_report(request, full_sap):
+    with open('reports/{0}/recycle_products_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_recycle_products_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
+
+# Вторсырье
+@login_required(redirect_field_name='')
+def products_recycle(request, full_sap):
+    result = store_class.products_recycle(full_sap)
+    return JsonResponse(result)
+
 
 
 

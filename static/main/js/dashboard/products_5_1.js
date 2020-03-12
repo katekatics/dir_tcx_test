@@ -129,3 +129,20 @@ function products_topvd() {
         }
     );
 }
+
+function products_recycle() {
+    // Топ ВД
+    $.post("/store/" + full_sap + "/products_recycle/", { csrfmiddlewaretoken: getCookie('tcx_token') },
+        function (data) {
+            if (data.theme) {
+                $("#products_recycle_theme").attr('class', data.theme);
+                $("#products_recycle_body_text").html(data.body_text);
+                $("#products_recycle_footer_time").html(data.date);
+                create_report_modal(data.tbody, data.thead, 'products_recycle');
+                $("#products_recycle_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
+                
+            }
+            block_errors("products_recycle", data);
+        }
+    );
+}

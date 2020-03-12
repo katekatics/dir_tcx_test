@@ -184,6 +184,7 @@ function data() {
     products_top30();
     products_super_price();
     products_topvd();
+    products_recycle();
 
     services_loyalty();
     services_cashless();

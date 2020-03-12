@@ -28,6 +28,9 @@ urlpatterns = [
     path('store/<str:full_sap>/products_topvd_report/', views.products_topvd_report, name='products_topvd_report'),
     path('store/<str:full_sap>/products_topvd/', views.products_topvd, name='products_topvd'),
 
+    path('store/<str:full_sap>/products_recycle_report/', views.products_recycle_report, name='products_recycle_report'),
+    path('store/<str:full_sap>/products_recycle/', views.products_recycle, name='products_recycle'),
+
     path('store/<str:full_sap>/products_overdue_report/', views.products_overdue_report, name='products_overdue_report'),
     path('store/<str:full_sap>/products_overdue/', views.products_overdue, name='products_overdue'),
 
