@@ -65,6 +65,7 @@ urlpatterns = [
     path('store/<str:full_sap>/business_old_price/', views.business_old_price, name='business_old_price'),
 
     path('store/<str:full_sap>/business_write_offs/', views.business_write_offs, name='business_write_offs'),
+    path('store/<str:full_sap>/business_write_offs_report/', views.business_write_offs_report, name='business_write_offs_report'),
 
     path('store/<str:full_sap>/business_rto/', views.business_rto, name='business_rto'),
 
@@ -86,7 +87,7 @@ urlpatterns = [
     path('store/<str:full_sap>/services_cashless/', views.services_cashless, name='services_cashless'),
 
     path('store/<str:full_sap>/nps_report/', views.nps_report, name='nps_report'),
-    path('store/<str:full_sap>/nps_from_mongo/', views.nps_from_mongo, name='nps_from_mongo'),
+    path('store/<str:full_sap>/nps/', views.nps, name='nps'),
 
     path('heatmap_page/', views.heatmap_page, name='heatmap_page'),
 
@@ -119,12 +120,6 @@ urlpatterns = [
     path('kick_stores/', views.kick_stores, name='kick_stores'),
 
     path('kick_store/', views.kick_store, name='kick_store'),
-
-    path('get_date_nps/', views.get_date_nps, name='get_date_nps'),
-
-    path('nps/', views.nps, name='nps'),
-
-    path('nps_page/', views.nps_page, name='nps_page'),
 
     path('', views.index, name='index'),
 ]

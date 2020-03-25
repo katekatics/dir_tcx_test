@@ -76,7 +76,7 @@ def create_kpi_graph(dirs, start_date, end_date):
     users_and_date=get_user_and_date(start_date, end_date)
     df = pd.DataFrame(users_and_date, columns=['user','date'])
     df["clean_data"] = df["date"].dt.date
-    grouped_on_dt_and_user = df.groupby(['user','clean_data'])['date'].count().reset_index()
+    grouped_on_dt_and_user = df.groupby(['-','clean_data'])['date'].count().reset_index()
     all_users = grouped_on_dt_and_user.groupby('clean_data')['user'].count().reset_index()
     grouped_on_dt_and_user['is_active'] = grouped_on_dt_and_user['date'].apply(lambda x:x>=par)
     active_users = grouped_on_dt_and_user.groupby('clean_data')['is_active'].sum().reset_index()

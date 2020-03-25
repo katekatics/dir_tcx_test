@@ -26,6 +26,10 @@ function business_rto() {
     $.post("/store/" + full_sap + "/business_rto/", { csrfmiddlewaretoken: getCookie('tcx_token') },
         function (data) {
             if (data.theme) {
+                text = (data.body_text).split('<br>');
+                plan_fact = text[0].split('|');
+                plan_fact_percent = text[1].split('|');
+                plan_fact_predict = text[2].split('|');
                 $("#business_rto_theme").attr('class', data.theme);
                 $("#business_rto_body_text").html(data.body_text);
                 $("#business_rto_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
@@ -33,6 +37,12 @@ function business_rto() {
                 $("#business_rto_footer_time").html(data.date_rto);
                 $("#percent_and_saled").html(data.sales_today + ' ₽ (' + data.percent_today_fact + '%) / ' + data.plan_sales_today + ' ₽');
                 $("#myBar").css('width', data.percent_today_fact + '%');
+                $('#rto_plan').html(plan_fact[0]);
+                $('#rto_fact').html(plan_fact[1]);
+                $('#rto_plan_percent').html(plan_fact_percent[0]);
+                $('#rto_fact_percent').html(plan_fact_percent[1]);
+                $('#predict_sum').html(plan_fact_predict[0]);
+                $('#predict_percent').html(plan_fact_predict[1]);
                 if (data.percent_today_fact>100)
                     {
                         $("#myBar").css('width', 100 + '%');
@@ -89,9 +99,9 @@ function business_canceled_checks() {
 
 
 
-function nps_from_mongo() {
+function nps() {
     // Количество аннулированных чеков
-    $.post("/store/" + full_sap + "/nps_from_mongo/", { csrfmiddlewaretoken: getCookie('tcx_token') },
+    $.post("/store/" + full_sap + "/nps/", { csrfmiddlewaretoken: getCookie('tcx_token') },
         function (data) {
             if (data.theme) {
                 $("#nps_theme").attr('class', data.theme);
@@ -116,6 +126,7 @@ function business_write_offs() {
                 $("#business_write_offs_body_text_m").html(data.body_text_1);
                 $("#business_write_offs_body_text_w").html(data.body_text_2);
                 $("#business_write_offs_footer_time").html(data.date);
+                create_report_modal(data.tbody, data.thead, 'business_write_offs');
                 $("#business_write_offs_body").attr('class', "card-body click_detect " + ((data.theme).split(' '))[1] + "-body");
             }
             block_errors("business_write_offs", data);

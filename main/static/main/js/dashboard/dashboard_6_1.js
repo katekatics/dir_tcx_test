@@ -169,7 +169,7 @@ function data() {
     business_average_check();
     business_canceled_checks();
     business_write_offs();
-    nps_from_mongo();
+    nps();
     business_sellers_perfom();
     business_open_documents();
     business_markdown();

@@ -87,6 +87,9 @@ def business_average_check(store):
 # Списания
 def business_write_offs(store):
     result = find_data('business_write_offs', store)
+    if 'thead' in result:
+        write_report('write_offs_report',
+                    result['thead'], result['tbody'], store)
     return result
 
 # Отмененные чеки
@@ -414,7 +417,7 @@ def raz_del(x):
     return '{0:,}'.format(x).replace(',', ' ')
 
 
-def nps_from_mongo(store):
+def nps(store):
     result = find_data('nps_report', store)
     if 'thead' in result:
         write_report('nps_report',

@@ -31,7 +31,7 @@ import paramiko
 import logging
 from logging.handlers import RotatingFileHandler
 
-sprint = '_5_'
+sprint = '_6_'
 version = '1'
 
 dirs = Dirs.objects.all()
@@ -57,54 +57,13 @@ events = {'sign_in': 'Вход в систему', 'get_feedback': 'Получе
         'products_stoped_fresh_report': 'Скачивание отчета по товарам без движения FRESH', 'products_minus_report': 'Скачивание отчета по товарам с отрицательными остатками',
         'products_topvd_report': 'Скачивание отчета по топ ВД', 'products_top30_report': 'Скачивание отчета по топ 30', 'products_super_price_report': 'Скачивание отчета по супер цене', 'index': 'Начальная страница', 
         'dashboard': 'Страница магазина', 'download_activity_log': 'Скачивание отчета по активности пользователей', 'download_feedback': 'Скачивание отчета по обратной связи',
-        'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина', 'nps_report': 'Скачивание отчета по NPS', 'products_recycle_report': 'Скачивание отчета по вторсырью'}
-
-@login_required(redirect_field_name='')
-def nps_page(request):
-    return render(request, 'main/nps.html')
-
-
-@login_required(redirect_field_name='')
-def get_date_nps(request):
-    today = datetime.today() 
-    yesterday = today - timedelta(days=1)
-    today_str = datetime.strftime(today, '%Y-%m-%dT00:00:00')
-    yesterday_str = datetime.strftime(yesterday, '%Y-%m-%dT00:00:00')
-    date_start_end = {"start": yesterday_str, "end": today_str}
-    return JsonResponse(date_start_end)
-
-@login_required(redirect_field_name='')
-def nps(request):
-    mongo = pymongo.MongoClient('192.168.200.73', 27017)
-    db = mongo['tcx']
-    col = db['nps']
-    cursor=col.find().sort("$natural",-1).limit(1)
-    last_row_nps = None
-    for i in cursor:
-        last_row_nps=i["Last_Modified"]
-
-    if last_row_nps.date() < datetime.today().date() - timedelta(days=1):
-        records = json.loads(request.POST['nps_records'])
-        for i in records:
-            date = i['Creation_Date'].split('T')
-            modified = i['Last_Modified'].split('T')
-            i['Creation_Date'] = datetime.strptime(date[0] + ' ' + date[1], '%Y-%m-%d %H:%M:%S')
-            i['Last_Modified'] = datetime.strptime(modified[0] + ' ' + modified[1], '%Y-%m-%d %H:%M:%S')
-    #     # if datetime.today().date().day == 1 and datetime.today().hour == 23:
-    #     #     col.remove({})
-    #     #     col.insert_many(records)
-    #     #     mongo.close()
-    #     if datetime.today().hour > 8:
-        col.insert_many(records)
-        mongo.close()  
-        return JsonResponse({'output': 'Данные за вчера добавлены!'})
-    else:
-        return JsonResponse({'output': 'Данные уже собраны!'})
+        'do_logout': 'Выход из системы', 'go_back': 'Переход на страницу не своего магазина', 'nps_report': 'Скачивание отчета по NPS', 'products_recycle_report': 'Скачивание отчета по вторсырью', 
+        'business_write_offs_report': 'Скачивание отчета по списаниям'}
 
 
 @login_required(redirect_field_name='')
 def kick_stores_page(request):
-    return render(request, 'main/kick_stores.html')
+    return render(request, 'main/kick_stores' + sprint + version + '.html')
 
 @login_required(redirect_field_name='')
 def kick_stores(request):
@@ -488,8 +447,8 @@ def business_rto(request, full_sap):
 
 # NPS
 @login_required(redirect_field_name='')
-def nps_from_mongo(request, full_sap):
-    result = store_class.nps_from_mongo(full_sap)
+def nps(request, full_sap):
+    result = store_class.nps(full_sap)
     return JsonResponse(result)
 
 @login_required(redirect_field_name='')
@@ -555,6 +514,19 @@ def business_write_offs(request, full_sap):
     result = store_class.business_write_offs(full_sap)
     return JsonResponse(result)
 
+# Скорость сканирования кассиров(отчет)
+@login_required(redirect_field_name='')
+@mongo_log
+@cef_logging
+@do_logging
+def business_write_offs_report(request, full_sap):
+    with open('reports/{0}/write_offs_report.xlsx'.format(full_sap), 'rb') as fp:
+        data = fp.read()
+    filename = '{}_business_offs_report_{}.xlsx'.format(full_sap, str(datetime.now().date()))
+    response = HttpResponse(content_type="application/")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename # force browser to download file
+    response.write(data)
+    return response
 
 # Скорость сканирования кассиров(отчет)
 @login_required(redirect_field_name='')
@@ -1009,7 +981,7 @@ def dashboard(request, full_sap):
                                                     })
 
 def sap_name(request, full_sap):
-    name = store_class.get_full_sap(full_sap[-4:])['name']
+    name = store_class.get_full_sap(full_sap.split('-')[2])['name']
     return JsonResponse(name, safe=False)
 
 

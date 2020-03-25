@@ -184,57 +184,74 @@
                 </div>
 
                 <!-- РТО -->
-                <div class="col-xl-6 col-lg-6 col-md-12">
-                    <div class="card bg-dark text-white my-1" id="business_rto_theme">
-                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Плановый РТО на текущий месяц | Суммарный РТО за месяц на текущий закрытый кассовый день<br>Плановый % по удельным весам | % накопленного РТО на текущий закрытый кассовый день по отношению к плану<br>Блок обновляется 1 раз в день">
-                            <h6 class="card-title text-center">План РТО на месяц | РТО накопленное на текущий закрытый кассовый день</h6>
-                        </div>
-                        <div class="card-body" id="business_rto_body">
-                            <h4 class="card-text text-center" id="business_rto_body_text">-</h4>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <small class="float-left" id="business_rto_footer_msg"></small>
+                <div class="col-12">
+                    <div class="card bg-success text-white my-1" id="business_rto_body_theme">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-9" tabindex="0" data-html="true" data-toggle="tooltip"
+                            data-placement="right" data-original-title="План и прогноз РТО обновляется 1 раз в день в 8 утра.<br>Прогресс продаж обновляется раз в 15 минут.">
+                                    <h6 class="card-title text-center">РТО</h6>
                                 </div>
-                                <div class="col-6 mb-0">
+                                <div class="col-3">
                                     <small class="float-right" id="business_rto_footer_time" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                    data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!-- Бар -->
-                <div class="col-xl-6 col-lg-6 col-md-12">
-                    <div class="card bg-success text-white my-1" >
-                        <div class="card-header" tabindex="0" data-html="true" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Прогресс продаж на сегодня (% выполнения) / Плановая сумма РТО на сегодняшний день.<br>Блок обновляется каждые 15 минут"> 
-                             
-                            <h6 class="card-title text-center">Прогресс продаж на сегодня по отношению к плану</h6>
-                        </div>
-
-                        <div class="card-body" tabindex="0" data-toggle="modal" >
-                            <h4 class="card-text text-center" >
-                                <div id="myText">
-                                    <h5 id="percent_and_saled"> -  </h5>
-                                    <div id="myProgress">
-                                        <div id="myBar">
-                                        </div>
-                                    </div>
-                                  </div>
-                                
-                                </h4>
-                        </div>
-                        <div class="card-footer">
-                            <div class="row text-center">
+                        <div class="card-body click_detect">
+                            <div class="row">
                                 <div class="col-6">
-                                    <small class="float-left" ></small>
+                                    <h6 class="card-title">План РТО на месяц | РТО накопленное на текущий закрытый кассовый день</h6>                             
                                 </div>
-                                <div class="col-6 mb-0">
-                                    <small class="float-right" id="business_bar_footer_time" data-toggle="tooltip"
-                            data-placement="right" data-original-title="Время последнего обновления блока"></small>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id='rto_plan'>-</h4>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="rto_fact">-</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h6 class="card-title">План по удельным весам (%) | Факт(%) на текущий закрытый кассовый день</h6>                             
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="rto_plan_percent">-</h4>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="rto_fact_percent">-</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h6 class="card-title">Прогноз выполнения плана на конец месяца: сумма | %</h6>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="predict_sum">-</h4>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="card-title text-center" id="predict_percent">-</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h6 class="card-title">Прогресс продаж на сегодня по отношению к плану</h6>
+                                </div>                 
+                                <div class="col-6">
+                                    <h4 class="card-text text-center">
+                                        <div id="myText">
+                                            <h5 id="percent_and_saled">-</h5>
+                                            <div id="myProgress">
+                                                <div id="myBar">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </h4>
                                 </div>
                             </div>
                         </div>
@@ -248,10 +265,10 @@
                             data-placement="right"
                             data-original-title="Общая сумма фактических закрытых списаний за текущий месяц по магазину<br>(Процент от суммарного РТО на текущий закрытый кассовый день)<br><br>
                                                 Общая сумма фактических закрытых списаний за текущую неделю по магазину<br>(Процент от суммарного РТО на текущий закрытый кассовый день)<br><br>
-                                                Блок обновляется каждые 15 минут">
+                                                Блок обновляется каждые 15 минут<br>(При нажатии на блок можно получить детализацию по списаниям и скачать отчёт)">
                             <h6 class="card-title text-center">Списания без учета компенсаций</h6>
                         </div>
-                        <div class="card-body" id="business_write_offs_body">
+                        <div class="card-body" tabindex="0" data-toggle="modal" id="business_write_offs_body">
                             <div class="row">
                                 <div class="col-6">
                                     <h5 class="card-text text-center" id="business_write_offs_body_text_m">-</h5>
@@ -270,6 +287,27 @@
                                     <small class="float-right" id="business_write_offs_footer_time" data-toggle="tooltip"
                             data-placement="right" data-original-title="Время последнего обновления блока"></small>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="business_write_offs_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title">Списания</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="business_write_offs_modal_body">
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-primary text-white"
+                                    href="{% url 'business_write_offs_report' full_sap=full_sap %}"
+                                    target="_blank">Скачать
+                                    отчет</a>
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">Закрыть</a>
                             </div>
                         </div>
                     </div>
